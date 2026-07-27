@@ -1,0 +1,55 @@
+/* ==========================================================================
+   Endless Studios — Typography tokens
+   Body/UI font: Inter.  Headings: Figtree (semibold).
+   Type scale lifted from the studio frontend (--text-* / --leading-*).
+   ========================================================================== */
+
+:root {
+  /* --- Font families ----------------------------------------------------- */
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: "Figtree", var(--font-sans);
+
+  /* --- Weights ----------------------------------------------------------- */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* --- Letter spacing ---------------------------------------------------- */
+  --tracking-thinest: -0.5px;
+  --tracking-thin: -1px;
+  --tracking-hero: -4px; /* the big carousel "journey" headline */
+
+  /* ======================================================================
+     TYPE SCALE  (size / line-height pairs, from the app's design tokens)
+     Display + heading ramps are meant to be set in Figtree.
+     ====================================================================== */
+
+  /* Display */
+  --text-d1: 96px;   --leading-d1: 120px;
+  --text-d2: 72px;   --leading-d2: 88px;
+  --text-d3: 64px;   --leading-d3: 72px;
+
+  /* Headings */
+  --text-h1: 56px;   --leading-h1: 64px;
+  --text-h2: 48px;   --leading-h2: 58px;
+  --text-h3: 40px;   --leading-h3: 48px;
+  --text-h4: 32px;   --leading-h4: 39px;
+  --text-h5: 24px;   --leading-h5: 32px;
+  --text-h6: 18px;   --leading-h6: 24px;
+
+  /* Body + UI */
+  --text-body-2: 16px;      --leading-body-2: 24px;   /* comfortable body */
+  --text-body: 14px;        --leading-body: 24px;     /* default UI body */
+  --text-body-small: 12px;  --leading-body-small: 24px;
+  --text-title: 16px;       --leading-title: 19px;    /* tile titles */
+  --text-menu: 14px;        --leading-menu: 20px;     /* nav / menu */
+  --text-button: 14px;      --leading-button: 20px;
+
+  /* Captions */
+  --text-caption-1: 13px;   --leading-caption-1: 18px;
+  --text-caption-2: 12px;   --leading-caption-2: 16px;
+  --text-caption-3: 11px;   --leading-caption-3: 18px;
+  --text-xxs: 10px;         --leading-xxs: 12px;
+}

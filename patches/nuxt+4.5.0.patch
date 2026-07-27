@@ -1,0 +1,44 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index c8cbe26..f937a91 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -7292,13 +7292,13 @@ const publicPathTemplate = {
+ 		return [
+ 			"import { joinRelativeURL } from 'ufo'",
+ 			!nuxt.options.dev && "import { useRuntimeConfig } from 'nitropack/runtime'",
+-			nuxt.options.dev ? `const getAppConfig = () => (${JSON.stringify(nuxt.options.app)})` : "const getAppConfig = () => useRuntimeConfig().app",
+-			"export const baseURL = () => getAppConfig().baseURL",
+-			"export const buildAssetsDir = () => getAppConfig().buildAssetsDir",
++			nuxt.options.dev ? `const getAppConfig = () => (${JSON.stringify(nuxt.options.app)})` : "const getAppConfig = () => useRuntimeConfig()?.app",
++			"export const baseURL = () => getAppConfig()?.baseURL || '/'",
++			"export const buildAssetsDir = () => getAppConfig()?.buildAssetsDir",
+ 			"export const buildAssetsURL = (...path) => joinRelativeURL(publicAssetsURL(), buildAssetsDir(), ...path)",
+ 			"export const publicAssetsURL = (...path) => {",
+ 			"  const appConfig = getAppConfig()",
+-			"  const publicBase = appConfig.cdnURL || appConfig.baseURL",
++			"  const publicBase = appConfig?.cdnURL || appConfig?.baseURL || '/'",
+ 			"  return path.length ? joinRelativeURL(publicBase, ...path) : publicBase",
+ 			"}",
+ 			"if (import.meta.client) {",
+diff --git a/dist/index.js b/dist/index.js
+index c8cbe26..f937a91 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -7292,13 +7292,13 @@ const publicPathTemplate = {
+ 		return [
+ 			"import { joinRelativeURL } from 'ufo'",
+ 			!nuxt.options.dev && "import { useRuntimeConfig } from 'nitropack/runtime'",
+-			nuxt.options.dev ? `const getAppConfig = () => (${JSON.stringify(nuxt.options.app)})` : "const getAppConfig = () => useRuntimeConfig().app",
+-			"export const baseURL = () => getAppConfig().baseURL",
+-			"export const buildAssetsDir = () => getAppConfig().buildAssetsDir",
++			nuxt.options.dev ? `const getAppConfig = () => (${JSON.stringify(nuxt.options.app)})` : "const getAppConfig = () => useRuntimeConfig()?.app",
++			"export const baseURL = () => getAppConfig()?.baseURL || '/'",
++			"export const buildAssetsDir = () => getAppConfig()?.buildAssetsDir",
+ 			"export const buildAssetsURL = (...path) => joinRelativeURL(publicAssetsURL(), buildAssetsDir(), ...path)",
+ 			"export const publicAssetsURL = (...path) => {",
+ 			"  const appConfig = getAppConfig()",
+-			"  const publicBase = appConfig.cdnURL || appConfig.baseURL",
++			"  const publicBase = appConfig?.cdnURL || appConfig?.baseURL || '/'",
+ 			"  return path.length ? joinRelativeURL(publicBase, ...path) : publicBase",
+ 			"}",
+ 			"if (import.meta.client) {",

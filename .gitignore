@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# nuxt build/dev artifacts
+.nuxt/
+.output/
+.data/
+dist/
+
+# storybook build output
+storybook-static/
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# os/editor cruft
+.DS_Store
+*:Zone.Identifier
+
+# claude local-only settings
+.claude/settings.local.json

@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Endless Studios — Spacing, radius, shadow & motion tokens
+   The platform leans on generous, rounded shapes and soft ambient shadows.
+   ========================================================================== */
+
+:root {
+  /* --- Spacing scale (4px base) ----------------------------------------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-2_5: 10px;
+  --space-3: 12px;
+  --space-3_5: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* --- Radius ------------------------------------------------------------
+     Rounded is the brand. Cards use 2xl (16px); tiles & heroes go larger. */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;   /* rounded-2xl — the default card radius */
+  --radius-xl: 20px;
+  --radius-2xl: 24px;  /* rounded-3xl — tiles, program cards */
+  --radius-3xl: 32px;  /* hero / carousel */
+  --radius-pill: 100px;
+  --radius-full: 9999px;
+
+  /* --- Shadows -----------------------------------------------------------
+     Soft, cool-grey ambient lifts — never hard black drop shadows. */
+  --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 10px 19px 7px rgb(156 161 165 / 15%); /* card-general-styles hover */
+  --shadow-menu: 0 4px 16px rgba(15, 23, 43, 0.12);       /* dropdowns / popovers */
+
+  /* --- Containers -------------------------------------------------------- */
+  --container: 82.4rem; /* the app's --ui-container max width */
+
+  /* --- Motion ------------------------------------------------------------
+     Short, linear-ish transitions. Cards ease at 0.25s; nothing bounces. */
+  --duration-fast: 0.15s;  /* @kind other */
+  --duration-base: 0.25s;  /* @kind other */
+  --duration-slow: 0.5s;   /* @kind other */
+  --ease-standard: ease;   /* @kind other */
+}

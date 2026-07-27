@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Endless Studios — Color tokens
+   Ramps lifted verbatim from the studio frontend (@theme static in main.css).
+   Brand roles: primary = orange, secondary = cornflower, kids = teal.
+   ========================================================================== */
+
+:root {
+  /* --- Orange (PRIMARY / brand) ------------------------------------------ */
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #ffd6a8;
+  --color-orange-300: #ffb86a;
+  --color-orange-400: #ff8904;
+  --color-orange-500: #ff6900;
+  --color-orange-600: #f54a00;
+  --color-orange-700: #ca3500;
+  --color-orange-800: #9f2d00;
+  --color-orange-900: #7e2a0c;
+  --color-orange-950: #441306;
+
+  /* --- Cornflower (SECONDARY / indigo-violet) ---------------------------- */
+  --color-cornflower-50: #e7e5fc;
+  --color-cornflower-100: #d0ccfa;
+  --color-cornflower-200: #b9b2f8;
+  --color-cornflower-300: #9a91f5;
+  --color-cornflower-400: #7c6ff2;
+  --color-cornflower-500: #6556f0;
+  --color-cornflower-600: #463ca8;
+  --color-cornflower-700: #322b78;
+  --color-cornflower-800: #1e1948;
+  --color-cornflower-900: #0f0c24;
+  --color-cornflower-950: #080613;
+
+  /* --- Teal (KIDS / gated youth surfaces) -------------------------------- */
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #96f7e4;
+  --color-teal-300: #46ecd5;
+  --color-teal-400: #00d5be;
+  --color-teal-500: #00bba7;
+  --color-teal-600: #009689;
+  --color-teal-700: #00786f;
+  --color-teal-800: #005f5a;
+  --color-teal-900: #0b4f4a;
+  --color-teal-950: #022f2e;
+
+  /* --- Sky (INFO) -------------------------------------------------------- */
+  --color-sky-50: #d8ecf8;
+  --color-sky-100: #b2daf1;
+  --color-sky-200: #8cc7ea;
+  --color-sky-300: #59afe1;
+  --color-sky-400: #2696d7;
+  --color-sky-500: #0084d1;
+  --color-sky-600: #005c92;
+  --color-sky-700: #004268;
+  --color-sky-800: #00273e;
+  --color-sky-900: #00131f;
+  --color-sky-950: #000a10;
+
+  /* --- Amber (WARNING) --------------------------------------------------- */
+  --color-amber-50: #fae9d8;
+  --color-amber-100: #f5d4b2;
+  --color-amber-200: #f1bf8c;
+  --color-amber-300: #eaa259;
+  --color-amber-400: #e48626;
+  --color-amber-500: #e07100;
+  --color-amber-600: #9c4f00;
+  --color-amber-700: #703800;
+  --color-amber-800: #432100;
+  --color-amber-900: #211000;
+  --color-amber-950: #110900;
+
+  /* --- Lime (SUCCESS) ---------------------------------------------------- */
+  --color-lime-50: #e5ecdf;
+  --color-lime-100: #ccdac0;
+  --color-lime-200: #b2c8a0;
+  --color-lime-300: #90af77;
+  --color-lime-400: #6e974d;
+  --color-lime-500: #55852e;
+  --color-lime-600: #3b5d20;
+  --color-lime-700: #2a4217;
+  --color-lime-800: #19270d;
+  --color-lime-900: #0c1306;
+  --color-lime-950: #060a03;
+
+  /* --- Red (ERROR) ------------------------------------------------------- */
+  --color-red-50: #fadce2;
+  --color-red-100: #f5bac6;
+  --color-red-200: #f098a9;
+  --color-red-300: #e96a83;
+  --color-red-400: #e23d5d;
+  --color-red-500: #de1b41;
+  --color-red-600: #9b122d;
+  --color-red-700: #6f0d20;
+  --color-red-800: #420813;
+  --color-red-900: #210409;
+  --color-red-950: #110205;
+
+  /* --- Slate (NEUTRAL ramp used across surfaces + text) ------------------ */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cad5e2;
+  --color-slate-400: #90a1b9;
+  --color-slate-500: #62748e;
+  --color-slate-600: #45556c;
+  --color-slate-700: #314158;
+  --color-slate-800: #1d293d;
+  --color-slate-900: #0f172b;
+  --color-slate-950: #020618;
+
+  /* --- Midnight (dark footer / deep backgrounds) ------------------------- */
+  --color-midnight-50: #dae6ec;
+  --color-midnight-100: #b6cdd9;
+  --color-midnight-200: #92b5c6;
+  --color-midnight-300: #6194ad;
+  --color-midnight-400: #317394;
+  --color-midnight-500: #0d5b82;
+  --color-midnight-600: #093f5b;
+  --color-midnight-700: #062d41;
+  --color-midnight-800: #031b27;
+  --color-midnight-900: #010d13;
+  --color-midnight-950: #01070a;
+
+  /* ======================================================================
+     ⚠ LEGACY ACCENTS — DEPRECATED. Do NOT use in new work.
+     These are one-off hex values carried over from the pre-token codebase.
+     They map to NEITHER a Tailwind ramp (--color-{name}-{shade}) NOR a
+     Nuxt UI semantic alias (--ui-*). Kept only so existing components keep
+     rendering; reach for the --ui-* equivalent noted on each line instead.
+     Tracked visually in the "Legacy accents" card (Colors group).
+     ====================================================================== */
+  --color-orange-endless: #f76e40; /* LEGACY project tags, task-status → --ui-primary */
+  --color-orange-primary: #ff754c; /* LEGACY button / hero "Download" text → --ui-primary */
+  --color-orange-title: #f26522;   /* LEGACY section titles, in-review status → --ui-primary */
+  --color-orange-button-hover: #e55c2d; /* LEGACY → --ui-primary-hover */
+  --color-purple-primary: #6c5dd3; /* LEGACY comment CTA, avatars → --ui-secondary */
+  --color-blue-status: #2fb0f8;    /* LEGACY status dots on tiles → --ui-info */
+  --color-green-light: #7fba7a;    /* LEGACY on-track / done dots → --ui-success */
+  --color-yellow-main: #ffce73;    /* LEGACY due-soon / feedback dots → --ui-warning */
+
+  /* ======================================================================
+     SEMANTIC ALIASES  — reach for these in product UI, not the raw ramps.
+     ====================================================================== */
+
+  /* Brand roles */
+  --ui-primary: var(--color-orange-500);
+  --ui-primary-hover: var(--color-orange-600);
+  --ui-primary-contrast: #ffffff;
+  --ui-secondary: var(--color-cornflower-500);
+  --ui-secondary-hover: var(--color-cornflower-600);
+  --ui-kids: var(--color-teal-500);
+
+  /* Status */
+  --ui-info: var(--color-sky-500);
+  --ui-warning: var(--color-amber-500);
+  --ui-success: var(--color-lime-500);
+  --ui-error: var(--color-red-500);
+
+  /* Text — tuned for readability (mirrors --ui-text overrides in the app) */
+  --ui-text: var(--color-slate-800);        /* default body / strong */
+  --ui-text-toned: var(--color-slate-700);
+  --ui-text-muted: var(--color-slate-600);  /* secondary copy, meta */
+  --ui-text-dimmed: var(--color-slate-500); /* timestamps, captions */
+  --ui-text-highlighted: var(--color-slate-950);
+  --ui-text-inverted: #ffffff;
+
+  /* Surfaces */
+  --ui-bg: #ffffff;               /* app / card background */
+  --ui-bg-muted: var(--color-slate-50);
+  --ui-bg-elevated: var(--color-slate-100);
+  --ui-bg-inverted: var(--color-midnight-950); /* footer, deep sections */
+
+  /* Borders / lines */
+  --ui-border: #dcdce9;           /* the app's card border color */
+  --ui-border-muted: var(--color-slate-200);
+  --ui-border-accented: var(--color-slate-300);
+}

@@ -1,0 +1,8 @@
+/* ==========================================================================
+   Endless Studios — Webfonts
+   Inter (body/UI) and Figtree (headings) are the platform's real typefaces;
+   both ship from Google Fonts, so no substitution is needed. If you vendor
+   the binaries locally, replace these @import lines with @font-face rules.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Figtree:wght@400;500;600;700;800&display=swap");

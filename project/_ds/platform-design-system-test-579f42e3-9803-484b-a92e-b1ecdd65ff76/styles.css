@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Endless Studios Design System — global entry point
+   Consumers link THIS file. It only @imports token + font layers; no rules
+   live here directly. The compiler ships everything reachable from here.
+   ========================================================================== */
+
+@import "./tokens/fonts.css";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";

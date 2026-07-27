@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/styles.css">
+  <script src="_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; background: var(--color-slate-50); }
+    a { color: var(--color-cornflower-500); text-decoration: none; }
+    a:hover { color: var(--color-cornflower-600); }
+    /* Lucide icons as CSS masks (the DS bundle emits .iconify.i-lucide-* spans) */
+    .iconify { display: inline-block; flex: none; background-color: currentColor; -webkit-mask: var(--ic) no-repeat center / contain; mask: var(--ic) no-repeat center / contain; }
+    .i-lucide-home { --ic: url("https://api.iconify.design/lucide/home.svg"); }
+    .i-lucide-book-open { --ic: url("https://api.iconify.design/lucide/book-open.svg"); }
+    .i-lucide-list-todo { --ic: url("https://api.iconify.design/lucide/list-todo.svg"); }
+    .i-lucide-gamepad-2 { --ic: url("https://api.iconify.design/lucide/gamepad-2.svg"); }
+    .i-lucide-hand-coins { --ic: url("https://api.iconify.design/lucide/hand-coins.svg"); }
+    .i-lucide-messages-square { --ic: url("https://api.iconify.design/lucide/messages-square.svg"); }
+    .i-lucide-calendar-days { --ic: url("https://api.iconify.design/lucide/calendar-days.svg"); }
+    .i-lucide-calendar { --ic: url("https://api.iconify.design/lucide/calendar.svg"); }
+    .i-lucide-trophy { --ic: url("https://api.iconify.design/lucide/trophy.svg"); }
+    .i-lucide-user-round { --ic: url("https://api.iconify.design/lucide/user-round.svg"); }
+    .i-lucide-bell { --ic: url("https://api.iconify.design/lucide/bell.svg"); }
+    .i-lucide-search { --ic: url("https://api.iconify.design/lucide/search.svg"); }
+    .i-lucide-zap { --ic: url("https://api.iconify.design/lucide/zap.svg"); }
+    .i-lucide-flame { --ic: url("https://api.iconify.design/lucide/flame.svg"); }
+    .i-lucide-play { --ic: url("https://api.iconify.design/lucide/play.svg"); }
+    .i-lucide-github { --ic: url("https://api.iconify.design/lucide/github.svg"); }
+    .i-lucide-check { --ic: url("https://api.iconify.design/lucide/check.svg"); }
+    .i-lucide-chevron-right { --ic: url("https://api.iconify.design/lucide/chevron-right.svg"); }
+    .i-lucide-arrow-right { --ic: url("https://api.iconify.design/lucide/arrow-right.svg"); }
+    .i-lucide-external-link { --ic: url("https://api.iconify.design/lucide/external-link.svg"); }
+    .i-lucide-sparkles { --ic: url("https://api.iconify.design/lucide/sparkles.svg"); }
+    .i-lucide-snowflake { --ic: url("https://api.iconify.design/lucide/snowflake.svg"); }
+    .i-lucide-log-in { --ic: url("https://api.iconify.design/lucide/log-in.svg"); }
+    .i-lucide-more-horizontal { --ic: url("https://api.iconify.design/lucide/more-horizontal.svg"); }
+    .i-lucide-thumbs-up { --ic: url("https://api.iconify.design/lucide/thumbs-up.svg"); }
+    .i-lucide-message-circle { --ic: url("https://api.iconify.design/lucide/message-circle.svg"); }
+    .i-lucide-clock { --ic: url("https://api.iconify.design/lucide/clock.svg"); }
+    .i-lucide-check-circle-2 { --ic: url("https://api.iconify.design/lucide/check-circle-2.svg"); }
+  </style>
+</helmet>
+<div data-screen-label="Studio Home" style="min-height:100vh;font-family:var(--font-sans);color:var(--ui-text);background:var(--color-slate-50)">
+
+  <!-- ===================== LEFT NAV SIDEBAR ===================== -->
+  <aside style="position: fixed; left: 0; top: 0; bottom: 0; width: 260px; z-index: 50">
+    <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Sidebar" from="./_ds/platform-design-system-test-579f42e3-9803-484b-a92e-b1ecdd65ff76/components/brand/Sidebar.jsx" brand-name="Studios" active-id="{{ navActive }}" on-navigate="{{ onNav }}" notifications="{{ notifications }}" user="{{ sidebarUser }}" items="{{ navItems }}" hint-size="260px,100%" style="height: 100%"></x-import>
+  </aside>
+
+  <!-- ===================== TOP BAR (active learner) ===================== -->
+  <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ true }}">
+    <header style="position:fixed;top:0;left:260px;right:0;height:64px;z-index:40;background:var(--ui-bg);border-bottom:1px solid var(--ui-border);display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3_5);padding:0 var(--space-8);box-sizing:border-box" data-comment-anchor="7c65c26555-header">
+      <div style="margin-right:auto;display:flex;align-items:center;gap:var(--space-2);width:300px;max-width:38vw;height:38px;padding:0 var(--space-3_5);background:var(--color-slate-100);border-radius:10px;box-sizing:border-box" data-om-label="Glossary Search">
+        <span class="iconify i-lucide-search" style="width:16px;height:16px;color:var(--ui-text-dimmed);flex:none"></span>
+        <input type="text" placeholder="Search the Glossary" aria-label="Search the Glossary" style="border:none;background:transparent;outline:none;width:100%;min-width:0;font-family:var(--font-sans);font-size:14px;color:var(--ui-text)">
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:6px" data-comment-anchor="906337174b-div">
+        <span class="iconify i-lucide-zap" style="width: 15px; height: 15px; color: var(--ui-primary)"></span>
+        <span style="font-size: 14px; font-weight: 600; color: var(--ui-text); height: 20px">{{ xpLabel }}</span>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:6px" data-comment-anchor="6416c0761c-div">
+        <span class="iconify i-lucide-flame" style="width:15px;height:15px;color:var(--ui-primary)"></span>
+        <span style="font-size: 14px; font-weight: 600; color: var(--ui-text); height: 20px">{{ headerStreak }}</span>
+      </div>
+      <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Avatar" name="{{ userName }}" size="md" hint-size="40px,40px"></x-import>
+    </header>
+  </sc-if>
+
+  <!-- ===================== CONTENT ===================== -->
+  
+
+  <!-- ===================== PREVIEW-ONLY STATE SWITCHER (not part of the product) ===================== -->
+  <div style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:200;display:flex;align-items:center;gap:var(--space-1);background:rgba(2,6,24,0.92);border-radius:100px;padding:5px 6px 5px var(--space-3_5);box-shadow:var(--shadow-menu)">
+    <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--color-slate-400);margin-right:6px">PREVIEW AS</span>
+    <div style="{{ swNewStyle }}" onClick="{{ setViewNew }}">New learner</div>
+    <div style="{{ swActiveStyle }}" onClick="{{ setViewActive }}">Active learner</div>
+    <div style="{{ swGuestStyle }}" onClick="{{ setViewGuest }}">Guest</div>
+  </div>
+<div style="overflow-x: auto; width: 100%">
+    <div style="max-width: 1080px; min-width: 1080px; margin: 0 auto; padding: 0; box-sizing: border-box; width: 1080px">
+      <div style="height: 40px; width: 100%"></div><sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}"><div style="position: static; padding: var(--space-16) var(--space-8) 28px; display: flex; flex-direction: row; gap: var(--space-3_5); align-items: center; justify-content: space-between; background-color: #cccccc; padding-top: 32px; padding-bottom: 32px; padding-left: 32px; padding-right: 32px; border-radius: 16px">
+                <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; justify-content: normal; align-items: flex-start"><h1 style="margin: 0; font-family: var(--font-heading); font-size: 48px; line-height: 40px; font-weight: 800; letter-spacing: -1px; color: var(--ui-text-inverted); height: 48px">Make games. Together.</h1><p style="margin: 0; max-width: 440px; font-size: 18px; line-height: 28px; color: rgba(255,255,255,0.85); font-weight: 400">Endless Studios is where young creators learn game-making by building and shipping real games with a community.</p><div style="display:flex;align-items:center;gap:var(--space-4);margin-top:var(--space-1)">
+                  <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="primary" size="lg" hint-size="120px,44px">Join free</x-import>
+                  <a href="#" style="color:var(--ui-text-inverted);font-size:14px;font-weight:600">or log in</a>
+                </div></div>
+                <div style="background: radial-gradient(120% 90% at 50% 0%, var(--color-teal-50), var(--ui-bg) 75%); border: 1px solid var(--ui-border); border-radius: 16px; padding: var(--space-6); width: 285px">
+              <h3 style="margin:0;font-family:var(--font-heading);font-size:17px;font-weight:700;letter-spacing:-0.5px;color:var(--ui-text-highlighted)">Join Endless Studios</h3>
+              <p style="margin:6px 0 var(--space-4);font-size:13px;line-height:20px;color:var(--ui-text-muted)">Create a free account to build games with the community — and unlock:</p>
+              <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-5)">
+                <div style="display:flex;align-items:center;gap:var(--space-2_5)">
+                  <span class="iconify i-lucide-zap" style="width:16px;height:16px;color:var(--ui-primary)"></span>
+                  <span style="font-size:13px;color:var(--ui-text)">XP, levels and real game-making skills</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--space-2_5)">
+                  <span class="iconify i-lucide-flame" style="width:16px;height:16px;color:var(--ui-primary)"></span>
+                  <span style="font-size:13px;color:var(--ui-text)">A learning streak that fits your week</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--space-2_5)">
+                  <span class="iconify i-lucide-messages-square" style="width:16px;height:16px;color:var(--ui-primary)"></span>
+                  <span style="font-size:13px;color:var(--ui-text)">Feedback from mentors and friends</span>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+                <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="primary" block="{{ true }}" hint-size="100%,40px">Join free</x-import>
+                <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="neutral" variant="outline" block="{{ true }}" leading-icon="i-lucide-log-in" hint-size="100%,40px">Log in</x-import>
+              </div>
+            </div>
+                
+              </div></sc-if>
+      <div style="display: grid; grid-template-columns: minmax(0,1fr) 324px; gap: var(--space-12); align-items: start; margin-top: 80px">
+
+        <!-- ============ MAIN COLUMN ============ -->
+        <div style="display: flex; flex-direction: column; min-width: 0; width: 100%; justify-content: flex-start; align-items: stretch; flex-wrap: nowrap; gap: 80px">
+
+          <!-- Header: new learner -->
+          <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
+            
+          </sc-if>
+
+          <!-- Header: guest hero -->
+          <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;border-radius:32px;overflow:hidden;background:var(--color-midnight-900)">
+              <img src="assets/img/hero-signed-out.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(1,7,10,0.05) 30%, rgba(1,7,10,0.62) 100%)"></div>
+              
+            </div>
+          </sc-if>
+
+          <!-- ============ CONTINUE LEARNING ============ -->
+          
+
+          <!-- ============ YOUR OPEN TASKS ============ -->
+          <section style="width: 100%; align-self: auto" data-om-label="Learning">
+            <sc-if value="{{ isActive }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3_5)">
+                <h2 style="margin: 0; font-family: var(--font-heading); font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); height: 32px">Continue learning</h2>
+                <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="secondary" variant="ghost" size="sm" trailing-icon="i-lucide-arrow-right" hint-size="150px,32px">View all programs</x-import>
+              </div>
+              <div style="background: var(--ui-bg); border: 1px solid var(--ui-border); border-radius: 24px; padding: var(--space-5); display: flex; align-items: stretch; gap: var(--space-5); transition: box-shadow 0.25s ease; padding-top: 24px; padding-right: 24px; padding-bottom: 24px; padding-left: 24px" style-hover="box-shadow:var(--shadow-hover)">
+                <img src="assets/img/bg-threadbare.png" alt="Intro to Game Design" style="width: 242px; align-self: stretch; object-fit: cover; border-radius: 16px; flex: none">
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: stretch; justify-content: space-between">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--ui-text-dimmed)">Program</div>
+                  <div style="margin-top: 3px; font-family: var(--font-heading); font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); height: 32px">Intro to Game Design</div>
+                  <div style="margin-top: 3px; font-size: 14px; color: var(--ui-text-muted)">Current task: Grey-box your first level</div>
+                  <div style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-3); flex-direction: row; flex-wrap: nowrap">
+                    <div style="flex: 1; border-radius: 100px; background: var(--color-slate-100); overflow: hidden; width: 100%; height: 8px">
+                      <div style="width:62%;height:100%;border-radius:100px;background:var(--ui-primary)"></div>
+                    </div>
+                    <span style="font-size:12px;color:var(--ui-text-dimmed);white-space:nowrap">42%</span>
+                  </div>
+                  <div style="margin-top:var(--space-5)">
+                    <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="primary" size="lg" leading-icon="i-lucide-play" hint-size="180px,44px" style="position: relative">Resume learning</x-import>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ showRecs }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-1)">
+                <h2 style="margin: 0; font-family: var(--font-heading); font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); line-height: 32px">Start learning</h2>
+                <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="secondary" variant="ghost" size="sm" hint-size="160px,32px">Browse all programs</x-import>
+              </div>
+              <p style="margin:0 0 var(--space-3_5);font-size:13px;color:var(--ui-text-muted)">Pick a program to begin your journey — every task you finish earns XP.</p>
+              <div style="display: flex; flex-direction: column; gap: 24px">
+                <sc-for list="{{ recs }}" as="r" hint-placeholder-count="3">
+                  <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.ProgramTile" image="{{ r.image }}" name="{{ r.name }}" description="{{ r.description }}" tasks-count="{{ r.tasksCount }}" status="{{ r.status }}" dc-props="{{ programStyle }}" hint-size="100%,134px"></x-import>
+                </sc-for>
+              </div>
+            </sc-if>
+          </section><sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ true }}" data-om-label="Your Open Tasks">
+            <section data-om-label="Your Open Tasks">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3_5)">
+                <h2 style="margin: 0; font-family: var(--font-heading); font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); line-height: 32px">Your open tasks</h2>
+                <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="secondary" variant="ghost" size="sm" hint-size="132px,32px">All open tasks</x-import>
+              </div>
+              <sc-if value="{{ isActive }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                  <sc-for list="{{ openTasks }}" as="t" hint-placeholder-count="3">
+                    <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.TaskTile" name="{{ t.name }}" status="{{ t.status }}" project="{{ t.project }}" project-image="{{ t.projectImage }}" due="{{ t.due }}" due-soon="{{ t.dueSoon }}" dc-props="{{ tileStyle }}" hint-size="100%,120px" style="width: 100%; padding-top: 24px; padding-right: 24px; padding-bottom: 24px; padding-left: 24px"></x-import>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
+                <div style="border:1.5px dashed var(--color-slate-300);border-radius:16px;padding:var(--space-8) var(--space-6);display:flex;flex-direction:column;align-items:center;gap:var(--space-2);text-align:center">
+                  <span class="iconify i-lucide-sparkles" style="width:22px;height:22px;color:var(--ui-primary)"></span>
+                  <div style="font-family:var(--font-heading);font-size:15px;font-weight:700;color:var(--ui-text)">No open tasks yet</div>
+                  <p style="margin:0;max-width:360px;font-size:13px;line-height:20px;color:var(--ui-text-muted)">Tasks you start in programs — and GitHub issues you pick up — will land here.</p>
+                </div>
+              </sc-if>
+            </section>
+          </sc-if>
+
+          <!-- ============ NEW & NOTEWORTHY ============ -->
+          <section data-om-label="New &amp; Noteworthy">
+            <h2 style="margin: 0; font-family: var(--font-heading); font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); line-height: 32px">New &amp; noteworthy</h2>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin:var(--space-3) 0 var(--space-4)">
+              <div style="{{ tabAllStyle }}" onClick="{{ setTabAll }}">All</div>
+              <div style="{{ tabAnnounceStyle }}" onClick="{{ setTabAnnounce }}">Announcements</div>
+              <div style="{{ tabGameStyle }}" onClick="{{ setTabGame }}">Game updates</div>
+              <div style="{{ tabProgramStyle }}" onClick="{{ setTabProgram }}">Program boards</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 40px">
+              <sc-for list="{{ filteredPosts }}" as="p" hint-placeholder-count="3">
+                <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.PostCard" key="{{ p.id }}" author="{{ p.author }}" avatar="{{ p.avatar }}" time="{{ p.time }}" source="{{ p.source }}" post-type="{{ p.postType }}" image="{{ p.image }}" tags="{{ p.tags }}" likes="{{ p.likes }}" comments="{{ p.comments }}" hint-size="100%,200px" style="padding-top: 24px; padding-right: 24px; padding-bottom: 24px; padding-left: 24px">{{ p.body }}</x-import>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+
+        <!-- ============ RIGHT RAIL ============ -->
+        <div style="display: flex; flex-direction: column; gap: 24px; min-width: 0; width: 100%">
+
+          <!-- Guest: sign-up CTA -->
+          <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
+            
+          </sc-if>
+
+          <!-- New learner: getting started checklist -->
+          <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}" data-om-label="Getting Started">
+            <div style="background:var(--ui-bg);border:1px solid var(--ui-border);border-radius:16px;padding:var(--space-5)">
+              <div style="display:flex;align-items:center;gap:var(--space-3_5);margin-bottom:var(--space-4)">
+                <div style="width:48px;height:48px;border-radius:50%;background:conic-gradient(var(--ui-primary) 144deg, var(--color-slate-200) 144deg);display:flex;align-items:center;justify-content:center;flex:none">
+                  <div style="width:36px;height:36px;border-radius:50%;background:var(--ui-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--ui-text)">2/5</div>
+                </div>
+                <div>
+                  <h3 style="margin:0;font-family:var(--font-heading);font-size:16px;font-weight:700;letter-spacing:-0.5px;color:var(--ui-text-highlighted)">Getting started</h3>
+                  <div style="display:inline-flex;align-items:center;gap:var(--space-1);margin-top:2px;font-size:12px;font-weight:600;color:var(--ui-primary)">
+                    <span class="iconify i-lucide-zap" style="width:13px;height:13px"></span>Finish all 5 to earn 1,000 XP
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <sc-for list="{{ gsItems }}" as="g" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:var(--space-2_5);padding:7px var(--space-2);border-radius:10px;cursor:pointer" style-hover="background:var(--color-slate-50)">
+                    <span style="{{ g.circleStyle }}">
+                      <sc-if value="{{ g.done }}" hint-placeholder-val="{{ false }}"><span class="iconify i-lucide-check" style="width:11px;height:11px;color:var(--ui-text-inverted)"></span></sc-if>
+                    </span>
+                    <span style="{{ g.labelStyle }}">{{ g.label }}</span>
+                    <sc-if value="{{ g.todo }}" hint-placeholder-val="{{ true }}"><span class="iconify i-lucide-chevron-right" style="width:14px;height:14px;color:var(--ui-text-dimmed);margin-left:auto"></span></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Streak (logged-in) -->
+          <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ true }}" data-om-label="Streak">
+            <div style="border-radius: 16px; padding: var(--space-5); background-color: var(--ui-bg-elevated); padding-top: 24px; padding-right: 24px; padding-bottom: 24px; padding-left: 24px">
+              <div style="display: flex; align-items: center; justify-content: space-between">
+                <div>
+                  <h3 style="margin: 0; font-family: var(--font-heading); font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); height: 28px; line-height: 28px">{{ streakTitle }}</h3>
+                  <p style="margin: 3px 0 0; font-size: 14px; color: var(--ui-text-dimmed)">Mon–Fri only · weekends are free</p>
+                </div>
+                <span aria-hidden="true" style="width: 37px; height: 37px; flex: none; -webkit-mask: url('assets/icons/lightning.svg') no-repeat center / contain; mask: url('assets/icons/lightning.svg') no-repeat center / contain; background-color: var(--color-orange-300)"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:var(--space-4)">
+                <sc-for list="{{ weekCells }}" as="d" hint-placeholder-count="7">
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding-top: 4px; padding-bottom: 4px; padding-left: 4px; padding-right: 4px; border-radius: 4px">
+                    <span style="{{ d.style }}">
+                      <sc-if value="{{ d.showCheck }}" hint-placeholder-val="{{ false }}"><span class="iconify i-lucide-check" style="width:13px;height:13px;color:var(--ui-text-inverted)"></span></sc-if>
+                      <sc-if value="{{ d.showLetter }}" hint-placeholder-val="{{ true }}">{{ d.letter }}</sc-if>
+                    </span>
+                    <span style="font-size:10px;font-weight:600;color:var(--ui-text-dimmed)">{{ d.letter }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-top:var(--space-4);padding-top:var(--space-3_5);border-top:1px solid var(--ui-border-muted)">
+                <span style="display: inline-flex; width: 8px; height: 8px; border-radius: 50%; align-items: center; justify-content: center; background-color: var(--color-midnight-200)"></span>
+                <span style="display: inline-flex; width: 8px; height: 8px; border-radius: 50%; align-items: center; justify-content: center; background-color: var(--color-midnight-200)"></span>
+                <span style="font-size:12px;color:var(--ui-text-muted)">2 skips left this week</span>
+                <span style="margin-left:auto;font-size:12px;color:var(--ui-text-dimmed)">{{ streakMeta }}</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Upcoming events -->
+          
+
+          <!-- Bounties -->
+          <div style="border-radius: 16px; padding: var(--space-5); background-color: var(--ui-bg-elevated); padding-top: 24px; padding-right: 24px; padding-bottom: 24px; padding-left: 24px" data-om-label="Upcoming Events">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3_5); width: 100%">
+              <h3 style="margin: 0; font-family: var(--font-heading); font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); height: 28px; line-height: 28px">Upcoming events</h3>
+              <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="secondary" variant="ghost" size="sm" hint-size="120px,32px">Full calendar</x-import>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%">
+              <sc-for list="{{ events }}" as="e" hint-placeholder-count="4" style="width: 100%">
+                <div style="display: flex; align-items: center; gap: var(--space-3); cursor: pointer; padding: var(--space-2); margin: 0 calc(var(--space-2)*-1); border-radius: var(--radius-md); transition: background var(--duration-fast) linear; width: 100%" style-hover="background:var(--ui-bg)">
+                  <div style="{{ e.tileStyle }}">
+                    <span style="font-size:9px;font-weight:700;letter-spacing:0.04em">{{ e.mon }}</span>
+                    <span style="font-size:16px;font-weight:700;line-height:16px">{{ e.day }}</span>
+                  </div>
+                  <div style="flex: 1; min-width: 0; width: 100%">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--ui-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%">{{ e.title }}</div>
+                    <div style="font-size: 12px; color: var(--ui-text-dimmed); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%">{{ e.meta }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div><div style="border-radius: 16px; padding: var(--space-5); background-color: var(--ui-bg-elevated); padding-top: 24px; padding-right: 24px; padding-bottom: 24px; padding-left: 24px" data-om-label="Bounties">
+            
+              <h3 style="margin: 0; font-family: var(--font-heading); font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--ui-text-highlighted); align-self: center; height: 28px; position: static; width: 100%; line-height: 28px">Bounties</h3>
+              
+            
+            <p style="margin: 0 0 var(--space-3_5); font-size: 14px; color: var(--ui-text-dimmed); width: 100%">Paid tasks posted by game teams.</p>
+            <div style="display: flex; flex-direction: column; gap: 8px; width: 100%">
+              <sc-for list="{{ bounties }}" as="b" hint-placeholder-count="3" style="width: 100%">
+                <div style="display: flex; align-items: center; gap: var(--space-3); cursor: pointer; padding: var(--space-2); margin: 0 calc(var(--space-2)*-1); border-radius: var(--radius-md); transition: background var(--duration-fast) linear; width: 100%" style-hover="background:var(--ui-bg)">
+                  <img src="{{ b.img }}" alt="" style="width:34px;height:34px;border-radius:10px;object-fit:cover;flex:none">
+                  <div style="flex: 1; min-width: 0; width: 100%">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--ui-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%">{{ b.title }}</div>
+                    <div style="font-size: 12px; color: var(--ui-text-dimmed); width: 100%">{{ b.game }}</div>
+                  </div>
+                  <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Badge" color="success" variant="soft" size="sm" hint-size="auto,20px">{{ b.amt }}</x-import>
+                </div>
+              </sc-for>
+            </div>
+            <x-import component-from-global-scope="EndlessStudiosDesignSystem_579f42.Button" color="secondary" variant="ghost" size="sm" trailing-icon="i-lucide-external-link" hint-size="170px,32px" style="margin-top:var(--space-3_5)">Browse all bounties</x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;previewState&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;active&quot;, &quot;new&quot;, &quot;guest&quot;], &quot;default&quot;: &quot;active&quot;, &quot;tsType&quot;: &quot;'active' | 'new' | 'guest'&quot;, &quot;section&quot;: &quot;Preview&quot; },
+  &quot;userName&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Nova&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Content&quot; },
+  &quot;streakDays&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;min&quot;: 0, &quot;max&quot;: 30, &quot;step&quot;: 1, &quot;default&quot;: 6, &quot;unit&quot;: &quot;days&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Content&quot; }
+}">
+class Component extends DCLogic {
+  state = { view: null, tab: 'all', nav: 'home' };
+
+  get view() { return this.state.view ?? this.props.previewState ?? 'active'; }
+
+  renderVals() {
+    const view = this.view;
+    const isActive = view === 'active', isNew = view === 'new', isGuest = view === 'guest';
+    const tab = this.state.tab;
+
+    const tabBase = { padding: '7px 14px', borderRadius: 100, fontSize: 13, fontWeight: 600, cursor: 'pointer', userSelect: 'none', transition: 'all 0.15s linear' };
+    const tabStyle = (id) => tab === id
+      ? { ...tabBase, background: 'var(--color-midnight-950)', color: 'var(--ui-text-inverted)', border: '1px solid var(--color-midnight-950)' }
+      : { ...tabBase, background: 'var(--ui-bg)', color: 'var(--ui-text-muted)', border: '1px solid var(--ui-border)' };
+
+    const swBase = { padding: '6px 12px', borderRadius: 100, fontSize: 12.5, fontWeight: 600, cursor: 'pointer', userSelect: 'none', transition: 'all 0.15s linear' };
+    const swStyle = (id) => view === id
+      ? { ...swBase, background: 'var(--ui-bg)', color: 'var(--color-slate-900)' }
+      : { ...swBase, background: 'transparent', color: 'var(--color-slate-300)' };
+
+    const posts = [
+      { id: 'p1', cat: 'announce', author: 'Endless Studios', avatar: 'assets/logo-endless.svg', time: 'Today', source: 'Announcements', postType: 'Announcement', tags: ['Event', 'Creator Jam'], likes: 132, comments: 41,
+        body: 'Creator Jam 2026 registration is open! Team up, build a game in 48 hours, and demo it at the summer showcase. Spots are limited — grab yours.' },
+      { id: 'p2', cat: 'game', author: 'Threadbare team', time: 'Yesterday', source: 'Threadbare', postType: 'Game update', image: 'assets/img/bg-threadbare.png', tags: ['Changelog', 'v0.9'], likes: 87, comments: 19,
+        body: 'v0.9 "Loom" is live — the weaving minigame ships today, plus smoother sheep pathfinding and 12 community-made quilt patterns.' },
+      { id: 'p3', cat: 'program', author: 'Mx. Rivera', time: 'Yesterday', source: 'Intro to Game Design', postType: 'From your instructor', tags: ['Week 3'], likes: 24, comments: 8,
+        body: 'Week 3 brief is up: block out one core mechanic in grey boxes before Friday\u2019s playtest. Bring one question about your game loop to the session.' },
+      { id: 'p4', cat: 'program', author: 'mika.builds', time: '2 days ago', source: 'Pixel Art Foundations', postType: 'New work', image: 'assets/img/endstar-bg.webp', tags: ['Showcase'], likes: 56, comments: 14,
+        body: 'First pass at my sunset title screen — built the whole scene in Endstar\u2019s editor. Palette feedback welcome!' },
+      { id: 'p5', cat: 'game', author: 'Endstar team', time: '3 days ago', source: 'Endstar', postType: 'Game update', tags: ['Changelog'], likes: 63, comments: 11,
+        body: 'Endstar 1.4 adds remixable sample worlds — open any featured world, press Remix, and make it yours.' },
+    ];
+
+    const gsCircle = (done) => done
+      ? { display: 'inline-flex', width: 18, height: 18, borderRadius: '50%', background: 'var(--ui-success)', alignItems: 'center', justifyContent: 'center', flex: 'none' }
+      : { display: 'inline-flex', width: 18, height: 18, borderRadius: '50%', border: '1.5px dashed var(--color-slate-300)', boxSizing: 'border-box', flex: 'none' };
+    const gsLabel = (done) => done
+      ? { fontSize: 13, color: 'var(--ui-text-dimmed)', textDecoration: 'line-through' }
+      : { fontSize: 13, color: 'var(--ui-text)' };
+    const gsItems = [
+      { label: 'Create your account', done: true },
+      { label: 'Complete your profile', done: true },
+      { label: 'Join your first program', done: false },
+      { label: 'Play a community game', done: false },
+      { label: 'Say hi in the community feed', done: false },
+    ].map(g => ({ ...g, todo: !g.done, circleStyle: gsCircle(g.done), labelStyle: gsLabel(g.done) }));
+
+    const cell = (kind) => {
+      const base = { display: 'inline-flex', width: 30, height: 30, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, boxSizing: 'border-box' };
+      if (kind === 'done') return { ...base, background: 'var(--ui-primary)' };
+      if (kind === 'today') return { ...base, border: '2px solid var(--ui-primary)', color: 'var(--ui-primary)', background: 'var(--color-orange-50)' };
+      if (kind === 'off') return { ...base, border: '1.5px dashed var(--color-slate-200)', color: 'var(--color-slate-300)' };
+      return { ...base, background: 'var(--color-slate-100)', color: 'var(--ui-text-dimmed)' };
+    };
+    const letters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    const kinds = isActive
+      ? ['done', 'today', 'up', 'up', 'up', 'off', 'off']
+      : ['today', 'up', 'up', 'up', 'up', 'off', 'off'];
+    const weekCells = letters.map((letter, i) => {
+      const k = kinds[i];
+      return { letter, style: cell(k), showCheck: k === 'done', showLetter: k !== 'done' };
+    });
+
+    const streakDays = this.props.streakDays ?? 6;
+    const evTile = (c) => ({
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 40, height: 40,
+      borderRadius: 12, flex: 'none',
+      background: c === 'community' ? 'var(--color-orange-50)' : c === 'program' ? 'var(--color-cornflower-50)' : 'var(--color-slate-100)',
+      color: c === 'community' ? 'var(--color-orange-700)' : c === 'program' ? 'var(--color-cornflower-600)' : 'var(--color-slate-600)',
+    });
+    const events = [
+      { mon: 'JUL', day: '22', title: 'Creator Jam kickoff', meta: 'Community event · 4:00 PM', tileStyle: evTile('community') },
+      { mon: 'JUL', day: '24', title: 'Playtest build due', meta: 'Intro to Game Design · task deadline', tileStyle: evTile('program') },
+      { mon: 'JUL', day: '28', title: 'Threadbare v1.0 milestone', meta: 'GitHub · threadbare', tileStyle: evTile('github') },
+      { mon: 'AUG', day: '01', title: 'Summer Show & Tell', meta: 'Community event · live demos', tileStyle: evTile('community') },
+    ];
+
+    return {
+      userName: this.props.userName ?? 'Nova',
+      isActive, isNew, isGuest,
+      isLoggedIn: !isGuest,
+      navActive: this.state.nav,
+      onNav: (id) => this.setState({ nav: id }),
+      notifications: isGuest ? 0 : 3,
+      sidebarUser: isGuest ? { name: 'Guest' } : { name: this.props.userName ?? 'Nova' },
+      navItems: [
+        { id: 'home', label: 'Home', icon: 'home' },
+        { id: 'learn', label: 'Learn', icon: 'brain', children: [
+          { id: 'programs', label: 'Programs' },
+          { id: 'my-tasks', label: 'My tasks' },
+        ] },
+        { id: 'play', label: 'Play', icon: 'gamepad', children: [
+          { id: 'games-library', label: 'Games library' },
+          { id: 'bounties', label: 'Bounties' },
+        ] },
+        { id: 'community', label: 'Community', icon: 'infinity', children: [
+          { id: 'community-feed', label: 'Community feed' },
+          { id: 'events', label: 'Events' },
+          { id: 'leaderboards', label: 'Leaderboards' },
+        ] },
+      ],
+      showRecs: isNew || isGuest,
+      levelLabel: isNew ? 'Level 1 · 150 XP' : 'Level 3 · 2,450 XP',
+      xpLabel: isNew ? '150 XP' : '2,450 XP',
+      headerStreak: isNew ? 0 : streakDays,
+      streakTitle: isActive ? streakDays + '-day streak' : 'Start your streak',
+      streakMeta: isActive ? 'Best: 14 days' : 'Best: 0 days',
+      weekCells, gsItems, events, streakDays,
+      tileStyle: { style: { boxSizing: 'border-box', padding: '20px' } },
+      programStyle: { style: { boxSizing: 'border-box', padding: '20px' } },
+      recs: [
+        { name: 'Intro to Game Design', description: 'Build your first playable prototype, one task at a time.', tasksCount: 8, status: 'Beginner', image: 'assets/img/bg-threadbare.png' },
+        { name: 'Pixel Art Foundations', description: 'Draw, animate, and export sprite art for your games.', tasksCount: 6, status: 'Beginner', image: 'assets/img/generic-image.png' },
+        { name: 'Ship Your First Game', description: 'Take a project from idea to a shared, playable build.', tasksCount: 10, status: 'Intermediate', image: 'assets/img/games/game-built.png' },
+      ],
+      openTasks: [
+        { name: 'Fix ladder-climb collision', status: 'New', project: 'threadbare · GitHub', projectImage: 'assets/icons/github-mark.svg', due: '3 days' },
+        { name: 'Grey-box your first level', status: 'In Progress', project: 'Intro to Game Design', projectImage: 'assets/img/default-bg.png', due: 'Friday', dueSoon: true },
+        { name: 'Title-screen mockup', status: 'Feedback', project: 'Pixel Art Foundations', projectImage: 'assets/img/generic-image.png', due: 'Today', dueSoon: true },
+      ],
+      bounties: [
+        { title: 'Design a boss intro cutscene', game: 'Ink Drinker', amt: '$40', img: 'assets/img/games/endstar-avatar.png' },
+        { title: 'Fix double-jump collision bug', game: 'Pixel Racer', amt: '$25', img: 'assets/img/generic-image.png' },
+        { title: 'Compose a 30s title theme', game: 'Star Weaver', amt: '$60', img: 'assets/img/default-image.png' },
+      ],
+      filteredPosts: posts.filter(p => tab === 'all' || p.cat === tab),
+      tabAllStyle: tabStyle('all'), tabAnnounceStyle: tabStyle('announce'), tabGameStyle: tabStyle('game'), tabProgramStyle: tabStyle('program'),
+      setTabAll: () => this.setState({ tab: 'all' }),
+      setTabAnnounce: () => this.setState({ tab: 'announce' }),
+      setTabGame: () => this.setState({ tab: 'game' }),
+      setTabProgram: () => this.setState({ tab: 'program' }),
+      swNewStyle: swStyle('new'), swActiveStyle: swStyle('active'), swGuestStyle: swStyle('guest'),
+      setViewNew: () => this.setState({ view: 'new' }),
+      setViewActive: () => this.setState({ view: 'active' }),
+      setViewGuest: () => this.setState({ view: 'guest' }),
+    };
+  }
+}
+</script>
+</body>
+</html>
