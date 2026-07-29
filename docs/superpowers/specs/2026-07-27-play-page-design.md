@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Build `/play`, the programs catalog. Learners browse cohort-based programs, see progress on ones they're already enrolled in, and filter/search to find new ones.
+Build `/learn`, the programs catalog. Learners browse cohort-based programs, see progress on ones they're already enrolled in, and filter/search to find new ones.
 
 ## Scope
 

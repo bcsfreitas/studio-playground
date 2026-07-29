@@ -1,0 +1,67 @@
+<script setup lang="ts">
+import type { BadgeProps } from '@nuxt/ui'
+import { cohortTimingOf, formatCohortRange, type LearnProgram } from '~/composables/useLearnMockData'
+
+const props = defineProps<{
+  program: LearnProgram
+}>()
+
+const TIMING_LABEL: Record<string, string> = {
+  'starting-soon': 'Starting Soon',
+  'open-enrollment': 'Open Enrollment'
+}
+
+const TIMING_COLOR: Record<string, BadgeProps['color']> = {
+  'starting-soon': 'warning',
+  'open-enrollment': 'neutral'
+}
+
+const timing = computed(() => cohortTimingOf(props.program))
+const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, props.program.cohortEnd))
+</script>
+
+<template>
+  <UPageCard
+    :to="`/learn/${program.id}`"
+    :title="program.name"
+    :description="program.description"
+    reverse
+    variant="outline"
+    class="cursor-pointer transition-shadow duration-250 hover:shadow-xl rounded-2xl"
+    :ui="{ title: 'font-bold line-clamp-2', description: 'line-clamp-2' }"
+  >
+    <img
+      :src="program.image"
+      alt=""
+      class="w-full h-56 object-cover bg-slate-100 rounded-2xl"
+    >
+
+    <template #footer>
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-3">
+          <UBadge :label="program.status" color="neutral" size="md" variant="soft" />
+          <span class="inline-flex items-center gap-1.5 text-xs text-dimmed">
+            <UIcon name="lucide:layers" class="size-4" />
+            {{ program.tasksCount }} Modules
+          </span>
+        </div>
+
+        <div class="border-t border-default pt-3">
+          <div v-if="program.enrolled" class="flex flex-col gap-2">
+            <div class="flex items-center gap-3">
+              <UProgress :model-value="program.progress" color="primary" />
+              <span class="text-xs text-default">{{ program.progress }}%</span>
+            </div>
+          </div>
+
+          <div v-else class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <UBadge :label="cohortRange" color="neutral" variant="outline" size="sm" />
+              <UBadge :label="TIMING_LABEL[timing]" :color="TIMING_COLOR[timing]" variant="soft" size="sm" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </UPageCard>
+</template>
