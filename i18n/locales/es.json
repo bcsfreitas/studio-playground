@@ -1,0 +1,96 @@
+{
+  "program": {
+    "notFound": {
+      "title": "Programa no encontrado",
+      "body": "No pudimos encontrar un programa en esta dirección. Puede que se haya movido o que el enlace esté desactualizado.",
+      "backToLearn": "Volver a Learn"
+    },
+    "hero": {
+      "deliveredWith": "Impartido con {institution}",
+      "facilitatedBy": "Facilitado por {facilitator}"
+    },
+    "badges": {
+      "difficulty": {
+        "Beginner": "Principiante",
+        "Intermediate": "Intermedio",
+        "Advanced": "Avanzado"
+      },
+      "tier": {
+        "Explore": "Explorar",
+        "Core": "Esencial",
+        "More": "Más"
+      },
+      "learningType": {
+        "self-paced": "A tu propio ritmo",
+        "moderated": "Con calendario"
+      }
+    },
+    "facts": {
+      "duration": "Duración",
+      "totalXp": "XP total",
+      "learningType": "Tipo de aprendizaje",
+      "difficulty": "Dificultad",
+      "language": "Idioma",
+      "minAge": "Edad mínima"
+    },
+    "game": {
+      "playLabel": "Jugar a {name}"
+    },
+    "sections": {
+      "curriculum": "Plan de estudios",
+      "tools": "Herramientas que usarás",
+      "prerequisites": "Requisitos previos",
+      "testimonials": "Lo que dicen los estudiantes",
+      "certificate": "Lo que obtendrás"
+    },
+    "curriculum": {
+      "xpBadge": "+{xp} XP"
+    },
+    "prerequisites": {
+      "emptyTitle": "Sin requisitos previos",
+      "emptyBody": "Este programa está abierto a cualquier persona, no se necesita experiencia previa."
+    },
+    "testimonials": {
+      "emptyTitle": "Todavía no hay testimonios",
+      "emptyBody": "Este programa acaba de lanzarse - sé de los primeros en compartir tu experiencia.",
+      "completedCount": "Ningún estudiante ha completado este programa todavía | {count} estudiante ha completado este programa | {count} estudiantes han completado este programa"
+    },
+    "certificate": {
+      "shareButton": "Compartir",
+      "downloadButton": "Descargar",
+      "microcredentialsLabel": "Microcredenciales"
+    },
+    "whatsNext": {
+      "viewProgram": "Ver programa"
+    },
+    "enrollment": {
+      "sessionPickerLabel": "Elige una sesión",
+      "cta": {
+        "resume": "Continuar aprendiendo",
+        "startLearning": "Comenzar a aprender",
+        "unlockCohort": "Desbloquear sesión",
+        "enrollmentClosed": "Inscripción cerrada",
+        "cohortFull": "Sesión completa",
+        "joinWaitlist": "Unirte a la lista de espera",
+        "enroll": "Inscribirte en esta sesión"
+      },
+      "accessCode": {
+        "placeholder": "Ingresa el código de acceso",
+        "helper": "Esta sesión requiere un código de acceso de tu facilitador.",
+        "error": "Ese código no coincide. Consulta con tu facilitador e intenta de nuevo."
+      },
+      "seats": {
+        "filled": "{taken} de {max} cupos ocupados",
+        "full": "Completo"
+      },
+      "cohortDescription": {
+        "open": "{taken} de {max} cupos - {range}",
+        "full": "Completo - {range}",
+        "closed": "Cerrado - {range}",
+        "requiresCode": "Requiere un código de acceso",
+        "selfPaced": "A tu propio ritmo - comienza cuando quieras",
+        "alreadyEnrolled": "Ya estás inscrito - {progress}% completado"
+      }
+    }
+  }
+}

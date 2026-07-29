@@ -15,6 +15,7 @@
   "dependencies": {
     "@nuxt/icon": "^2.3.1",
     "@nuxt/ui": "^4.10.0",
+    "@nuxtjs/i18n": "^10.5.0",
     "@storybook-vue/nuxt": "^9.1.0-29411911.f34c865",
     "nuxt": "^4.5.0",
     "vue": "^3.5.13",

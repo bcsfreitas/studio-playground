@@ -1,0 +1,96 @@
+{
+  "program": {
+    "notFound": {
+      "title": "Program not found",
+      "body": "We couldn't find a program at this address. It may have moved or the link may be out of date.",
+      "backToLearn": "Back to Learn"
+    },
+    "hero": {
+      "deliveredWith": "Delivered with {institution}",
+      "facilitatedBy": "Facilitated by {facilitator}"
+    },
+    "badges": {
+      "difficulty": {
+        "Beginner": "Beginner",
+        "Intermediate": "Intermediate",
+        "Advanced": "Advanced"
+      },
+      "tier": {
+        "Explore": "Explore",
+        "Core": "Core",
+        "More": "More"
+      },
+      "learningType": {
+        "self-paced": "Self-paced",
+        "moderated": "Moderated"
+      }
+    },
+    "facts": {
+      "duration": "Duration",
+      "totalXp": "Total XP",
+      "learningType": "Learning type",
+      "difficulty": "Difficulty",
+      "language": "Language",
+      "minAge": "Minimum age"
+    },
+    "game": {
+      "playLabel": "Play {name}"
+    },
+    "sections": {
+      "curriculum": "Curriculum",
+      "tools": "Tools you'll use",
+      "prerequisites": "Prerequisites",
+      "testimonials": "What learners say",
+      "certificate": "What you'll earn"
+    },
+    "curriculum": {
+      "xpBadge": "+{xp} XP"
+    },
+    "prerequisites": {
+      "emptyTitle": "No prerequisites",
+      "emptyBody": "This program is open to anyone, no prior experience needed."
+    },
+    "testimonials": {
+      "emptyTitle": "No testimonials yet",
+      "emptyBody": "This program just launched - be one of the first to share your experience.",
+      "completedCount": "No learners have completed this program yet | {count} learner has completed this program | {count} learners have completed this program"
+    },
+    "certificate": {
+      "shareButton": "Share",
+      "downloadButton": "Download",
+      "microcredentialsLabel": "Microcredentials"
+    },
+    "whatsNext": {
+      "viewProgram": "View program"
+    },
+    "enrollment": {
+      "sessionPickerLabel": "Choose a session",
+      "cta": {
+        "resume": "Resume learning",
+        "startLearning": "Start learning",
+        "unlockCohort": "Unlock session",
+        "enrollmentClosed": "Enrollment closed",
+        "cohortFull": "Session full",
+        "joinWaitlist": "Join the waitlist",
+        "enroll": "Enroll in this session"
+      },
+      "accessCode": {
+        "placeholder": "Enter access code",
+        "helper": "This session requires an access code from your facilitator.",
+        "error": "That code doesn't match. Check with your facilitator and try again."
+      },
+      "seats": {
+        "filled": "{taken} of {max} seats filled",
+        "full": "Full"
+      },
+      "cohortDescription": {
+        "open": "{taken} of {max} seats - {range}",
+        "full": "Full - {range}",
+        "closed": "Closed - {range}",
+        "requiresCode": "Requires an access code",
+        "selfPaced": "Self-paced - start anytime",
+        "alreadyEnrolled": "You're enrolled - {progress}% complete"
+      }
+    }
+  }
+}
