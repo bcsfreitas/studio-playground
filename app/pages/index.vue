@@ -7,8 +7,14 @@ import {
   upcomingEvents,
   gettingStartedItems,
   weekCellsFor,
+  userName,
+  streakDays,
+  xpLabel,
+  notificationCount,
   type PreviewState
 } from '~/composables/useHomeMockData'
+
+definePageMeta({ layout: 'dashboard' })
 
 const state = ref<PreviewState>('active')
 
@@ -18,9 +24,6 @@ const isGuest = computed(() => state.value === 'guest')
 const isLoggedIn = computed(() => !isGuest.value)
 const showRecs = computed(() => isNew.value || isGuest.value)
 
-const userName = 'Nova'
-const streakDays = 6
-const xpLabel = '2,450 XP'
 const streakTitle = computed(() => (isActive.value ? `${streakDays}-day streak` : 'Start your streak'))
 const streakMeta = computed(() => (isActive.value ? 'Best: 14 days' : 'Best: 0 days'))
 const weekCells = computed(() => weekCellsFor(isActive.value))
@@ -42,12 +45,11 @@ const previewStates: { id: PreviewState, label: string }[] = [
 </script>
 
 <template>
-  <div class="font-sans text-default bg-slate-50 min-h-screen">
-    <AppSidebar :is-logged-in="isLoggedIn" :is-guest="isGuest" :user-name="userName" />
-    <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" />
+  <UDashboardPanel :ui="{ root: 'bg-muted', body: 'p-0 gap-0 overflow-x-auto' }">
+    <template #body>
+      <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" :notification-count="notificationCount" />
 
-    <div class="overflow-x-auto w-full box-border" :style="{ paddingLeft: '232px', paddingTop: isActive ? '64px' : '0' }">
-      <div class="mx-auto box-border" style="max-width: 1080px; min-width: 1080px; width: 1080px">
+      <UContainer>
         <div style="height: 40px; width: 100%" />
 
         <!-- Top CTA banner -->
@@ -206,24 +208,24 @@ const previewStates: { id: PreviewState, label: string }[] = [
             <BountiesCard :bounties="bounties" />
           </div>
         </div>
-      </div>
-    </div>
+      </UContainer>
+    </template>
+  </UDashboardPanel>
 
-    <!-- Dev-only preview state switcher (not part of the product's real UI) -->
+  <!-- Dev-only preview state switcher (not part of the product's real UI) -->
+  <div
+    class="fixed left-1/2 bottom-[18px] z-[200] flex items-center gap-1 -translate-x-1/2"
+    style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
+  >
+    <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>
     <div
-      class="fixed left-1/2 bottom-[18px] z-[200] flex items-center gap-1 -translate-x-1/2"
-      style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
+      v-for="p in previewStates"
+      :key="p.id"
+      class="px-3 py-1.5 rounded-full text-[12.5px] font-semibold cursor-pointer select-none transition-all duration-150"
+      :class="state === p.id ? 'bg-white text-slate-900' : 'text-slate-300'"
+      @click="state = p.id"
     >
-      <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>
-      <div
-        v-for="p in previewStates"
-        :key="p.id"
-        class="px-3 py-1.5 rounded-full text-[12.5px] font-semibold cursor-pointer select-none transition-all duration-150"
-        :class="state === p.id ? 'bg-white text-slate-900' : 'text-slate-300'"
-        @click="state = p.id"
-      >
-        {{ p.label }}
-      </div>
+      {{ p.label }}
     </div>
   </div>
 </template>

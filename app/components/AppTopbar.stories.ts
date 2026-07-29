@@ -7,7 +7,8 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen'
-  }
+  },
+  decorators: [() => ({ template: '<UDashboardGroup><UDashboardPanel><template #header><story /></template></UDashboardPanel></UDashboardGroup>' })]
 } satisfies Meta<typeof AppTopbar>
 
 export default meta
@@ -17,7 +18,8 @@ export const ActiveLearner: Story = {
   args: {
     xpLabel: '2,450 XP',
     streakDays: 6,
-    userName: 'Nova'
+    userName: 'Nova',
+    notificationCount: 13
   }
 }
 

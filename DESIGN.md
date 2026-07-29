@@ -153,10 +153,9 @@ Headings pair `font-heading font-bold` at whatever Tailwind size fits the contex
 
 ## Layout
 
-The current Studio Home page (`app/pages/index.vue`) is a **fixed-width prototype layout**, not a fluid container:
 - A fixed 232px left sidebar (`AppSidebar`) and a conditional 64px top bar (`AppTopbar`, shown only for the active-learner state) offset the content area via inline padding.
-- The content column itself is pinned to exactly **1080px** (`max-width/min-width/width: 1080px`) — this is a prototype characteristic to be aware of, not a pattern to defend if the app grows beyond this one page.
-- Below the hero, a 2-column grid (`minmax(0,1fr)` main column + a fixed **324px** right rail) with `gap-12`, and `gap-20`/`gap-6` rhythm between sections within each column.
+- **Every page wraps its `UDashboardPanel` body content in `<UContainer>`** — never a bespoke `max-w-*`/inline-style div. `--ui-container` is set to **1080px** in `main.css`, so `UContainer` gives every page the same max-width plus Nuxt UI's standard responsive side padding (16px / 24px / 32px at default/`sm`/`lg`) — fluid, not hard-pinned.
+- Within the container, `index.vue`'s content column runs a 2-column grid (`minmax(0,1fr)` main column + a fixed **324px** right rail) with `gap-12`, and `gap-20`/`gap-6` rhythm between sections within each column.
 
 ### Spacing System
 4px base unit, matching `--space-*` in `main.css`: `{spacing.1}` 4px · `{spacing.2}` 8px · `{spacing.3}` 12px · `{spacing.4}` 16px · `{spacing.6}` 24px · `{spacing.8}` 32px · `{spacing.12}` 48px · `{spacing.16}` 64px (full scale runs to 96px). Applied via Tailwind's standard `p-*`/`gap-*`/`space-y-*` utilities — no separate custom grid layered on top.

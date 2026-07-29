@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   ui: {
     theme: {
-      colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'kids']
+      colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'kids', 'purple', 'blue', 'rose']
     }
   },
   icon: {

@@ -23,7 +23,7 @@ withDefaults(defineProps<{
           </h3>
           <p class="text-sm text-dimmed mt-[3px]">Mon–Fri only · weekends are free</p>
         </div>
-        <Icon name="lucide:zap" class="size-[37px] shrink-0 text-orange-300" />
+        <img src="/images/icons/streak-flame.png" alt="" class="size-[37px] shrink-0" />
       </div>
     </template>
 

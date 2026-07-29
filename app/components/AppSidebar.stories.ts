@@ -7,33 +7,17 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen'
-  }
+  },
+  decorators: [() => ({ template: '<UDashboardGroup><story /></UDashboardGroup>' })]
 } satisfies Meta<typeof AppSidebar>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const LoggedIn: Story = {
-  args: {
-    isLoggedIn: true,
-    isGuest: false,
-    userName: 'Nova'
-  }
-}
+export const Default: Story = {}
 
-export const LoggedInNoAdmin: Story = {
+export const NoAdmin: Story = {
   args: {
-    isLoggedIn: true,
-    isGuest: false,
-    userName: 'Nova',
     showAdmin: false
-  }
-}
-
-export const Guest: Story = {
-  args: {
-    isLoggedIn: false,
-    isGuest: true,
-    userName: 'Nova'
   }
 }

@@ -163,6 +163,9 @@
   --ui-border-muted: var(--color-slate-200);
   --ui-border-accented: var(--color-slate-300);
 
+  /* Standard page content width — see DESIGN.md Layout section */
+  --ui-container: 1144px;
+
   /* Spacing (4px base) */
   --space-1: 4px;
   --space-2: 8px;
@@ -200,7 +203,30 @@
 html,
 body {
   margin: 0;
-  background: var(--color-slate-50);
+  background: var(--ui-bg-muted);
   font-family: var(--font-sans);
   color: var(--ui-text);
+}
+
+/* Dark mode — overrides the semantic --ui-* aliases only; the brand ramps
+   (orange/cornflower/etc) stay the same across modes. Comes after @nuxt/ui's
+   own `.dark` class rule so it wins the cascade (same selector specificity,
+   later source order). Surfaces build on --color-midnight (see DESIGN.md's
+   "deeper accent ramp for dark/inverted sections", previously unused). */
+.dark {
+  --ui-text: var(--color-slate-200);
+  --ui-text-toned: var(--color-slate-300);
+  --ui-text-muted: var(--color-slate-400);
+  --ui-text-dimmed: var(--color-slate-500);
+  --ui-text-highlighted: #ffffff;
+  --ui-text-inverted: var(--color-midnight-950);
+
+  --ui-bg: var(--color-midnight-950);
+  --ui-bg-muted: var(--color-midnight-900);
+  --ui-bg-elevated: var(--color-midnight-800);
+  --ui-bg-inverted: var(--color-slate-50);
+
+  --ui-border: var(--color-midnight-700);
+  --ui-border-muted: var(--color-midnight-800);
+  --ui-border-accented: var(--color-midnight-600);
 }

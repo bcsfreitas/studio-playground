@@ -3,22 +3,26 @@ defineProps<{
   xpLabel: string
   streakDays: number
   userName: string
+  notificationCount?: number
 }>()
 </script>
 
 <template>
-  <header
-    class="fixed top-0 left-[232px] right-0 h-16 z-40 bg-white border-b border-default flex items-center justify-end gap-3.5 box-border"
-    style="padding: 0 32px"
-  >
-    <div class="inline-flex items-center gap-1.5">
-      <Icon name="lucide:zap" class="size-[15px] text-primary" />
-      <span class="text-sm font-semibold text-default h-5">{{ xpLabel }}</span>
-    </div>
-    <div class="inline-flex items-center gap-1.5">
-      <Icon name="lucide:flame" class="size-[15px] text-primary" />
-      <span class="text-sm font-semibold text-default h-5">{{ streakDays }}</span>
-    </div>
-    <UAvatar :text="userName.charAt(0).toUpperCase()" size="md" />
-  </header>
+  <UDashboardNavbar :ui="{ root: 'w-full max-w-(--ui-container) mx-auto px-4 sm:px-6 lg:px-8 border-b-0', right: 'gap-3.5' }">
+    <template #right>
+      <div class="inline-flex items-center gap-1.5">
+        <Icon name="lucide:zap" class="size-[15px] text-primary" />
+        <span class="text-sm font-semibold text-default h-5">{{ xpLabel }}</span>
+      </div>
+      <div class="inline-flex items-center gap-1.5">
+        <img src="/images/icons/streak-flame.png" alt="" class="size-[15px]" />
+        <span class="text-sm font-semibold text-default h-5">{{ streakDays }}</span>
+      </div>
+      <UColorModeButton color="neutral" variant="ghost" />
+      <UButton color="neutral" variant="ghost" icon="lucide:bell" aria-label="Notifications">
+        <UBadge v-if="notificationCount" color="neutral" variant="outline" size="sm">{{ notificationCount }}</UBadge>
+      </UButton>
+      <UAvatar :text="userName.charAt(0).toUpperCase()" size="md" />
+    </template>
+  </UDashboardNavbar>
 </template>

@@ -1,5 +1,10 @@
 export type PreviewState = 'active' | 'new' | 'guest'
 
+export const userName = 'Nova'
+export const streakDays = 6
+export const xpLabel = '2,450 XP'
+export const notificationCount = 13
+
 export interface PostComment {
   id: string
   author: string
