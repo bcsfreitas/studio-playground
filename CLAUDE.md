@@ -24,6 +24,12 @@ Nuxt 3-style app (Nuxt 4) implementing the Endless Studios "Studio Home" page, b
 - `app/pages/index.vue` — the Studio Home page. Renders 3 states (Active learner / New learner / Guest) driven by mock data in `app/composables/useHomeMockData.ts`, matching the original prototype's `sc-if` branches. A "PREVIEW AS" pill (bottom of screen) lets you switch states for manual QA — kept intentionally, since there's no real auth/backend yet; the original design source explicitly marks the equivalent control as preview-only, so revisit whether to keep it once real session state exists.
 - `project/` — the original Claude Design handoff (raw `.dc.html` prototype + design system bundle + source images), kept for reference. Not part of the app build.
 
+## Learner guides
+
+Interactive learner guides (curriculum content) follow `LEARNER-GUIDES.md` —
+pedagogy, copy, and interaction standards layered on top of this file and
+`DESIGN.md`. Consult it before writing or restyling any guide.
+
 ## Building UI — mandatory tool use
 
 Before writing any markup for a new component or page section, check for a Nuxt UI component that already covers it. Never hand-write raw HTML/CSS for something Nuxt UI already provides (buttons, cards, badges, inputs, modals, tooltips, tables, menus, etc.) — this repo runs on `@nuxt/ui` v4, and reaching past it means duplicating and drifting from an existing accessible, themed component.
