@@ -4,19 +4,28 @@ import type { ToolCardData } from '~/composables/useMakeMockData'
 defineProps<{
   tool: ToolCardData
 }>()
+
+// Typed lookup, not an inline ternary — see DESIGN.md's STATUS_COLOR convention (TaskTile.vue).
+const BADGE_COLOR: Record<ToolCardData['badge'], 'success' | 'warning'> = {
+  Live: 'success',
+  Beta: 'warning'
+}
 </script>
 
 <template>
-  <UCard :ui="{ root: 'h-full flex flex-col', header: 'p-0 relative', body: 'flex flex-col gap-2 flex-1', footer: 'pt-0' }">
+  <UCard :ui="{ root: 'h-full flex flex-col rounded-3xl', header: 'p-0 relative', body: 'flex flex-col gap-2 flex-1', footer: 'pt-0' }">
     <template #header>
       <img v-if="tool.image" :src="tool.image" :alt="tool.name" class="h-28 w-full object-cover">
-      <div v-else class="h-28 w-full flex items-center justify-center" :style="{ background: tool.logoBg }">
+      <div v-else-if="tool.logo" class="h-28 w-full flex items-center justify-center" :style="{ background: tool.logoBg }">
         <img :src="tool.logo" :alt="tool.name" class="h-10 w-auto">
+      </div>
+      <div v-else class="h-28 w-full flex items-center justify-center" :style="{ background: tool.logoBg }">
+        <UIcon :name="tool.icon" class="size-10 text-white" />
       </div>
       <UBadge
         :label="tool.badge"
-        :color="tool.badge === 'Live' ? 'success' : 'warning'"
-        variant="solid"
+        :color="BADGE_COLOR[tool.badge]"
+        variant="soft"
         size="sm"
         class="absolute top-3 right-3"
       />

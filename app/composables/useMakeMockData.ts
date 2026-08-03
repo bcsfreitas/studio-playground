@@ -7,6 +7,7 @@ export interface ToolCardData {
   image?: string
   logo?: string
   logoBg?: string
+  icon?: string
   url?: string
   isDownload?: boolean
 }
@@ -46,7 +47,7 @@ export const webTools: ToolCardData[] = [
     tag: 'Entry-level engine · Download',
     blurb: 'Our flagship adventure — build, remix, and share games from inside the world. Download to play on your device.',
     badge: 'Live',
-    image: '/images/tools/endstar-hero.png',
+    image: '/images/img/games/endstar-avatar.png',
     isDownload: true,
     url: 'https://endlessstudios.com/endstar'
   }
@@ -86,7 +87,8 @@ export const tailorApps: ToolCardData[] = [
     tag: 'Music & sound',
     blurb: 'Loom together melodies, loops and sound effects for your game.',
     badge: 'Live',
-    image: '/images/tools/bg-01.png',
+    icon: 'lucide:music',
+    logoBg: '#eab308',
     url: 'https://threadbare-melodyloom.lovable.app'
   },
   {
@@ -95,7 +97,8 @@ export const tailorApps: ToolCardData[] = [
     tag: 'Characters',
     blurb: 'Design and customize the characters that live in your world.',
     badge: 'Live',
-    image: '/images/tools/bg-11.png',
+    icon: 'lucide:user-round',
+    logoBg: '#22c55e',
     url: 'https://threadbare-patches.lovable.app'
   },
   {
@@ -104,7 +107,8 @@ export const tailorApps: ToolCardData[] = [
     tag: 'Props & objects',
     blurb: 'Craft interactive props, objects and contraptions for your levels.',
     badge: 'Live',
-    image: '/images/tools/bg-27.png',
+    icon: 'lucide:hammer',
+    logoBg: '#6556f0',
     url: 'https://threadbear-builders-bench.lovable.app'
   },
   {
@@ -113,7 +117,8 @@ export const tailorApps: ToolCardData[] = [
     tag: 'Items & loot',
     blurb: 'Cook up collectibles, loot and swag for players to discover.',
     badge: 'Live',
-    image: '/images/tools/bg-38.png',
+    icon: 'lucide:gift',
+    logoBg: '#ff6900',
     url: 'http://threadbare-swag-lab.lovable.app'
   }
 ]
