@@ -26,17 +26,16 @@
       }
     },
     "facts": {
-      "duration": "Duración",
       "totalXp": "XP total",
-      "learningType": "Tipo de aprendizaje",
+      "learningType": "Tipo de clase",
       "difficulty": "Dificultad",
-      "language": "Idioma",
-      "minAge": "Edad mínima"
+      "language": "Idioma"
     },
     "game": {
       "playLabel": "Jugar a {name}"
     },
     "sections": {
+      "overview": "Resumen",
       "curriculum": "Plan de estudios",
       "tools": "Herramientas que usarás",
       "prerequisites": "Requisitos previos",
@@ -56,12 +55,22 @@
       "completedCount": "Ningún estudiante ha completado este programa todavía | {count} estudiante ha completado este programa | {count} estudiantes han completado este programa"
     },
     "certificate": {
-      "shareButton": "Compartir",
-      "downloadButton": "Descargar",
-      "microcredentialsLabel": "Microcredenciales"
-    },
-    "whatsNext": {
-      "viewProgram": "Ver programa"
+      "eyebrow": "Certificado",
+      "microcredentialsLabel": "Microcredenciales",
+      "benefits": {
+        "validateSkills": {
+          "title": "Valida tus habilidades",
+          "body": "Obtén una credencial de {issuingOrg} que muestra exactamente lo que construiste en este programa."
+        },
+        "keepForever": {
+          "title": "Es tuyo para siempre",
+          "body": "Una vez obtenido, nunca caduca y permanece en tu perfil de estudiante."
+        },
+        "shareAnywhere": {
+          "title": "Compártelo donde quieras",
+          "body": "Agrégalo a tu currículum, portafolio o LinkedIn."
+        }
+      }
     },
     "enrollment": {
       "sessionPickerLabel": "Elige una sesión",
@@ -70,8 +79,6 @@
         "startLearning": "Comenzar a aprender",
         "unlockCohort": "Desbloquear sesión",
         "enrollmentClosed": "Inscripción cerrada",
-        "cohortFull": "Sesión completa",
-        "joinWaitlist": "Unirte a la lista de espera",
         "enroll": "Inscribirte en esta sesión"
       },
       "accessCode": {
@@ -80,12 +87,10 @@
         "error": "Ese código no coincide. Consulta con tu facilitador e intenta de nuevo."
       },
       "seats": {
-        "filled": "{taken} de {max} cupos ocupados",
-        "full": "Completo"
+        "filled": "{taken} de {max} cupos ocupados"
       },
       "cohortDescription": {
         "open": "{taken} de {max} cupos - {range}",
-        "full": "Completo - {range}",
         "closed": "Cerrado - {range}",
         "requiresCode": "Requiere un código de acceso",
         "selfPaced": "A tu propio ritmo - comienza cuando quieras",

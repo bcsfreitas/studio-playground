@@ -26,17 +26,16 @@
       }
     },
     "facts": {
-      "duration": "Duration",
       "totalXp": "Total XP",
-      "learningType": "Learning type",
+      "learningType": "Class type",
       "difficulty": "Difficulty",
-      "language": "Language",
-      "minAge": "Minimum age"
+      "language": "Language"
     },
     "game": {
       "playLabel": "Play {name}"
     },
     "sections": {
+      "overview": "Overview",
       "curriculum": "Curriculum",
       "tools": "Tools you'll use",
       "prerequisites": "Prerequisites",
@@ -56,12 +55,22 @@
       "completedCount": "No learners have completed this program yet | {count} learner has completed this program | {count} learners have completed this program"
     },
     "certificate": {
-      "shareButton": "Share",
-      "downloadButton": "Download",
-      "microcredentialsLabel": "Microcredentials"
-    },
-    "whatsNext": {
-      "viewProgram": "View program"
+      "eyebrow": "Certificate",
+      "microcredentialsLabel": "Microcredentials",
+      "benefits": {
+        "validateSkills": {
+          "title": "Validate your skills",
+          "body": "Earn a credential from {issuingOrg} showing exactly what you built in this program."
+        },
+        "keepForever": {
+          "title": "Yours to keep",
+          "body": "Once earned, it never expires and stays on your learner profile."
+        },
+        "shareAnywhere": {
+          "title": "Share it anywhere",
+          "body": "Add it to a resume, portfolio, or LinkedIn."
+        }
+      }
     },
     "enrollment": {
       "sessionPickerLabel": "Choose a session",
@@ -70,8 +79,6 @@
         "startLearning": "Start learning",
         "unlockCohort": "Unlock session",
         "enrollmentClosed": "Enrollment closed",
-        "cohortFull": "Session full",
-        "joinWaitlist": "Join the waitlist",
         "enroll": "Enroll in this session"
       },
       "accessCode": {
@@ -80,12 +87,10 @@
         "error": "That code doesn't match. Check with your facilitator and try again."
       },
       "seats": {
-        "filled": "{taken} of {max} seats filled",
-        "full": "Full"
+        "filled": "{taken} of {max} seats filled"
       },
       "cohortDescription": {
         "open": "{taken} of {max} seats - {range}",
-        "full": "Full - {range}",
         "closed": "Closed - {range}",
         "requiresCode": "Requires an access code",
         "selfPaced": "Self-paced - start anytime",
