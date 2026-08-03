@@ -12,7 +12,8 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   task: 'lucide:circle-check',
   topic: 'lucide:file-text',
   survey: 'lucide:message-square-text',
-  resource: 'lucide:link'
+  resource: 'lucide:link',
+  deliverable: 'lucide:upload'
 }
 
 const items = computed(() => props.modules.map((m, index) => ({
