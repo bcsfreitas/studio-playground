@@ -22,7 +22,13 @@ function isUnlocked(cohortId: string) {
   return unlockedCohortIds.value.includes(cohortId)
 }
 
+// Confirming enrollment in the modal below flips the cohort to
+// "already-enrolled" for the rest of the browser session — there's no
+// backend to persist it to, same as unlockedCohortIds above.
+const justEnrolledCohortId = ref<string | null>(null)
+
 function statusOf(cohort: Cohort): EnrollmentStatus {
+  if (justEnrolledCohortId.value === cohort.id) return 'already-enrolled'
   return cohortStatusFor(cohort, props.enrollment, isUnlocked(cohort.id))
 }
 
@@ -78,6 +84,33 @@ function submitCode() {
     codeError.value = true
   }
 }
+
+const enrollModalOpen = ref(false)
+const enrollModalStep = ref<'confirm' | 'success'>('confirm')
+
+function openEnrollModal() {
+  enrollModalStep.value = 'confirm'
+  enrollModalOpen.value = true
+}
+
+function confirmEnrollment() {
+  if (!selectedCohort.value) return
+  justEnrolledCohortId.value = selectedCohort.value.id
+  enrollModalStep.value = 'success'
+}
+
+// Session-start-date line in the success view — a specific date ("Starts
+// Tuesday, Aug 4"), not the full range already shown in the picker.
+const enrollModalStartDateLabel = computed(() => {
+  const startDate = selectedCohort.value?.startDate
+  if (!startDate) return ''
+  return new Date(startDate).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC'
+  })
+})
 </script>
 
 <template>
@@ -136,8 +169,60 @@ function submitCode() {
         <p v-if="selectedCohort.maxLearners !== null" class="text-xs text-muted mb-3">
           {{ t('program.enrollment.seats.filled', { taken: selectedCohort.seatsTaken, max: selectedCohort.maxLearners }) }}
         </p>
-        <UButton :label="t('program.enrollment.cta.enroll')" icon="lucide:circle-check" color="primary" block />
+        <UButton
+          :label="t('program.enrollment.cta.enroll')"
+          icon="lucide:circle-check"
+          color="primary"
+          block
+          @click="openEnrollModal"
+        />
       </template>
     </div>
+
+    <UModal v-model:open="enrollModalOpen">
+      <template #body>
+        <div v-if="enrollModalStep === 'confirm' && selectedCohort" class="flex flex-col items-center text-center gap-3">
+          <div class="flex items-center justify-center size-12 rounded-full bg-primary/10 text-primary">
+            <UIcon name="lucide:calendar-check" class="size-6" />
+          </div>
+          <div class="font-heading font-bold text-lg text-highlighted">
+            {{ t('program.enrollment.confirmModal.title') }}
+          </div>
+          <p class="text-sm text-muted">
+            {{ t('program.enrollment.confirmModal.body', { program: template.title, range: cohortLabel(selectedCohort) }) }}
+          </p>
+        </div>
+
+        <div v-else class="flex flex-col items-center text-center gap-3">
+          <div class="flex items-center justify-center size-12 rounded-full bg-success/10 text-success">
+            <UIcon name="lucide:check" class="size-6" />
+          </div>
+          <div class="font-heading font-bold text-lg text-highlighted">
+            {{ t('program.enrollment.successModal.title') }}
+          </div>
+          <div class="w-full rounded-xl border border-default p-4 text-left">
+            <div class="font-heading font-semibold text-default">{{ template.title }}</div>
+            <div class="text-sm text-muted">{{ t('program.enrollment.successModal.starts', { date: enrollModalStartDateLabel }) }}</div>
+          </div>
+          <p class="text-sm text-muted">
+            {{ t('program.enrollment.successModal.emailNotice') }}
+          </p>
+        </div>
+      </template>
+
+      <template #footer>
+        <template v-if="enrollModalStep === 'confirm'">
+          <UButton :label="t('program.enrollment.confirmModal.cancel')" color="neutral" variant="outline" @click="enrollModalOpen = false" />
+          <UButton :label="t('program.enrollment.confirmModal.confirm')" color="primary" @click="confirmEnrollment" />
+        </template>
+        <UButton
+          v-else
+          :label="t('program.enrollment.successModal.done')"
+          color="primary"
+          block
+          @click="enrollModalOpen = false"
+        />
+      </template>
+    </UModal>
   </UPageCard>
 </template>
