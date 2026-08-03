@@ -13,7 +13,7 @@ const mainItems = computed<NavigationMenuItem[]>(() => [
   { label: 'Home', icon: 'lucide:home', to: '/', color: 'primary' },
   { label: 'Play', icon: 'lucide:gamepad-2', to: '#', color: 'purple' },
   { label: 'Learn', icon: 'lucide:brain', to: '/learn', color: 'blue' },
-  { label: 'Make', icon: 'lucide:wrench', to: '#', color: 'warning' },
+  { label: 'Make', icon: 'lucide:wrench', to: '/make', color: 'warning' },
   {
     label: 'Contribute',
     icon: 'lucide:blocks',
