@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { programTemplates } from '~/composables/useProgramMockData'
-import { flattenCurriculum } from '~/composables/usePlayerCurriculum'
+import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 import { useProgramProgress } from '~/composables/useProgramProgress'
 
-definePageMeta({ layout: 'player' })
+definePageMeta({ layout: 'program' })
 
 const route = useRoute()
 const { t } = useI18n()
@@ -22,13 +22,16 @@ const progress = template ? useProgramProgress(template) : null
 
 const activeItemId = computed(() => {
   const queryItem = route.query.item as string | undefined
-  if (queryItem && flatItems.some(item => item.id === queryItem)) return queryItem
+  const item = queryItem ? flatItems.find(candidate => candidate.id === queryItem) : undefined
+  if (item && !progress?.isModuleLocked(item.moduleId)) return item.id
   return flatItems[0]?.id
 })
 
 const activeItem = computed(() => flatItems.find(item => item.id === activeItemId.value))
 
 function selectItem(itemId: string) {
+  const item = flatItems.find(candidate => candidate.id === itemId)
+  if (!item || progress?.isModuleLocked(item.moduleId)) return
   navigateTo({ path: route.path, query: { item: itemId } }, { replace: true })
 }
 
@@ -41,17 +44,18 @@ function goToNextItem() {
 
 <template>
   <template v-if="template && progress">
-    <PlayerSidebar
+    <ProgramSidebar
       :template="template"
       :items="flatItems"
       :active-item-id="activeItemId"
       :is-completed="progress.isCompleted"
+      :is-module-locked="progress.isModuleLocked"
       :progress-percent="progress.progressPercent.value"
       :total-xp-earned="progress.totalXpEarned.value"
       :total-xp-available="progress.totalXpAvailable.value"
       @select-item="selectItem"
     />
-    <PlayerContentViewer
+    <ProgramContentViewer
       v-if="activeItem"
       :item="activeItem"
       :is-completed="progress.isCompleted(activeItem.id)"
@@ -59,5 +63,5 @@ function goToNextItem() {
       @next-item="goToNextItem"
     />
   </template>
-  <p v-else class="p-8">{{ t('player.notFound') }}</p>
+  <p v-else class="p-8">{{ t('program.viewer.notFound') }}</p>
 </template>

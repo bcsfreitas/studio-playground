@@ -118,7 +118,7 @@ const ENDLESS_STUDIOS: StudioOwner = { name: 'Endless Studios', logo: '/images/l
 
 // Cycled by module index so each module/curriculum-item-group reads as
 // visually distinct. Shared by ProgramCurriculumAccordion.vue and the
-// learning player's sidebar nav so both use the exact same cycling.
+// program content sidebar nav so both use the exact same cycling.
 export const MODULE_COLORS = ['primary', 'secondary', 'purple', 'blue'] as const
 
 export const programTemplates: ProgramTemplate[] = [

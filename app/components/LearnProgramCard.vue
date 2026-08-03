@@ -22,7 +22,7 @@ const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, 
 
 <template>
   <UPageCard
-    :to="program.enrolled ? `/learn/${program.id}/player` : `/learn/${program.id}`"
+    :to="program.enrolled ? `/learn/${program.id}/program` : `/learn/${program.id}`"
     :target="program.enrolled ? '_blank' : undefined"
     :title="program.name"
     :description="program.description"

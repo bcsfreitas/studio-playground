@@ -109,23 +109,23 @@
         "emailNotice": "Enviamos una confirmación a tu correo - revisa tu bandeja de entrada para recordatorios a medida que se acerque la sesión.",
         "done": "Entendido"
       }
+    },
+    "viewer": {
+      "exit": {
+        "label": "Salir"
+      },
+      "sidebar": {
+        "xpProgress": "{earned} / {available} XP"
+      },
+      "actions": {
+        "markComplete": "Marcar como completado",
+        "completed": "Completado",
+        "nextItem": "Ir al siguiente elemento"
+      },
+      "content": {
+        "placeholder": "Marcador de posición de {contentType}"
+      },
+      "notFound": "Programa no encontrado."
     }
-  },
-  "player": {
-    "exit": {
-      "label": "Salir"
-    },
-    "sidebar": {
-      "xpProgress": "{earned} / {available} XP"
-    },
-    "actions": {
-      "markComplete": "Marcar como completado",
-      "completed": "Completado",
-      "nextItem": "Ir al siguiente elemento"
-    },
-    "content": {
-      "placeholder": "Marcador de posición de {contentType}"
-    },
-    "notFound": "Programa no encontrado."
   }
 }

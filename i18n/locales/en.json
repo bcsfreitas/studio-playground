@@ -109,23 +109,23 @@
         "emailNotice": "We've sent a confirmation to your email - keep an eye on your inbox for reminders as the session gets closer.",
         "done": "Got it"
       }
+    },
+    "viewer": {
+      "exit": {
+        "label": "Exit"
+      },
+      "sidebar": {
+        "xpProgress": "{earned} / {available} XP"
+      },
+      "actions": {
+        "markComplete": "Mark as complete",
+        "completed": "Completed",
+        "nextItem": "Go to next item"
+      },
+      "content": {
+        "placeholder": "{contentType} placeholder"
+      },
+      "notFound": "Program not found."
     }
-  },
-  "player": {
-    "exit": {
-      "label": "Exit"
-    },
-    "sidebar": {
-      "xpProgress": "{earned} / {available} XP"
-    },
-    "actions": {
-      "markComplete": "Mark as complete",
-      "completed": "Completed",
-      "nextItem": "Go to next item"
-    },
-    "content": {
-      "placeholder": "{contentType} placeholder"
-    },
-    "notFound": "Program not found."
   }
 }

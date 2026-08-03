@@ -29,34 +29,34 @@ export default defineNuxtConfig({
     ]
   },
   hooks: {
-    // app/pages/learn/[programId]/player.vue lives in a directory whose name
+    // app/pages/learn/[programId]/program.vue lives in a directory whose name
     // exactly matches the sibling app/pages/learn/[programId].vue file. Nuxt's
     // file-based router treats that as parent/child nesting (a page file +
     // same-named directory = nested route), which would silently swallow the
-    // player route unless [programId].vue rendered a <NuxtPage/> outlet — it
+    // content route unless [programId].vue rendered a <NuxtPage/> outlet — it
     // doesn't, and we don't want to add one just for this. Promote the
-    // scanned player page back to an independent top-level route instead, so
+    // scanned content page back to an independent top-level route instead, so
     // it renders on its own rather than inside the program detail page.
     'pages:extend'(pages) {
-      function extractPlayerPage(list: NuxtPage[]): NuxtPage | undefined {
+      function extractContentPage(list: NuxtPage[]): NuxtPage | undefined {
         for (let i = 0; i < list.length; i++) {
           const page = list[i]!
-          if (page.file?.endsWith('pages/learn/[programId]/player.vue')) {
+          if (page.file?.endsWith('pages/learn/[programId]/program.vue')) {
             list.splice(i, 1)
             return page
           }
           if (page.children?.length) {
-            const found = extractPlayerPage(page.children)
+            const found = extractContentPage(page.children)
             if (found) return found
           }
         }
         return undefined
       }
 
-      const playerPage = extractPlayerPage(pages)
-      if (playerPage) {
-        playerPage.path = '/learn/:programId/player'
-        pages.push(playerPage)
+      const contentPage = extractContentPage(pages)
+      if (contentPage) {
+        contentPage.path = '/learn/:programId/program'
+        pages.push(contentPage)
       }
     }
   }

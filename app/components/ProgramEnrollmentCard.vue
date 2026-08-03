@@ -140,7 +140,7 @@ const enrollModalStartDateLabel = computed(() => {
           icon="lucide:play"
           color="primary"
           block
-          :to="`/learn/${template.id}/player`"
+          :to="`/learn/${template.id}/program`"
           target="_blank"
         />
         <template v-else>
@@ -158,7 +158,7 @@ const enrollModalStartDateLabel = computed(() => {
           icon="lucide:play"
           color="primary"
           block
-          :to="`/learn/${template.id}/player`"
+          :to="`/learn/${template.id}/program`"
           target="_blank"
         />
       </template>

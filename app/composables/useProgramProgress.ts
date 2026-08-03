@@ -1,5 +1,5 @@
 import type { ProgramTemplate } from '~/composables/useProgramMockData'
-import { flattenCurriculum } from '~/composables/usePlayerCurriculum'
+import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 
 interface StoredProgress {
   version: 1
@@ -7,7 +7,7 @@ interface StoredProgress {
 }
 
 function storageKey(programId: string) {
-  return `player-progress:${programId}`
+  return `program-progress:${programId}`
 }
 
 // Per-item completion has no backend to live in, so it's tracked entirely
@@ -15,7 +15,7 @@ function storageKey(programId: string) {
 // mock-learner concept in this app (the dev-only "PREVIEW AS" toggle isn't
 // a real multi-account system), so finer keying would be unused complexity.
 export function useProgramProgress(template: ProgramTemplate) {
-  const completedItemIds = useState<Set<string>>(`player-progress-${template.id}`, () => new Set())
+  const completedItemIds = useState<Set<string>>(`program-progress-${template.id}`, () => new Set())
 
   onMounted(() => {
     if (!import.meta.client) return
@@ -56,5 +56,15 @@ export function useProgramProgress(template: ProgramTemplate) {
     items.length === 0 ? 0 : Math.round((completedCount.value / items.length) * 100)
   )
 
-  return { isCompleted, markComplete, progressPercent, totalXpEarned, totalXpAvailable }
+  // A module unlocks once every item in the module before it is complete —
+  // the first module is always unlocked. Lessons within an unlocked module
+  // can be visited in any order; locked modules can't be jumped into.
+  function isModuleLocked(moduleId: string) {
+    const moduleIndex = template.curriculum.findIndex(mod => mod.id === moduleId)
+    if (moduleIndex <= 0) return false
+    const previousModule = template.curriculum[moduleIndex - 1]!
+    return !previousModule.items.every(item => completedItemIds.value.has(item.id))
+  }
+
+  return { isCompleted, markComplete, isModuleLocked, progressPercent, totalXpEarned, totalXpAvailable }
 }

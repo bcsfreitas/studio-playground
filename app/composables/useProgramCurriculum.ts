@@ -8,8 +8,8 @@ export interface FlatCurriculumItem extends CurriculumItem {
   moduleColor: typeof MODULE_COLORS[number]
 }
 
-// Flattens a program's modules into one ordered list — both the player's
-// sidebar nav and its "go to next item" action need the same flat,
+// Flattens a program's modules into one ordered list — both the program
+// content sidebar nav and its "go to next item" action need the same flat,
 // module-aware order, so this is the one place that computes it.
 export function flattenCurriculum(template: ProgramTemplate): FlatCurriculumItem[] {
   return template.curriculum.flatMap((mod, moduleIndex) =>
