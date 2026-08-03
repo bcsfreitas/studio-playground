@@ -6,6 +6,7 @@ import { useProgramProgress } from '~/composables/useProgramProgress'
 definePageMeta({ layout: 'player' })
 
 const route = useRoute()
+const { t } = useI18n()
 
 // Resolved once, non-reactively, at setup time: the dynamic route segment
 // only changes via a full page load in this app (a new tab per Resume
@@ -58,5 +59,5 @@ function goToNextItem() {
       @next-item="goToNextItem"
     />
   </template>
-  <p v-else class="p-8">Program not found.</p>
+  <p v-else class="p-8">{{ t('player.notFound') }}</p>
 </template>

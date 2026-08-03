@@ -20,7 +20,7 @@ const { t } = useI18n()
     <h1 class="text-2xl font-heading font-bold text-highlighted mt-1">{{ item.title }}</h1>
 
     <div class="mt-6 rounded-xl border border-dashed border-default p-12 text-center text-muted">
-      {{ item.contentType }} placeholder
+      {{ t('player.content.placeholder', { contentType: item.contentType }) }}
     </div>
 
     <div class="mt-6 flex items-center gap-3">

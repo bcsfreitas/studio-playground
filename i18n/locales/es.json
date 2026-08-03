@@ -121,6 +121,10 @@
       "markComplete": "Marcar como completado",
       "completed": "Completado",
       "nextItem": "Ir al siguiente elemento"
-    }
+    },
+    "content": {
+      "placeholder": "Marcador de posición de {contentType}"
+    },
+    "notFound": "Programa no encontrado."
   }
 }

@@ -121,6 +121,10 @@
       "markComplete": "Mark as complete",
       "completed": "Completed",
       "nextItem": "Go to next item"
-    }
+    },
+    "content": {
+      "placeholder": "{contentType} placeholder"
+    },
+    "notFound": "Program not found."
   }
 }
