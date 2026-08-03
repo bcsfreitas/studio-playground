@@ -68,7 +68,7 @@ Pulled via `DesignSync.get_file` from the reference project into `public/images/
 
 ## Page structure
 
-`app/pages/make/index.vue`, `definePageMeta({ layout: 'dashboard' })` — same shell as `/learn`: `UDashboardPanel` with `#body` containing `AppTopbar` followed by `UContainer` (identical structure to `learn/index.vue`).
+`app/pages/make/index.vue`, `definePageMeta({ layout: 'dashboard' })` — same shell as `/learn`: `UDashboardPanel` with `#body` containing `AppTopbar` followed by `UContainer` (identical structure to `learn/index.vue`), including that page's local `PreviewState` ref, `isActive` computed gating `AppTopbar`, and the fixed-position "PREVIEW AS" switcher pill — Make's own content doesn't branch on preview state, but every other dashboard-layout page carries this chrome, so Make matches for visual consistency.
 
 Sections, each introduced by the existing `SectionTitle` component:
 
@@ -86,7 +86,7 @@ New `app/components/ToolCard.vue`, reused for both the web-tools and Tailor grid
 - Body: `tag` (small uppercase label), `name` (title), `blurb`.
 - Footer: one `UButton` — `block`, `variant="soft"`, `color="neutral"`, icon `lucide:download` when `isDownload`, else `lucide:maximize`; label "Download" or "Launch tool". If `url` is absent, the button is `disabled` (Baby Godot in the reference has no working link yet).
 
-Built on `UPageCard` (`orientation="vertical"`), consistent with how `LearnProgramCard`/cover-page cards already wrap Nuxt UI card primitives rather than hand-rolled bordered divs.
+Built on `UCard` (its `#header`/body/`#footer` slots are unopinionated, unlike `UPageCard`'s fixed icon+title+description layout — a better fit for a full-bleed image/logo thumbnail), consistent with how `LearnProgramCard`/cover-page cards already wrap Nuxt UI card primitives rather than hand-rolled bordered divs.
 
 ## Navigation change
 
