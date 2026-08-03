@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CurriculumModule, CurriculumItemType } from '~/composables/useProgramMockData'
+import { MODULE_COLORS } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
   modules: CurriculumModule[]
@@ -13,10 +14,6 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   survey: 'lucide:message-square-text',
   resource: 'lucide:link'
 }
-
-// Cycled by module index so each card reads as visually distinct; same
-// 4-color family as ProgramFactsStrip's stat accents.
-const MODULE_COLORS = ['primary', 'secondary', 'purple', 'blue'] as const
 
 const items = computed(() => props.modules.map((m, index) => ({
   label: m.title,
