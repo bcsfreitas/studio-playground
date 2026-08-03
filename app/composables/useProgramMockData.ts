@@ -129,7 +129,7 @@ const GENERIC_ACCEPTANCE_CRITERIA = [
   'Your work for this module is shared with a link to a screenshot, short video, or playable build.',
   'The submission explains what you built or changed and why.',
   'The result works without breaking the rest of the project.'
-]
+] as const
 
 export const programTemplates: ProgramTemplate[] = [
   {

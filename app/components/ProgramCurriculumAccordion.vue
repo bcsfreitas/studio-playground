@@ -59,7 +59,7 @@ const items = computed(() => props.modules.map((m, index) => ({
           <UIcon :name="ITEM_TYPE_ICON[task.type as CurriculumItemType]" class="size-4 text-dimmed shrink-0" />
           <span class="flex-1">{{ task.title }}</span>
           <UBadge
-            v-if="task.type === 'task'"
+            v-if="task.xp"
             :label="t('program.curriculum.xpBadge', { xp: task.xp })"
             color="neutral"
             variant="soft"

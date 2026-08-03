@@ -26,6 +26,12 @@ function submitDeliverable() {
   if (!trimmed) return
   emit('submit-deliverable', { description: trimmed, links: links.value.filter(Boolean) })
 }
+
+// Submissions are free-text pasted by the learner into localStorage, so guard
+// against non-http(s) values (e.g. a stray `javascript:` URL) before linkifying.
+function isHttpLink(link: string) {
+  return /^https?:\/\//i.test(link)
+}
 </script>
 
 <template>
@@ -60,7 +66,7 @@ function submitDeliverable() {
         </div>
 
         <div class="mt-6">
-          <div class="font-heading font-bold text-highlighted">{{ t('program.viewer.deliverable.descriptionHeading') }}</div>
+          <h2 class="font-heading font-bold text-highlighted">{{ t('program.viewer.deliverable.descriptionHeading') }}</h2>
           <p class="mt-2 text-sm text-default">{{ t('program.viewer.deliverable.introBody') }}</p>
           <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.shareIntro') }}</p>
           <ul class="mt-1 list-disc pl-5 text-sm text-default">
@@ -68,19 +74,21 @@ function submitDeliverable() {
             <li>{{ t('program.viewer.deliverable.shareVideo') }}</li>
             <li>{{ t('program.viewer.deliverable.shareBuild') }}</li>
           </ul>
-          <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.submitStepsHeading') }}</p>
-          <ul class="mt-1 list-disc pl-5 text-sm text-default">
-            <li>{{ t('program.viewer.deliverable.submitStep1') }}</li>
-            <li>{{ t('program.viewer.deliverable.submitStep2') }}</li>
-            <li>{{ t('program.viewer.deliverable.submitStep3') }}</li>
-          </ul>
+          <template v-if="!isStarted && !isCompleted">
+            <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.submitStepsHeading') }}</p>
+            <ul class="mt-1 list-disc pl-5 text-sm text-default">
+              <li>{{ t('program.viewer.deliverable.submitStep1') }}</li>
+              <li>{{ t('program.viewer.deliverable.submitStep2') }}</li>
+              <li>{{ t('program.viewer.deliverable.submitStep3') }}</li>
+            </ul>
+          </template>
         </div>
 
         <div class="mt-6 rounded-xl border border-default p-6">
-          <div class="font-heading font-bold text-highlighted">
+          <h2 class="font-heading font-bold text-highlighted">
             {{ t('program.viewer.deliverable.milestone', { number: item.moduleNumber, total: totalModules, title: item.moduleTitle }) }}
-          </div>
-          <div class="mt-3 text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</div>
+          </h2>
+          <h3 class="mt-3 text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</h3>
           <ul class="mt-1 list-disc pl-5 text-sm text-default">
             <li v-for="criterion in item.acceptanceCriteria" :key="criterion">{{ criterion }}</li>
           </ul>
@@ -94,11 +102,20 @@ function submitDeliverable() {
             <UButton :label="t('program.viewer.actions.nextItem')" variant="outline" @click="$emit('next-item')" />
           </div>
           <div v-if="submission" class="rounded-xl border border-default p-4">
-            <div class="text-sm font-bold text-highlighted">{{ t('program.viewer.deliverable.yourSubmission') }}</div>
+            <h3 class="text-sm font-bold text-highlighted">{{ t('program.viewer.deliverable.yourSubmission') }}</h3>
             <p class="mt-2 text-sm text-default">{{ submission.description }}</p>
             <ul v-if="submission.links.length" class="mt-2 list-disc pl-5 text-sm">
               <li v-for="link in submission.links" :key="link">
-                <a :href="link" target="_blank" rel="noopener" class="text-primary underline break-all">{{ link }}</a>
+                <ULink
+                  v-if="isHttpLink(link)"
+                  :to="link"
+                  target="_blank"
+                  raw
+                  class="text-primary underline break-all"
+                >
+                  {{ link }}
+                </ULink>
+                <span v-else class="break-all">{{ link }}</span>
               </li>
             </ul>
           </div>
