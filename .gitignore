@@ -25,3 +25,6 @@ npm-debug.log*
 
 # claude local-only settings
 .claude/settings.local.json
+
+# git worktrees for isolated agent work
+.worktrees/
