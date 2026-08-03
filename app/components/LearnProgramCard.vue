@@ -46,19 +46,19 @@ const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, 
           </span>
         </div>
 
-        <div class="border-t border-default pt-3">
-          <div v-if="program.enrolled" class="flex flex-col gap-2">
-            <div class="flex items-center gap-3">
-              <UProgress :model-value="program.progress" color="primary" />
-              <span class="text-xs text-default">{{ program.progress }}%</span>
-            </div>
-          </div>
+        <USeparator />
 
-          <div v-else class="flex flex-col gap-2">
-            <div class="flex items-center gap-2">
-              <UBadge :label="cohortRange" color="neutral" variant="outline" size="sm" />
-              <UBadge :label="TIMING_LABEL[timing]" :color="TIMING_COLOR[timing]" variant="soft" size="sm" />
-            </div>
+        <div v-if="program.enrolled" class="flex flex-col gap-2">
+          <div class="flex items-center gap-3">
+            <UProgress :model-value="program.progress" color="primary" />
+            <span class="text-xs text-default">{{ program.progress }}%</span>
+          </div>
+        </div>
+
+        <div v-else class="flex flex-col gap-2">
+          <div class="flex items-center gap-2">
+            <UBadge :label="cohortRange" color="neutral" variant="outline" size="sm" />
+            <UBadge :label="TIMING_LABEL[timing]" :color="TIMING_COLOR[timing]" variant="soft" size="sm" />
           </div>
         </div>
       </div>
