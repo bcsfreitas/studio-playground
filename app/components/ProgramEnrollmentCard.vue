@@ -41,11 +41,14 @@ function cohortDescription(cohort: Cohort) {
   if (status === 'self-paced-always-open') return t('program.enrollment.cohortDescription.selfPaced')
   if (status === 'requires-access-code') return t('program.enrollment.cohortDescription.requiresCode')
   if (status === 'closed') return t('program.enrollment.cohortDescription.closed', { range })
-  if (status === 'full') return t('program.enrollment.cohortDescription.full', { range })
   return t('program.enrollment.cohortDescription.open', { taken: cohort.seatsTaken, max: cohort.maxLearners, range })
 }
 
-const cohortItems = computed(() => props.instance.cohorts.map(cohort => ({
+// A full cohort isn't offered as an option at all — there's no waitlist flow,
+// so surfacing it just to show a disabled "full" state serves no purpose.
+const availableCohorts = computed(() => props.instance.cohorts.filter(c => statusOf(c) !== 'full'))
+
+const cohortItems = computed(() => availableCohorts.value.map(cohort => ({
   value: cohort.id,
   label: cohortLabel(cohort),
   description: cohortDescription(cohort),
@@ -53,19 +56,20 @@ const cohortItems = computed(() => props.instance.cohorts.map(cohort => ({
 })))
 
 const defaultCohortId = computed(() => {
-  const firstOpen = props.instance.cohorts.find(c => statusOf(c) === 'open-with-seats')
-  return (firstOpen ?? props.instance.cohorts[0])?.id
+  const firstOpen = availableCohorts.value.find(c => statusOf(c) === 'open-with-seats')
+  return (firstOpen ?? availableCohorts.value[0])?.id
 })
 
 const selectedCohortId = ref(defaultCohortId.value)
 
 const selectedCohort = computed(() =>
-  props.instance.cohorts.find(c => c.id === selectedCohortId.value) ?? props.instance.cohorts[0]
+  availableCohorts.value.find(c => c.id === selectedCohortId.value) ?? availableCohorts.value[0]
 )
 
-const selectedStatus = computed(() => statusOf(selectedCohort.value))
+const selectedStatus = computed(() => selectedCohort.value ? statusOf(selectedCohort.value) : undefined)
 
 function submitCode() {
+  if (!selectedCohort.value) return
   if (enteredCode.value.trim() === selectedCohort.value.accessCode) {
     unlockedCohortIds.value.push(selectedCohort.value.id)
     enteredCode.value = ''
@@ -78,13 +82,10 @@ function submitCode() {
 
 <template>
   <UPageCard variant="soft">
-    <div class="flex items-center gap-3">
-      <img :src="template.image" alt="" class="size-14 rounded-xl object-cover bg-slate-100 shrink-0">
       <div class="font-heading font-bold text-highlighted line-clamp-2">{{ template.title }}</div>
-    </div>
 
     <URadioGroup
-      v-if="instance.cohorts.length > 1"
+      v-if="availableCohorts.length > 1"
       v-model="selectedCohortId"
       variant="card"
       :legend="t('program.enrollment.sessionPickerLabel')"
@@ -92,7 +93,9 @@ function submitCode() {
       class="mt-4"
     />
 
-    <div class="mt-4 border-t border-default pt-4">
+    <USeparator class="mt-4" />
+
+    <div v-if="selectedCohort" class="mt-4">
       <template v-if="selectedStatus === 'already-enrolled'">
         <div class="flex items-center gap-3 mb-3">
           <UProgress :model-value="enrollment?.progress" color="primary" />
@@ -127,14 +130,6 @@ function submitCode() {
       <template v-else-if="selectedStatus === 'closed'">
         <UBadge :label="t('program.enrollment.cta.enrollmentClosed')" color="neutral" variant="soft" class="mb-3" />
         <UButton :label="t('program.enrollment.cta.enrollmentClosed')" color="neutral" variant="soft" block disabled />
-      </template>
-
-      <template v-else-if="selectedStatus === 'full'">
-        <UBadge :label="t('program.enrollment.seats.full')" color="warning" variant="soft" class="mb-3" />
-        <div class="flex flex-col gap-2">
-          <UButton :label="t('program.enrollment.cta.cohortFull')" color="primary" block disabled />
-          <UButton :label="t('program.enrollment.cta.joinWaitlist')" color="neutral" variant="outline" block />
-        </div>
       </template>
 
       <template v-else>
