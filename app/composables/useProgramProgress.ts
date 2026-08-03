@@ -1,9 +1,15 @@
 import type { ProgramTemplate } from '~/composables/useProgramMockData'
 import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 
+export interface DeliverableSubmission {
+  description: string
+  links: string[]
+}
+
 interface StoredProgress {
-  version: 1
+  version: 2
   completedItemIds: string[]
+  submissions: Record<string, DeliverableSubmission>
 }
 
 function storageKey(programId: string) {
@@ -16,14 +22,19 @@ function storageKey(programId: string) {
 // a real multi-account system), so finer keying would be unused complexity.
 export function useProgramProgress(template: ProgramTemplate) {
   const completedItemIds = useState<Set<string>>(`program-progress-${template.id}`, () => new Set())
+  const submissions = useState<Record<string, DeliverableSubmission>>(
+    `program-submissions-${template.id}`,
+    () => ({})
+  )
 
   onMounted(() => {
     if (!import.meta.client) return
     const raw = localStorage.getItem(storageKey(template.id))
     if (!raw) return
     try {
-      const parsed = JSON.parse(raw) as StoredProgress
-      completedItemIds.value = new Set(parsed.completedItemIds)
+      const parsed = JSON.parse(raw) as Partial<StoredProgress>
+      completedItemIds.value = new Set(parsed.completedItemIds ?? [])
+      submissions.value = parsed.submissions ?? {}
     } catch {
       // Corrupt/old localStorage value — ignore and start fresh.
     }
@@ -31,7 +42,11 @@ export function useProgramProgress(template: ProgramTemplate) {
 
   function persist() {
     if (!import.meta.client) return
-    const payload: StoredProgress = { version: 1, completedItemIds: [...completedItemIds.value] }
+    const payload: StoredProgress = {
+      version: 2,
+      completedItemIds: [...completedItemIds.value],
+      submissions: submissions.value
+    }
     localStorage.setItem(storageKey(template.id), JSON.stringify(payload))
   }
 
@@ -41,6 +56,19 @@ export function useProgramProgress(template: ProgramTemplate) {
 
   function markComplete(itemId: string) {
     if (completedItemIds.value.has(itemId)) return
+    completedItemIds.value = new Set(completedItemIds.value).add(itemId)
+    persist()
+  }
+
+  function getSubmission(itemId: string) {
+    return submissions.value[itemId]
+  }
+
+  // Deliverables complete the same way every other item does — submitting
+  // just also stashes what was submitted so it can be shown back to the
+  // learner on revisit.
+  function submitDeliverable(itemId: string, submission: DeliverableSubmission) {
+    submissions.value = { ...submissions.value, [itemId]: submission }
     completedItemIds.value = new Set(completedItemIds.value).add(itemId)
     persist()
   }
@@ -66,5 +94,14 @@ export function useProgramProgress(template: ProgramTemplate) {
     return !previousModule.items.every(item => completedItemIds.value.has(item.id))
   }
 
-  return { isCompleted, markComplete, isModuleLocked, progressPercent, totalXpEarned, totalXpAvailable }
+  return {
+    isCompleted,
+    markComplete,
+    getSubmission,
+    submitDeliverable,
+    isModuleLocked,
+    progressPercent,
+    totalXpEarned,
+    totalXpAvailable
+  }
 }
