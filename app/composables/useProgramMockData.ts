@@ -55,12 +55,6 @@ export interface ProgramCertificate {
   microcredentials?: Microcredential[]
 }
 
-export interface WhatsNext {
-  label: string
-  description: string
-  to: string
-}
-
 export interface ProgramTemplate {
   id: string
   title: string
@@ -82,7 +76,6 @@ export interface ProgramTemplate {
   studentsCompletedCount: number
   testimonials: Testimonial[]
   certificate: ProgramCertificate
-  whatsNext?: WhatsNext
 }
 
 export interface Cohort {
@@ -157,11 +150,6 @@ export const programTemplates: ProgramTemplate[] = [
       name: 'Pixel Art Foundations Certificate',
       issuingOrg: 'Endless Studios',
       microcredentials: [{ id: 'mc-sprite-sheets', name: 'Sprite Sheet Animation' }]
-    },
-    whatsNext: {
-      label: 'Level Design Lab',
-      description: 'Take your art skills into building playable spaces.',
-      to: '/learn/level-design-lab'
     },
     curriculum: [
       {
@@ -246,11 +234,6 @@ export const programTemplates: ProgramTemplate[] = [
         { id: 'mc-team-collab', name: 'Team Collaboration' }
       ]
     },
-    whatsNext: {
-      label: 'Advanced Shader Programming',
-      description: 'Push your shipped build further with custom shaders.',
-      to: '/learn/advanced-shader-programming'
-    },
     curriculum: [
       {
         id: 'module-prototype-to-playable',
@@ -317,11 +300,6 @@ export const programTemplates: ProgramTemplate[] = [
       name: 'Level Design Lab Certificate',
       issuingOrg: 'Northgate Youth Arts Center',
       microcredentials: []
-    },
-    whatsNext: {
-      label: 'Narrative Design Workshop',
-      description: 'Bring story and pacing together in your next level.',
-      to: '/learn/narrative-design-workshop'
     },
     curriculum: [
       {
@@ -522,4 +500,14 @@ export function cohortStatusFor(
 
   if (cohort.maxLearners !== null && cohort.seatsTaken >= cohort.maxLearners) return 'full'
   return 'open-with-seats'
+}
+
+// Whether a new learner could book into this program at all — used to keep
+// fully-booked programs (every cohort full) out of the /learn catalog.
+// Programs with no matching instance (catalog-only mock entries) are treated
+// as available, since there's no cohort data to say otherwise.
+export function hasAvailableCohort(programId: string): boolean {
+  const instance = programInstances.find(i => i.programId === programId)
+  if (!instance) return true
+  return instance.cohorts.some(c => cohortStatusFor(c, undefined, false) !== 'full')
 }
