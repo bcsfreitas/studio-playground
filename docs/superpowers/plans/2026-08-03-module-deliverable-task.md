@@ -262,18 +262,20 @@ git commit -m "Add i18n copy for the deliverable submission UI"
 
 ---
 
-### Task 3: `ProgramContentViewer.vue` deliverable overview + submission form
+### Task 3: Deliverable content viewer, persistence, and page wiring (end-to-end)
+
+**Why one task:** the content viewer's props/emit (this task's Step 1) and the composable's return shape (Step 2) and the page wiring (Step 3) only make sense — and can only be verified — together. Splitting them into separate tasks would leave every one of them unverifiable in isolation (Step 1 alone: the parent doesn't pass its new props yet; Step 2 alone: nothing calls it; Step 3 alone: the component it wires doesn't exist yet), which violates "each task ends with an independently testable deliverable." This task's single end-to-end verify step (Step 4) is the first point any of this is actually testable.
 
 **Files:**
 - Modify: `app/components/ProgramContentViewer.vue` (full rewrite)
+- Modify: `app/composables/useProgramProgress.ts` (full rewrite)
+- Modify: `app/pages/learn/[programId]/program.vue` (template only)
 
 **Interfaces:**
-- Consumes: `FlatCurriculumItem` (from `useProgramCurriculum`, unchanged — `acceptanceCriteria` flows through automatically since `FlatCurriculumItem extends CurriculumItem`). `DeliverableSubmission` type (defined in Task 4's `useProgramProgress.ts`; import it here as a type-only import — the type must exist before this file typechecks, but at runtime Vue/Vite don't care about import order for type-only imports, so this task can be done before or after Task 4).
-- Produces: new props `totalModules: number`, `submission: DeliverableSubmission | undefined`. New emit `'submit-deliverable': [payload: DeliverableSubmission]`. Task 4 (page wiring) depends on these exact names.
+- Consumes: `FlatCurriculumItem` (from `useProgramCurriculum`, unchanged — `acceptanceCriteria` flows through automatically since `FlatCurriculumItem extends CurriculumItem`).
+- Produces (internal to this task, not consumed by any other task in this plan): `DeliverableSubmission` interface (`{ description: string; links: string[] }`), exported from `useProgramProgress.ts`. `ProgramContentViewer` gains props `totalModules: number`, `submission: DeliverableSubmission | undefined` and emit `'submit-deliverable': [payload: DeliverableSubmission]`. `useProgramProgress(template)`'s return value gains `getSubmission(itemId: string): DeliverableSubmission | undefined` and `submitDeliverable(itemId: string, submission: DeliverableSubmission): void`.
 
-- [ ] **Step 1: Add the `DeliverableSubmission` type placeholder import and new props/emit**
-
-Since Task 4 defines `DeliverableSubmission` in `useProgramProgress.ts`, do Task 4's Step 1 (just the interface, not the rest) first if working strictly in order — or do this task after Task 4 is complete. Either order works; there's no runtime circular dependency (this component doesn't call any `useProgramProgress` function, only imports a type).
+- [ ] **Step 1: Rewrite `ProgramContentViewer.vue`**
 
 Replace the entire contents of `app/components/ProgramContentViewer.vue` with:
 
@@ -433,30 +435,7 @@ function submitDeliverable() {
 
 Note `props` is declared but template accesses `item`/`isCompleted`/etc. directly (unwrapped) — this matches the existing file's style (Vue's `<script setup>` template compiler auto-unwraps `defineProps` results referenced by name), so no `props.` prefix needed in the template, consistent with how `item` and `isCompleted` were already used before this change.
 
-- [ ] **Step 2: Verify (layout only — parent isn't wired yet, so props will be `undefined`/emit goes nowhere)**
-
-This component alone can't be exercised until Task 4 wires its new props/emit from the page. Skip standalone verification here — Task 4's verify step exercises this file end-to-end. (If you want an early visual sanity check, temporarily hardcode `:total-modules="2"` and `:submission="undefined"` where `ProgramContentViewer` is used, reload, and confirm the deliverable item shows the description/milestone/criteria/XP block without a Vue template error in the console — then remove the hardcoding before Task 4.)
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add app/components/ProgramContentViewer.vue
-git commit -m "Add deliverable overview and submission form to the content viewer"
-```
-
----
-
-### Task 4: Persistence for submissions + page wiring (end-to-end)
-
-**Files:**
-- Modify: `app/composables/useProgramProgress.ts` (full rewrite)
-- Modify: `app/pages/learn/[programId]/program.vue` (template only)
-
-**Interfaces:**
-- Consumes: `ProgramContentViewer`'s `totalModules`/`submission` props and `submit-deliverable` emit, defined in Task 3.
-- Produces: `DeliverableSubmission` interface (`{ description: string; links: string[] }`), `useProgramProgress(template)` return value gains `getSubmission(itemId: string): DeliverableSubmission | undefined` and `submitDeliverable(itemId: string, submission: DeliverableSubmission): void`.
-
-- [ ] **Step 1: Rewrite `useProgramProgress.ts`**
+- [ ] **Step 2: Rewrite `useProgramProgress.ts`**
 
 Replace the entire contents of `app/composables/useProgramProgress.ts` with:
 
@@ -570,7 +549,7 @@ export function useProgramProgress(template: ProgramTemplate) {
 }
 ```
 
-- [ ] **Step 2: Wire the new props/emit in the page**
+- [ ] **Step 3: Wire the new props/emit in the page**
 
 In `app/pages/learn/[programId]/program.vue`, find the `<ProgramContentViewer>` tag and replace it with:
 
@@ -588,9 +567,9 @@ In `app/pages/learn/[programId]/program.vue`, find the `<ProgramContentViewer>` 
     />
 ```
 
-The added `:key="activeItem.id"` forces the component to remount when the active item changes, so `ProgramContentViewer`'s local `isStarted`/`description`/`links` refs (added in Task 3) reset cleanly when the learner navigates to a different item — without it, those refs would leak from one deliverable into the next since Vue reuses the component instance across prop changes.
+The added `:key="activeItem.id"` forces the component to remount when the active item changes, so `ProgramContentViewer`'s local `isStarted`/`description`/`links` refs (added in Step 1) reset cleanly when the learner navigates to a different item — without it, those refs would leak from one deliverable into the next since Vue reuses the component instance across prop changes.
 
-- [ ] **Step 3: Verify — full end-to-end flow**
+- [ ] **Step 4: Verify — full end-to-end flow**
 
 Start the dev server, open `/learn/intro-game-design/program`, clear `localStorage`, reload.
 
@@ -603,9 +582,9 @@ Start the dev server, open `/learn/intro-game-design/program`, clear `localStora
 7. Complete the remaining item(s) in module 1 (if any aren't done yet) and confirm module 2 unlocks exactly as before this change (module-lock behavior from the earlier lock/skip feature is unaffected).
 8. Check the browser console for errors throughout — expect none.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add app/composables/useProgramProgress.ts "app/pages/learn/[programId]/program.vue"
-git commit -m "Persist deliverable submissions and wire them into the content viewer"
+git add app/components/ProgramContentViewer.vue app/composables/useProgramProgress.ts "app/pages/learn/[programId]/program.vue"
+git commit -m "Add deliverable submission UI, persistence, and page wiring"
 ```
