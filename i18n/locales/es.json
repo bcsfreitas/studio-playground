@@ -76,6 +76,7 @@
       "sessionPickerLabel": "Elige una sesión",
       "cta": {
         "resume": "Continuar aprendiendo",
+        "startsOn": "Comienza el {date}",
         "startLearning": "Comenzar a aprender",
         "unlockCohort": "Desbloquear sesión",
         "enrollmentClosed": "Inscripción cerrada",

@@ -76,6 +76,7 @@
       "sessionPickerLabel": "Choose a session",
       "cta": {
         "resume": "Resume learning",
+        "startsOn": "Starts {date}",
         "startLearning": "Start learning",
         "unlockCohort": "Unlock session",
         "enrollmentClosed": "Enrollment closed",

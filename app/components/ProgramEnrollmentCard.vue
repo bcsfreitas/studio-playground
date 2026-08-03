@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ProgramTemplate, ProgramInstance, EnrollmentRecord, Cohort, EnrollmentStatus } from '~/composables/useProgramMockData'
-import { cohortStatusFor } from '~/composables/useProgramMockData'
+import { cohortStatusFor, cohortHasStarted } from '~/composables/useProgramMockData'
 import { formatCohortRange } from '~/composables/useLearnMockData'
 
 const props = defineProps<{
@@ -134,12 +134,33 @@ const enrollModalStartDateLabel = computed(() => {
           <UProgress :model-value="enrollment?.progress ?? 0" color="primary" />
           <span class="text-xs text-default">{{ enrollment?.progress ?? 0 }}%</span>
         </div>
-        <UButton :label="t('program.enrollment.cta.resume')" icon="lucide:play" color="primary" block />
+        <UButton
+          v-if="selectedCohort && cohortHasStarted(selectedCohort)"
+          :label="t('program.enrollment.cta.resume')"
+          icon="lucide:play"
+          color="primary"
+          block
+          :to="`/learn/${template.id}/player`"
+          target="_blank"
+        />
+        <template v-else>
+          <p class="text-xs text-muted mb-2">
+            {{ t('program.enrollment.cta.startsOn', { date: enrollModalStartDateLabel }) }}
+          </p>
+          <UButton :label="t('program.enrollment.cta.resume')" icon="lucide:play" color="primary" block disabled />
+        </template>
       </template>
 
       <template v-else-if="selectedStatus === 'self-paced-always-open'">
         <UBadge :label="t('program.enrollment.cohortDescription.selfPaced')" color="neutral" variant="soft" class="mb-3" />
-        <UButton :label="t('program.enrollment.cta.startLearning')" icon="lucide:play" color="primary" block />
+        <UButton
+          :label="t('program.enrollment.cta.startLearning')"
+          icon="lucide:play"
+          color="primary"
+          block
+          :to="`/learn/${template.id}/player`"
+          target="_blank"
+        />
       </template>
 
       <template v-else-if="selectedStatus === 'requires-access-code'">

@@ -575,6 +575,16 @@ export function cohortStatusFor(
   return 'open-with-seats'
 }
 
+// A cohort with no start date (self-paced) is always "started"; otherwise
+// compare against today using the same UTC-midnight normalization
+// cohortStatusFor's closed-date check uses, to avoid a server-timezone skew.
+export function cohortHasStarted(cohort: Cohort, today = new Date()): boolean {
+  if (cohort.startDate === null) return true
+  const todayUtcMidnight = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
+  const startsAt = new Date(cohort.startDate).getTime()
+  return startsAt <= todayUtcMidnight
+}
+
 // Whether a new learner could book into this program at all — used to keep
 // fully-booked programs (every cohort full) out of the /learn catalog.
 // Programs with no matching instance (catalog-only mock entries) are treated
