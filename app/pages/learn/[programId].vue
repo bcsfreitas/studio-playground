@@ -41,13 +41,15 @@ const previewStates: { id: PreviewState, label: string }[] = [
         <div style="height: 40px; width: 100%" />
 
         <div v-if="template && instance" class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_324px] gap-8 lg:gap-12 pb-16">
-          <div class="flex flex-col gap-12 min-w-0">
+          <div class="flex flex-col gap-15 min-w-0">
             <ProgramHero :template="template" :institution="instance.deliveringInstitution" />
+
             <ProgramFactsStrip :template="template" />
 
             <!-- Mobile-only: right rail is sticky on lg+, but below that the
                  enrollment CTA needs to sit right after the hero, not after
                  the entire scroll of curriculum/testimonials/certificate. -->
+            <USeparator class="lg:hidden" />
             <ProgramEnrollmentCard
               class="lg:hidden"
               :template="template"
@@ -55,23 +57,25 @@ const previewStates: { id: PreviewState, label: string }[] = [
               :enrollment="enrollment"
             />
 
-            <ProgramGameStubCard v-if="template.linkedGame" :game="template.linkedGame" />
-
+            <USeparator />
             <section>
               <SectionTitle :title="t('program.sections.curriculum')" />
               <ProgramCurriculumAccordion :modules="template.curriculum" />
             </section>
 
+            <USeparator />
             <section>
               <SectionTitle :title="t('program.sections.tools')" />
               <ProgramToolsList :tools="template.toolsUsed" />
             </section>
 
+            <USeparator />
             <section>
               <SectionTitle :title="t('program.sections.prerequisites')" />
               <ProgramPrerequisites :prerequisites="template.prerequisites" />
             </section>
 
+            <USeparator />
             <section>
               <SectionTitle :title="t('program.sections.testimonials')" />
               <ProgramSocialProof
@@ -80,12 +84,12 @@ const previewStates: { id: PreviewState, label: string }[] = [
               />
             </section>
 
+            <USeparator />
             <section>
               <SectionTitle :title="t('program.sections.certificate')" />
               <ProgramCertificateShowcase :certificate="template.certificate" />
             </section>
 
-            <ProgramWhatsNext v-if="template.whatsNext" :whats-next="template.whatsNext" />
           </div>
 
           <div class="hidden lg:block">
@@ -110,7 +114,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
   </UDashboardPanel>
 
   <!-- Dev-only preview state + locale switcher (not part of the product's real UI) -->
-  <div class="fixed left-1/2 bottom-[18px] z-[200] flex items-center gap-2 -translate-x-1/2">
+  <div class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-2">
     <div
       class="flex items-center gap-1"
       style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"

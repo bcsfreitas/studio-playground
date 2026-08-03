@@ -17,17 +17,11 @@ const { t } = useI18n()
 <template>
   <div class="flex-1 p-8 overflow-y-auto">
     <!-- Mirrors ProgramCurriculumAccordion's module container (rounded-2xl
-         border, color-tinted badge/title) so the active module's identity
-         carries over from the sidebar into the content viewer. -->
+         border) so the active module's identity carries over from the
+         sidebar into the content viewer. -->
     <div class="rounded-2xl border border-default p-8">
       <div class="flex items-center gap-2.5">
-        <UBadge
-          :label="item.moduleNumber"
-          :color="item.moduleColor"
-          variant="soft"
-          class="rounded-full size-7 justify-center p-0 shrink-0"
-        />
-        <span class="font-heading font-bold text-sm" :class="`text-${item.moduleColor}-600`">
+        <span class="font-heading font-bold text-sm text-primary-600">
           {{ item.moduleTitle }}
         </span>
         <span class="text-xs text-muted uppercase">· {{ item.contentType }}</span>

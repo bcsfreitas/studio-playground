@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { userName, streakDays, xpLabel, notificationCount, type PreviewState } from '~/composables/useHomeMockData'
 import { learnPrograms, cohortTimingOf, type CohortTiming } from '~/composables/useLearnMockData'
+import { programTemplates, hasAvailableCohort } from '~/composables/useProgramMockData'
 
 definePageMeta({ layout: 'dashboard' })
+
+// Joins catalog scheduling/enrollment state to the same programTemplates the
+// cover page and program content read from, so title/description/image/
+// difficulty/module count can never drift from what's actually inside.
+const catalogPrograms = computed(() => learnPrograms.map(p => ({
+  ...p,
+  template: programTemplates.find(t => t.id === p.id)!
+})))
 
 const state = ref<PreviewState>('active')
 const isActive = computed(() => state.value === 'active')
@@ -24,15 +33,16 @@ const difficultyItems: { value: Difficulty, label: string }[] = [
   { value: 'Advanced', label: 'Advanced' }
 ]
 
-const sortedPrograms = computed(() => [...learnPrograms].sort((a, b) => {
+const sortedPrograms = computed(() => [...catalogPrograms.value].sort((a, b) => {
   if (a.enrolled !== b.enrolled) return a.enrolled ? -1 : 1
   if (a.enrolled) return (b.progress ?? 0) - (a.progress ?? 0)
   return new Date(a.cohortStart).getTime() - new Date(b.cohortStart).getTime()
 }))
 
 const filteredPrograms = computed(() => sortedPrograms.value.filter((p) => {
-  if (search.value && !p.name.toLowerCase().includes(search.value.toLowerCase())) return false
-  if (difficultyFilter.value.length && !difficultyFilter.value.includes(p.status)) return false
+  if (!hasAvailableCohort(p.id)) return false
+  if (search.value && !p.template.title.toLowerCase().includes(search.value.toLowerCase())) return false
+  if (difficultyFilter.value.length && !difficultyFilter.value.includes(p.template.difficulty)) return false
   if (timingFilter.value.length && !timingFilter.value.includes(cohortTimingOf(p))) return false
   return true
 }))
@@ -113,7 +123,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
 
   <!-- Dev-only preview state switcher (not part of the product's real UI) -->
   <div
-    class="fixed left-1/2 bottom-[18px] z-[200] flex items-center gap-1 -translate-x-1/2"
+    class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-1"
     style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
   >
     <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { BadgeProps } from '@nuxt/ui'
 import { cohortTimingOf, formatCohortRange, type LearnProgram } from '~/composables/useLearnMockData'
+import type { ProgramTemplate } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
-  program: LearnProgram
+  program: LearnProgram & { template: ProgramTemplate }
 }>()
 
 const TIMING_LABEL: Record<string, string> = {
@@ -24,15 +25,15 @@ const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, 
   <UPageCard
     :to="program.enrolled ? `/learn/${program.id}/program` : `/learn/${program.id}`"
     :target="program.enrolled ? '_blank' : undefined"
-    :title="program.name"
-    :description="program.description"
+    :title="program.template.title"
+    :description="program.template.description"
     reverse
     variant="outline"
     class="cursor-pointer transition-shadow duration-250 hover:shadow-xl rounded-2xl"
     :ui="{ title: 'font-bold line-clamp-2', description: 'line-clamp-2' }"
   >
     <img
-      :src="program.image"
+      :src="program.template.image"
       alt=""
       class="w-full h-56 object-cover bg-slate-100 rounded-2xl"
     >
@@ -40,10 +41,10 @@ const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, 
     <template #footer>
       <div class="flex flex-col gap-3">
         <div class="flex items-center gap-3">
-          <UBadge :label="program.status" color="neutral" size="md" variant="soft" />
+          <UBadge :label="program.template.difficulty" color="neutral" size="md" variant="soft" />
           <span class="inline-flex items-center gap-1.5 text-xs text-dimmed">
             <UIcon name="lucide:layers" class="size-4" />
-            {{ program.tasksCount }} Modules
+            {{ program.template.curriculum.length }} Modules
           </span>
         </div>
 

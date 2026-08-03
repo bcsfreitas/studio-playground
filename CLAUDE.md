@@ -26,7 +26,7 @@ Nuxt 3-style app (Nuxt 4) implementing the Endless Studios "Studio Home" page, b
 
 ## Building UI — mandatory tool use
 
-Before writing any markup for a new component or page section, check for a Nuxt UI component that already covers it. Never hand-write raw HTML/CSS for something Nuxt UI already provides (buttons, cards, badges, inputs, modals, tooltips, tables, menus, etc.) — this repo runs on `@nuxt/ui` v4, and reaching past it means duplicating and drifting from an existing accessible, themed component.
+Before writing any markup for a new component or page section, check for a Nuxt UI component that already covers it. Never hand-write raw HTML/CSS for something Nuxt UI already provides (buttons, cards, badges, inputs, modals, tooltips, tables, menus, dividers, etc.) — this repo runs on `@nuxt/ui` v4, and reaching past it means duplicating and drifting from an existing accessible, themed component. In particular, use `USeparator` instead of a `border-t`/`border-b` div for section dividers.
 
 - Use the `nuxt-ui` skill (installed at `.agents/skills/nuxt-ui`) first for component APIs — props, slots, variants, sizes, states — before guessing from memory or training data, which may lag the installed v4 API.
 - Use the `nuxt-ui-remote` MCP server (`https://ui.nuxt.com/mcp`) for anything the skill doesn't cover, or to confirm current behavior straight from the live docs.

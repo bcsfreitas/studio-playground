@@ -18,7 +18,7 @@ defineProps<{
         <img src="/images/icons/streak-flame.png" alt="" class="size-[15px]" />
         <span class="text-sm font-semibold text-default h-5">{{ streakDays }}</span>
       </div>
-      <UColorModeButton color="neutral" variant="ghost" />
+      <LanguageSwitcher />
       <UButton color="neutral" variant="ghost" icon="lucide:bell" aria-label="Notifications">
         <UBadge v-if="notificationCount" color="neutral" variant="outline" size="sm">{{ notificationCount }}</UBadge>
       </UButton>

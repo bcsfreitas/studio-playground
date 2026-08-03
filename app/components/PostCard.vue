@@ -115,7 +115,9 @@ function focusComment() {
           </div>
         </div>
 
-        <div class="-mx-4 sm:-mx-6 px-4 sm:px-6 pt-6 border-t border-default">
+        <USeparator class="-mx-4 sm:-mx-6" />
+
+        <div class="px-4 sm:px-6 pt-6">
           <div class="flex align-center gap-2.5">
             <UAvatar text="Y" size="2xl" />
             <UTextarea

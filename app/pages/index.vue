@@ -214,7 +214,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
 
   <!-- Dev-only preview state switcher (not part of the product's real UI) -->
   <div
-    class="fixed left-1/2 bottom-[18px] z-[200] flex items-center gap-1 -translate-x-1/2"
+    class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-1"
     style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
   >
     <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ProgramTemplate, CurriculumItemType } from '~/composables/useProgramMockData'
-import { MODULE_COLORS } from '~/composables/useProgramMockData'
 import type { FlatCurriculumItem } from '~/composables/useProgramCurriculum'
 
 const props = defineProps<{
@@ -27,12 +26,10 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   resource: 'lucide:link'
 }
 
-const modules = computed(() => props.template.curriculum.map((mod, index) => ({
+const modules = computed(() => props.template.curriculum.map(mod => ({
   label: mod.title,
   value: mod.id,
   moduleItems: mod.items,
-  color: MODULE_COLORS[index % MODULE_COLORS.length],
-  number: index + 1,
   isLocked: props.isModuleLocked(mod.id)
 })))
 
@@ -71,18 +68,11 @@ const expandedModules = computed(() => modules.value.filter(mod => !mod.isLocked
           name="lucide:lock"
           class="size-7 p-1.5 shrink-0 text-dimmed"
         />
-        <UBadge
-          v-else
-          :label="item.number"
-          :color="item.color"
-          variant="soft"
-          class="rounded-full size-7 justify-center p-0 shrink-0"
-        />
       </template>
       <template #default="{ item }">
         <span
           class="font-heading font-bold text-sm"
-          :class="item.isLocked ? 'text-dimmed' : `text-${item.color}-600`"
+          :class="item.isLocked ? 'text-dimmed' : 'text-primary-600'"
         >
           {{ item.label }}
         </span>

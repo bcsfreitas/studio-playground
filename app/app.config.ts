@@ -65,9 +65,9 @@ export default defineAppConfig({
           variant: 'pill',
           active: false,
           class: {
-            link: 'hover:text-primary hover:before:bg-slate-50',
+            link: 'hover:text-primary hover:before:bg-slate-100',
             linkLeadingIcon: 'group-hover:text-primary',
-            childLink: 'hover:text-primary hover:before:bg-slate-50',
+            childLink: 'hover:text-primary hover:before:bg-slate-100',
             childLinkIcon: 'group-hover:text-primary'
           }
         },
@@ -87,9 +87,9 @@ export default defineAppConfig({
           variant: 'pill',
           active: false,
           class: {
-            link: 'hover:text-warning hover:before:bg-slate-50',
+            link: 'hover:text-warning hover:before:bg-slate-100',
             linkLeadingIcon: 'group-hover:text-warning',
-            childLink: 'hover:text-warning hover:before:bg-slate-50',
+            childLink: 'hover:text-warning hover:before:bg-slate-100',
             childLinkIcon: 'group-hover:text-warning'
           }
         },
@@ -109,9 +109,9 @@ export default defineAppConfig({
           variant: 'pill',
           active: false,
           class: {
-            link: 'hover:text-purple hover:before:bg-slate-50',
+            link: 'hover:text-purple hover:before:bg-slate-100',
             linkLeadingIcon: 'group-hover:text-purple',
-            childLink: 'hover:text-purple hover:before:bg-slate-50',
+            childLink: 'hover:text-purple hover:before:bg-slate-100',
             childLinkIcon: 'group-hover:text-purple'
           }
         },
@@ -131,9 +131,9 @@ export default defineAppConfig({
           variant: 'pill',
           active: false,
           class: {
-            link: 'hover:text-blue hover:before:bg-slate-50',
+            link: 'hover:text-blue hover:before:bg-slate-100',
             linkLeadingIcon: 'group-hover:text-blue',
-            childLink: 'hover:text-blue hover:before:bg-slate-50',
+            childLink: 'hover:text-blue hover:before:bg-slate-100',
             childLinkIcon: 'group-hover:text-blue'
           }
         },
@@ -153,9 +153,9 @@ export default defineAppConfig({
           variant: 'pill',
           active: false,
           class: {
-            link: 'hover:text-rose hover:before:bg-slate-50',
+            link: 'hover:text-rose hover:before:bg-slate-100',
             linkLeadingIcon: 'group-hover:text-rose',
-            childLink: 'hover:text-rose hover:before:bg-slate-50',
+            childLink: 'hover:text-rose hover:before:bg-slate-100',
             childLinkIcon: 'group-hover:text-rose'
           }
         },

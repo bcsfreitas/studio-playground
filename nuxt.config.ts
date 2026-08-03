@@ -7,7 +7,12 @@ export default defineNuxtConfig({
   ui: {
     theme: {
       colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'kids', 'purple', 'blue', 'rose']
-    }
+    },
+    // @nuxt/fonts' Storybook dev-handler crashes the whole process (passes a
+    // bare {path} object instead of a real h3 event to setResponseHeader).
+    // Fonts here load via a plain @import in main.css, so the module isn't
+    // needed — disable it only under Storybook to dodge the crash.
+    fonts: process.env.STORYBOOK === 'true' ? false : undefined
   },
   icon: {
     provider: 'server',

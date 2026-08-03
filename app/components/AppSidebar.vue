@@ -13,10 +13,10 @@ const mainItems = computed<NavigationMenuItem[]>(() => [
   { label: 'Home', icon: 'lucide:home', to: '/', color: 'primary' },
   { label: 'Play', icon: 'lucide:gamepad-2', to: '#', color: 'purple' },
   { label: 'Learn', icon: 'lucide:brain', to: '/learn', color: 'blue' },
-  { label: 'Make', icon: 'lucide:blocks', to: '#', color: 'warning' },
+  { label: 'Make', icon: 'lucide:wrench', to: '#', color: 'warning' },
   {
     label: 'Contribute',
-    avatar: { src: '/images/logo-endless.svg', alt: '' },
+    icon: 'lucide:blocks',
     trailingIcon: 'lucide:external-link',
     to: '#',
     color: 'rose'
@@ -54,7 +54,8 @@ const navMenuUi = {
     }"
   >
     <template #header>
-      <img src="/images/endless-logo-horizontal.svg" alt="Endless Studios" width="114" height="31">
+      <img src="/images/endless-logo-horizontal.svg" alt="Endless Studios" width="114" height="31" class="dark:hidden">
+      <img src="/images/endless-logo-horizontal-dark.svg" alt="Endless Studios" width="114" height="31" class="hidden dark:block">
     </template>
 
     <template #default="{ collapsed }">
@@ -81,6 +82,12 @@ const navMenuUi = {
           :ui="navMenuUi"
         />
       </template>
+    </template>
+
+    <template #footer>
+      <div class="w-full flex justify-start">
+        <UColorModeButton color="neutral" variant="outline" />
+      </div>
     </template>
   </UDashboardSidebar>
 </template>

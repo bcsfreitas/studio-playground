@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { CurriculumModule, CurriculumItemType } from '~/composables/useProgramMockData'
-import { MODULE_COLORS } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
   modules: CurriculumModule[]
@@ -15,12 +14,10 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   resource: 'lucide:link'
 }
 
-const items = computed(() => props.modules.map((m, index) => ({
+const items = computed(() => props.modules.map(m => ({
   label: m.title,
   value: m.id,
-  moduleItems: m.items,
-  color: MODULE_COLORS[index % MODULE_COLORS.length],
-  number: index + 1
+  moduleItems: m.items
 })))
 </script>
 
@@ -35,16 +32,8 @@ const items = computed(() => props.modules.map((m, index) => ({
       trigger: 'py-4'
     }"
   >
-    <template #leading="{ item }">
-      <UBadge
-        :label="item.number"
-        :color="item.color"
-        variant="soft"
-        class="rounded-full size-7 justify-center p-0 shrink-0"
-      />
-    </template>
     <template #default="{ item }">
-      <span class="font-heading font-bold text-base" :class="`text-${item.color}-600`">
+      <span class="font-heading font-bold text-base text-primary-600">
         {{ item.label }}
       </span>
     </template>

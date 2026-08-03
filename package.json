@@ -9,8 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare && npm run patch:nuxt",
     "patch:nuxt": "cd node_modules/nuxt && (patch -p1 -N --dry-run -s < ../../patches/nuxt+4.5.0.patch && patch -p1 -N < ../../patches/nuxt+4.5.0.patch) || true",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "STORYBOOK=true storybook dev -p 6006",
+    "build-storybook": "STORYBOOK=true storybook build"
   },
   "dependencies": {
     "@nuxt/icon": "^2.3.1",

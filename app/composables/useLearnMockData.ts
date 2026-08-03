@@ -1,10 +1,9 @@
+// Catalog-only scheduling/enrollment state, keyed to a programTemplates id.
+// Display fields (title, description, image, difficulty, module count) come
+// from useProgramMockData.ts's programTemplates so the catalog card can never
+// drift from what the cover page and program content actually show.
 export interface LearnProgram {
   id: string
-  name: string
-  description: string
-  image: string
-  status: 'Beginner' | 'Intermediate' | 'Advanced'
-  tasksCount: number
   cohortStart: string
   cohortEnd: string
   enrolled: boolean
@@ -12,16 +11,17 @@ export interface LearnProgram {
 }
 
 export const learnPrograms: LearnProgram[] = [
-  { id: 'intro-game-design', name: 'Intro to Game Design', description: 'Build your first playable prototype, one task at a time.', image: '/images/img/bg-threadbare.png', status: 'Beginner', tasksCount: 8, cohortStart: '2026-06-15', cohortEnd: '2026-08-15', enrolled: true, progress: 65 },
-  { id: 'pixel-art-foundations', name: 'Pixel Art Foundations', description: 'Draw, animate, and export sprite art for your games.', image: '/images/img/generic-image.png', status: 'Beginner', tasksCount: 6, cohortStart: '2026-07-01', cohortEnd: '2026-08-26', enrolled: true, progress: 30 },
-  { id: 'ship-your-first-game', name: 'Ship Your First Game', description: 'Take a project from idea to a shared, playable build.', image: '/images/img/games/game-built.png', status: 'Intermediate', tasksCount: 10, cohortStart: '2026-08-03', cohortEnd: '2026-09-28', enrolled: false },
-  { id: 'sound-design-basics', name: 'Sound Design Basics', description: 'Layer sound effects and ambience that make a scene feel alive.', image: '/images/img/default-bg.png', status: 'Beginner', tasksCount: 5, cohortStart: '2026-08-05', cohortEnd: '2026-09-16', enrolled: false },
-  { id: 'level-design-lab', name: 'Level Design Lab', description: 'Pace, teach, and challenge players through hands-on level blocks.', image: '/images/img/default-image.png', status: 'Intermediate', tasksCount: 9, cohortStart: '2026-08-10', cohortEnd: '2026-10-05', enrolled: false },
-  { id: 'advanced-shader-programming', name: 'Advanced Shader Programming', description: 'Write custom shaders for stylized lighting and effects.', image: '/images/img/bg-threadbare.png', status: 'Advanced', tasksCount: 12, cohortStart: '2026-09-01', cohortEnd: '2026-11-03', enrolled: false },
-  { id: 'narrative-design-workshop', name: 'Narrative Design Workshop', description: 'Branch dialogue and pace story beats around player choice.', image: '/images/img/generic-image.png', status: 'Intermediate', tasksCount: 7, cohortStart: '2026-09-14', cohortEnd: '2026-11-09', enrolled: false },
-  { id: '3d-character-modeling', name: '3D Character Modeling', description: 'Sculpt, retopologize, and rig a game-ready character.', image: '/images/img/games/game-built.png', status: 'Advanced', tasksCount: 11, cohortStart: '2026-09-21', cohortEnd: '2026-11-16', enrolled: false },
-  { id: 'multiplayer-networking-fundamentals', name: 'Multiplayer Networking Fundamentals', description: 'Sync state across clients without the game feeling laggy.', image: '/images/img/default-bg.png', status: 'Advanced', tasksCount: 10, cohortStart: '2026-10-05', cohortEnd: '2026-12-07', enrolled: false },
-  { id: 'game-audio-music-composition', name: 'Game Audio & Music Composition', description: 'Score adaptive music that reacts to what the player does.', image: '/images/img/default-image.png', status: 'Beginner', tasksCount: 6, cohortStart: '2026-10-12', cohortEnd: '2026-12-14', enrolled: false }
+  { id: 'intro-game-design', cohortStart: '2026-06-15', cohortEnd: '2026-08-15', enrolled: true, progress: 65 },
+  { id: 'pixel-art-foundations', cohortStart: '2026-07-01', cohortEnd: '2026-08-26', enrolled: true, progress: 30 },
+  { id: 'ship-your-first-game', cohortStart: '2026-08-03', cohortEnd: '2026-09-28', enrolled: false },
+  { id: 'sound-design-basics', cohortStart: '2026-08-05', cohortEnd: '2026-09-16', enrolled: false },
+  { id: 'level-design-lab', cohortStart: '2026-08-10', cohortEnd: '2026-10-05', enrolled: false },
+  { id: 'creature-rigging-crash-course', cohortStart: '2026-08-17', cohortEnd: '2026-09-04', enrolled: false },
+  { id: 'advanced-shader-programming', cohortStart: '2026-09-01', cohortEnd: '2026-11-03', enrolled: false },
+  { id: 'narrative-design-workshop', cohortStart: '2026-09-14', cohortEnd: '2026-11-09', enrolled: false },
+  { id: '3d-character-modeling', cohortStart: '2026-09-21', cohortEnd: '2026-11-16', enrolled: false },
+  { id: 'multiplayer-networking-fundamentals', cohortStart: '2026-10-05', cohortEnd: '2026-12-07', enrolled: false },
+  { id: 'game-audio-music-composition', cohortStart: '2026-10-12', cohortEnd: '2026-12-14', enrolled: false }
 ]
 
 export type CohortTiming = 'in-progress' | 'starting-soon' | 'open-enrollment'

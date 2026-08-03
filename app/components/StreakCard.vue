@@ -14,7 +14,7 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <UPageCard variant="soft" :ui="{ footer: 'flex items-center gap-2 pt-3.5 mt-4 border-t border-muted' }">
+  <UPageCard variant="soft" :ui="{ footer: 'flex flex-col gap-3.5 mt-4' }">
     <template #header>
       <div class="flex items-center justify-between">
         <div>
@@ -46,9 +46,12 @@ withDefaults(defineProps<{
     </div>
 
     <template #footer>
-      <span v-for="i in skipsTotal" :key="i" class="inline-flex size-4 rounded-full bg-sky-50" />
-      <span class="text-xs text-muted">{{ skipsLeft }} skips left this week</span>
-      <span class="ml-auto text-xs text-dimmed">{{ meta }}</span>
+      <USeparator color="neutral" :ui="{ border: 'border-muted' }" />
+      <div class="flex items-center gap-2">
+        <span v-for="i in skipsTotal" :key="i" class="inline-flex size-4 rounded-full bg-sky-50" />
+        <span class="text-xs text-muted">{{ skipsLeft }} skips left this week</span>
+        <span class="ml-auto text-xs text-dimmed">{{ meta }}</span>
+      </div>
     </template>
   </UPageCard>
 </template>
