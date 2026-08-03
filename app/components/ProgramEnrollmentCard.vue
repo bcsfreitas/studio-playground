@@ -131,8 +131,8 @@ const enrollModalStartDateLabel = computed(() => {
     <div v-if="selectedCohort" class="mt-4">
       <template v-if="selectedStatus === 'already-enrolled'">
         <div class="flex items-center gap-3 mb-3">
-          <UProgress :model-value="enrollment?.progress" color="primary" />
-          <span class="text-xs text-default">{{ enrollment?.progress }}%</span>
+          <UProgress :model-value="enrollment?.progress ?? 0" color="primary" />
+          <span class="text-xs text-default">{{ enrollment?.progress ?? 0 }}%</span>
         </div>
         <UButton :label="t('program.enrollment.cta.resume')" icon="lucide:play" color="primary" block />
       </template>
@@ -180,6 +180,11 @@ const enrollModalStartDateLabel = computed(() => {
     </div>
 
     <UModal v-model:open="enrollModalOpen">
+      <template #title>
+        <span class="sr-only">{{ enrollModalStep === 'confirm'
+          ? t('program.enrollment.confirmModal.title')
+          : t('program.enrollment.successModal.title') }}</span>
+      </template>
       <template #body>
         <div v-if="enrollModalStep === 'confirm' && selectedCohort" class="flex flex-col items-center text-center gap-3">
           <div class="flex items-center justify-center size-12 rounded-full bg-primary/10 text-primary">
