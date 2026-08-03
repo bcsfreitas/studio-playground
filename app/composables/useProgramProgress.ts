@@ -47,12 +47,13 @@ export function useProgramProgress(template: ProgramTemplate) {
 
   const items = flattenCurriculum(template)
 
+  const completedCount = computed(() => items.filter(item => completedItemIds.value.has(item.id)).length)
   const totalXpAvailable = computed(() => items.reduce((sum, item) => sum + item.xp, 0))
   const totalXpEarned = computed(() =>
     items.filter(item => completedItemIds.value.has(item.id)).reduce((sum, item) => sum + item.xp, 0)
   )
   const progressPercent = computed(() =>
-    items.length === 0 ? 0 : Math.round((completedItemIds.value.size / items.length) * 100)
+    items.length === 0 ? 0 : Math.round((completedCount.value / items.length) * 100)
   )
 
   return { isCompleted, markComplete, progressPercent, totalXpEarned, totalXpAvailable }

@@ -18,7 +18,7 @@ export function flattenCurriculum(template: ProgramTemplate): FlatCurriculumItem
       moduleId: mod.id,
       moduleTitle: mod.title,
       moduleNumber: moduleIndex + 1,
-      moduleColor: MODULE_COLORS[moduleIndex % MODULE_COLORS.length]
+      moduleColor: MODULE_COLORS[moduleIndex % MODULE_COLORS.length]!
     }))
   )
 }
