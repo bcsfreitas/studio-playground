@@ -95,6 +95,18 @@
         "requiresCode": "Requires an access code",
         "selfPaced": "Self-paced - start anytime",
         "alreadyEnrolled": "You're enrolled - {progress}% complete"
+      },
+      "confirmModal": {
+        "title": "Lock in your seat?",
+        "body": "You're about to enroll in {program}, {range}.",
+        "cancel": "Cancel",
+        "confirm": "Yes, enroll me"
+      },
+      "successModal": {
+        "title": "You're in!",
+        "starts": "Starts {date}",
+        "emailNotice": "We've sent a confirmation to your email - keep an eye on your inbox for reminders as the session gets closer.",
+        "done": "Got it"
       }
     }
   }

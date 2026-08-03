@@ -95,6 +95,18 @@
         "requiresCode": "Requiere un código de acceso",
         "selfPaced": "A tu propio ritmo - comienza cuando quieras",
         "alreadyEnrolled": "Ya estás inscrito - {progress}% completado"
+      },
+      "confirmModal": {
+        "title": "¿Reservar tu lugar?",
+        "body": "Estás a punto de inscribirte en {program}, {range}.",
+        "cancel": "Cancelar",
+        "confirm": "Sí, inscríbeme"
+      },
+      "successModal": {
+        "title": "¡Ya estás dentro!",
+        "starts": "Comienza el {date}",
+        "emailNotice": "Enviamos una confirmación a tu correo - revisa tu bandeja de entrada para recordatorios a medida que se acerque la sesión.",
+        "done": "Entendido"
       }
     }
   }
