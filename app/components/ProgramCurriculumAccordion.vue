@@ -14,17 +14,45 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   resource: 'lucide:link'
 }
 
-const items = computed(() => props.modules.map(m => ({
+// Cycled by module index so each card reads as visually distinct; same
+// 4-color family as ProgramFactsStrip's stat accents.
+const MODULE_COLORS = ['primary', 'secondary', 'purple', 'blue'] as const
+
+const items = computed(() => props.modules.map((m, index) => ({
   label: m.title,
   value: m.id,
-  moduleItems: m.items
+  moduleItems: m.items,
+  color: MODULE_COLORS[index % MODULE_COLORS.length],
+  number: index + 1
 })))
 </script>
 
 <template>
-  <UAccordion :items="items" type="multiple">
+  <UAccordion
+    :items="items"
+    :default-value="items.map(item => item.value)"
+    type="multiple"
+    :ui="{
+      root: 'flex flex-col gap-3',
+      item: 'rounded-2xl border border-default px-5',
+      trigger: 'py-4'
+    }"
+  >
+    <template #leading="{ item }">
+      <UBadge
+        :label="item.number"
+        :color="item.color"
+        variant="soft"
+        class="rounded-full size-7 justify-center p-0 shrink-0"
+      />
+    </template>
+    <template #default="{ item }">
+      <span class="font-heading font-bold text-base" :class="`text-${item.color}-600`">
+        {{ item.label }}
+      </span>
+    </template>
     <template #content="{ item }">
-      <ul class="flex flex-col gap-2 pb-3.5">
+      <ul class="flex flex-col gap-2.5 pb-4">
         <li
           v-for="task in item.moduleItems"
           :key="task.id"
