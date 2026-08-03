@@ -109,5 +109,18 @@
         "done": "Entendido"
       }
     }
+  },
+  "player": {
+    "exit": {
+      "label": "Salir"
+    },
+    "sidebar": {
+      "xpProgress": "{earned} / {available} XP"
+    },
+    "actions": {
+      "markComplete": "Marcar como completado",
+      "completed": "Completado",
+      "nextItem": "Ir al siguiente elemento"
+    }
   }
 }
