@@ -11,7 +11,8 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   task: 'lucide:circle-check',
   topic: 'lucide:file-text',
   survey: 'lucide:message-square-text',
-  resource: 'lucide:link'
+  resource: 'lucide:link',
+  deliverable: 'lucide:upload'
 }
 
 const items = computed(() => props.modules.map(m => ({
@@ -47,7 +48,7 @@ const items = computed(() => props.modules.map(m => ({
           <UIcon :name="ITEM_TYPE_ICON[task.type as CurriculumItemType]" class="size-4 text-dimmed shrink-0" />
           <span class="flex-1">{{ task.title }}</span>
           <UBadge
-            v-if="task.type === 'task'"
+            v-if="task.xp"
             :label="t('program.curriculum.xpBadge', { xp: task.xp })"
             color="neutral"
             variant="soft"

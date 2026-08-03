@@ -3,7 +3,7 @@ import type { PreviewState } from '~/composables/useHomeMockData'
 export type ProgramTier = 'Explore' | 'Core' | 'More'
 export type ProgramDifficulty = 'Beginner' | 'Intermediate' | 'Advanced'
 export type LearningType = 'self-paced' | 'moderated'
-export type CurriculumItemType = 'topic' | 'survey' | 'task' | 'resource'
+export type CurriculumItemType = 'topic' | 'survey' | 'task' | 'resource' | 'deliverable'
 export type CurriculumContentType = 'video' | 'slideshow' | 'text' | 'image' | 'gif'
 
 export interface StudioOwner {
@@ -29,6 +29,7 @@ export interface CurriculumItem {
   title: string
   xp: number
   contentType: CurriculumContentType
+  acceptanceCriteria?: string[]
 }
 
 export interface CurriculumModule {
@@ -116,6 +117,15 @@ export type EnrollmentStatus =
 
 const ENDLESS_STUDIOS: StudioOwner = { name: 'Endless Studios', logo: '/images/logo-endless.svg' }
 
+// Shared by every generically-templated module deliverable (every module
+// outside Intro to Game Design, which gets bespoke deliverable copy).
+const GENERIC_DELIVERABLE_XP = 200
+const GENERIC_ACCEPTANCE_CRITERIA = [
+  'Your work for this module is shared with a link to a screenshot, short video, or playable build.',
+  'The submission explains what you built or changed and why.',
+  'The result works without breaking the rest of the project.'
+] as const
+
 export const programTemplates: ProgramTemplate[] = [
   {
     id: 'intro-game-design',
@@ -127,7 +137,7 @@ export const programTemplates: ProgramTemplate[] = [
     language: 'English',
     difficulty: 'Beginner',
     minAge: 10,
-    totalXp: 600,
+    totalXp: 1050,
     learningType: 'self-paced',
     tier: 'Explore',
     durationLabel: '3 weeks - about 1 hr/week, at your own pace',
@@ -147,7 +157,19 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-igd-what-is-a-game', type: 'topic', title: 'What makes a game a game?', xp: 0, contentType: 'video' },
           { id: 'item-igd-core-loop', type: 'task', title: 'Sketch your core gameplay loop', xp: 150, contentType: 'slideshow' },
-          { id: 'item-igd-paper-prototype', type: 'task', title: 'Build a paper prototype', xp: 150, contentType: 'image' }
+          { id: 'item-igd-paper-prototype', type: 'task', title: 'Build a paper prototype', xp: 150, contentType: 'image' },
+          {
+            id: 'item-igd-concept-deliverable',
+            type: 'deliverable',
+            title: 'Submit Your Paper Prototype',
+            xp: 200,
+            contentType: 'text',
+            acceptanceCriteria: [
+              'A core-loop sketch and a playable paper prototype are both shared, with a photo or short video of the prototype in action.',
+              'The submission explains the core loop and what the prototype is meant to test.',
+              'Another person can play the prototype start to finish without extra explanation from you.'
+            ]
+          }
         ]
       },
       {
@@ -156,7 +178,19 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-igd-choose-tool', type: 'resource', title: 'Choosing your first game engine', xp: 0, contentType: 'text' },
           { id: 'item-igd-first-level', type: 'task', title: 'Build a playable first level', xp: 200, contentType: 'video' },
-          { id: 'item-igd-playtest-survey', type: 'survey', title: 'How did your first playtest go?', xp: 0, contentType: 'text' }
+          { id: 'item-igd-playtest-survey', type: 'survey', title: 'How did your first playtest go?', xp: 0, contentType: 'text' },
+          {
+            id: 'item-igd-first-level-deliverable',
+            type: 'deliverable',
+            title: 'Submit Your First Playable Level',
+            xp: 250,
+            contentType: 'text',
+            acceptanceCriteria: [
+              'A playable build or a video walkthrough of your first level is shared.',
+              'The submission notes which engine you used and one thing that was hard to get working.',
+              'The level can be played from start to finish without crashing.'
+            ]
+          }
         ]
       },
       {
@@ -180,7 +214,7 @@ export const programTemplates: ProgramTemplate[] = [
     language: 'English',
     difficulty: 'Beginner',
     minAge: 10,
-    totalXp: 1100,
+    totalXp: 1700,
     learningType: 'self-paced',
     tier: 'Explore',
     durationLabel: '4 weeks - about 2 hrs/week, at your own pace',
@@ -213,7 +247,8 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-sprite-anatomy', type: 'topic', title: 'Anatomy of a sprite', xp: 0, contentType: 'video' },
           { id: 'item-16x16-character', type: 'task', title: 'Draw a 16x16 character sprite', xp: 150, contentType: 'slideshow' },
-          { id: 'item-walk-cycle', type: 'task', title: 'Build a 4-frame walk cycle', xp: 200, contentType: 'gif' }
+          { id: 'item-walk-cycle', type: 'task', title: 'Build a 4-frame walk cycle', xp: 200, contentType: 'gif' },
+          { id: 'item-pixel-fundamentals-deliverable', type: 'deliverable', title: 'Submit your Pixel Fundamentals work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -222,7 +257,8 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-palette-libraries', type: 'resource', title: 'Recommended palette libraries', xp: 0, contentType: 'image' },
           { id: 'item-recolor-sprite', type: 'task', title: 'Recolor your sprite with an 8-color palette', xp: 150, contentType: 'image' },
-          { id: 'item-color-survey', type: 'survey', title: 'How comfortable are you with color theory?', xp: 0, contentType: 'text' }
+          { id: 'item-color-survey', type: 'survey', title: 'How comfortable are you with color theory?', xp: 0, contentType: 'text' },
+          { id: 'item-palettes-shading-deliverable', type: 'deliverable', title: 'Submit your Palettes & Shading work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -230,7 +266,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Export & Reuse',
         items: [
           { id: 'item-export-godot', type: 'task', title: 'Export a sprite sheet for Godot', xp: 150, contentType: 'video' },
-          { id: 'item-idle-run-blend', type: 'task', title: 'Animate an idle-to-run blend', xp: 250, contentType: 'gif' }
+          { id: 'item-idle-run-blend', type: 'task', title: 'Animate an idle-to-run blend', xp: 250, contentType: 'gif' },
+          { id: 'item-export-reuse-deliverable', type: 'deliverable', title: 'Submit your Export & Reuse work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -254,7 +291,7 @@ export const programTemplates: ProgramTemplate[] = [
     language: 'English',
     difficulty: 'Intermediate',
     minAge: 13,
-    totalXp: 1600,
+    totalXp: 2400,
     learningType: 'moderated',
     linkedGame: {
       id: 'endstar',
@@ -305,7 +342,8 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-project-structure', type: 'topic', title: 'Godot project structure', xp: 0, contentType: 'video' },
           { id: 'item-player-movement', type: 'task', title: 'Wire up player movement in Godot', xp: 150, contentType: 'video' },
-          { id: 'item-win-lose', type: 'task', title: 'Add a win/lose condition', xp: 250, contentType: 'slideshow' }
+          { id: 'item-win-lose', type: 'task', title: 'Add a win/lose condition', xp: 250, contentType: 'slideshow' },
+          { id: 'item-prototype-to-playable-deliverable', type: 'deliverable', title: 'Submit your Prototype to Playable work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -313,7 +351,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Systems & Polish',
         items: [
           { id: 'item-save-load', type: 'task', title: 'Implement a save/load system', xp: 300, contentType: 'slideshow' },
-          { id: 'item-juice', type: 'task', title: 'Add sound effects and juice', xp: 250, contentType: 'video' }
+          { id: 'item-juice', type: 'task', title: 'Add sound effects and juice', xp: 250, contentType: 'video' },
+          { id: 'item-systems-polish-deliverable', type: 'deliverable', title: 'Submit your Systems & Polish work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -322,7 +361,8 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-git-cheatsheet', type: 'resource', title: 'Git basics cheat sheet', xp: 0, contentType: 'text' },
           { id: 'item-shared-repo', type: 'task', title: 'Set up a shared GitHub repo', xp: 200, contentType: 'image' },
-          { id: 'item-pull-request', type: 'task', title: "Review a teammate's pull request", xp: 150, contentType: 'text' }
+          { id: 'item-pull-request', type: 'task', title: "Review a teammate's pull request", xp: 150, contentType: 'text' },
+          { id: 'item-team-workflow-deliverable', type: 'deliverable', title: 'Submit your Team Workflow work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -330,7 +370,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Ship It',
         items: [
           { id: 'item-publish-build', type: 'task', title: 'Publish a build to the Endstar library', xp: 100, contentType: 'slideshow' },
-          { id: 'item-ship-survey', type: 'survey', title: 'Rate your experience shipping a build', xp: 0, contentType: 'text' }
+          { id: 'item-ship-survey', type: 'survey', title: 'Rate your experience shipping a build', xp: 0, contentType: 'text' },
+          { id: 'item-ship-it-deliverable', type: 'deliverable', title: 'Submit your Ship It work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -354,7 +395,7 @@ export const programTemplates: ProgramTemplate[] = [
     language: 'English',
     difficulty: 'Intermediate',
     minAge: 12,
-    totalXp: 1300,
+    totalXp: 1900,
     learningType: 'moderated',
     tier: 'Core',
     durationLabel: '6 weeks - one live workshop per week',
@@ -381,7 +422,8 @@ export const programTemplates: ProgramTemplate[] = [
         items: [
           { id: 'item-pacing-principles', type: 'topic', title: 'Principles of level pacing', xp: 0, contentType: 'video' },
           { id: 'item-blockout', type: 'task', title: 'Block out a level using primitive shapes', xp: 150, contentType: 'slideshow' },
-          { id: 'item-pacing-playtest', type: 'task', title: 'Playtest and note pacing issues', xp: 200, contentType: 'text' }
+          { id: 'item-pacing-playtest', type: 'task', title: 'Playtest and note pacing issues', xp: 200, contentType: 'text' },
+          { id: 'item-layout-fundamentals-deliverable', type: 'deliverable', title: 'Submit your Layout Fundamentals work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -389,7 +431,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Encounter Design',
         items: [
           { id: 'item-teach-mechanic', type: 'task', title: 'Design a challenge teaching a new mechanic', xp: 300, contentType: 'video' },
-          { id: 'item-difficulty-curve', type: 'task', title: 'Place enemies to create a difficulty curve', xp: 200, contentType: 'image' }
+          { id: 'item-difficulty-curve', type: 'task', title: 'Place enemies to create a difficulty curve', xp: 200, contentType: 'image' },
+          { id: 'item-encounter-design-deliverable', type: 'deliverable', title: 'Submit your Encounter Design work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -397,7 +440,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Polish & Ship',
         items: [
           { id: 'item-lighting-pack', type: 'resource', title: 'Lighting reference pack', xp: 0, contentType: 'image' },
-          { id: 'item-lighting-dressing', type: 'task', title: 'Add lighting and set dressing', xp: 200, contentType: 'slideshow' }
+          { id: 'item-lighting-dressing', type: 'task', title: 'Add lighting and set dressing', xp: 200, contentType: 'slideshow' },
+          { id: 'item-polish-ship-deliverable', type: 'deliverable', title: 'Submit your Polish & Ship work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -420,7 +464,7 @@ export const programTemplates: ProgramTemplate[] = [
     language: 'English',
     difficulty: 'Advanced',
     minAge: 14,
-    totalXp: 1000,
+    totalXp: 1600,
     learningType: 'moderated',
     tier: 'More',
     durationLabel: '3 weeks - two live sessions per week',
@@ -442,7 +486,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Skeleton Basics',
         items: [
           { id: 'item-rig-hierarchy', type: 'topic', title: 'Rig hierarchy overview', xp: 0, contentType: 'video' },
-          { id: 'item-base-skeleton', type: 'task', title: 'Build a base skeleton for a quadruped', xp: 200, contentType: 'slideshow' }
+          { id: 'item-base-skeleton', type: 'task', title: 'Build a base skeleton for a quadruped', xp: 200, contentType: 'slideshow' },
+          { id: 'item-skeleton-basics-deliverable', type: 'deliverable', title: 'Submit your Skeleton Basics work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -450,7 +495,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Weight Painting',
         items: [
           { id: 'item-weight-paint', type: 'task', title: 'Weight paint a walk-ready mesh', xp: 250, contentType: 'video' },
-          { id: 'item-fix-pinching', type: 'task', title: 'Fix pinching at major joints', xp: 200, contentType: 'image' }
+          { id: 'item-fix-pinching', type: 'task', title: 'Fix pinching at major joints', xp: 200, contentType: 'image' },
+          { id: 'item-weight-painting-deliverable', type: 'deliverable', title: 'Submit your Weight Painting work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {
@@ -458,7 +504,8 @@ export const programTemplates: ProgramTemplate[] = [
         title: 'Animate',
         items: [
           { id: 'item-walk-cycle-block', type: 'task', title: 'Block a walk cycle using the rig', xp: 150, contentType: 'gif' },
-          { id: 'item-rig-survey', type: 'survey', title: 'How confident do you feel rigging a biped next?', xp: 0, contentType: 'text' }
+          { id: 'item-rig-survey', type: 'survey', title: 'How confident do you feel rigging a biped next?', xp: 0, contentType: 'text' },
+          { id: 'item-animate-deliverable', type: 'deliverable', title: 'Submit your Animate work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
         ]
       },
       {

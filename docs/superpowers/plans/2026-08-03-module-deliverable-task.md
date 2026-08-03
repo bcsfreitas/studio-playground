@@ -28,7 +28,7 @@
 **Interfaces:**
 - Produces: `CurriculumItemType` now includes `'deliverable'`. `CurriculumItem.acceptanceCriteria?: string[]`. Every module's `items` array ends with one item of `type: 'deliverable'`.
 
-- [ ] **Step 1: Extend the type union and interface**
+- [x] **Step 1: Extend the type union and interface**
 
 In `app/composables/useProgramMockData.ts`, change line 6:
 
@@ -49,7 +49,7 @@ export interface CurriculumItem {
 }
 ```
 
-- [ ] **Step 2: Add shared constants for generically-templated deliverables**
+- [x] **Step 2: Add shared constants for generically-templated deliverables**
 
 Immediately after the `MODULE_COLORS` export (currently line 122), add:
 
@@ -64,7 +64,7 @@ const GENERIC_ACCEPTANCE_CRITERIA = [
 ]
 ```
 
-- [ ] **Step 3: Append the Intro to Game Design deliverables (bespoke copy) and bump its totalXp**
+- [x] **Step 3: Append the Intro to Game Design deliverables (bespoke copy) and bump its totalXp**
 
 Change `totalXp: 500` to `totalXp: 950` for the `intro-game-design` program.
 
@@ -102,7 +102,7 @@ Append to `module-igd-build-your-prototype`'s `items` array (after `item-igd-pla
 }
 ```
 
-- [ ] **Step 4: Append generic deliverables to every other program's modules, bump their totalXp**
+- [x] **Step 4: Append generic deliverables to every other program's modules, bump their totalXp**
 
 For each program below, change `totalXp` to the new value and append one item (using `GENERIC_DELIVERABLE_XP` and `GENERIC_ACCEPTANCE_CRITERIA` from Step 2) to the end of each listed module's `items` array.
 
@@ -152,7 +152,7 @@ For each program below, change `totalXp` to the new value and append one item (u
 { id: 'item-animate-deliverable', type: 'deliverable', title: 'Submit your Animate work', xp: GENERIC_DELIVERABLE_XP, contentType: 'text', acceptanceCriteria: GENERIC_ACCEPTANCE_CRITERIA }
 ```
 
-- [ ] **Step 5: Add the deliverable icon everywhere `ITEM_TYPE_ICON` is defined**
+- [x] **Step 5: Add the deliverable icon everywhere `ITEM_TYPE_ICON` is defined**
 
 In both `app/components/ProgramSidebar.vue` and `app/components/ProgramCurriculumAccordion.vue`, the `ITEM_TYPE_ICON` record is typed `Record<CurriculumItemType, string>` — TypeScript requires every key, so both need the new entry:
 
@@ -166,7 +166,7 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
 }
 ```
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Start the dev server (`npm run dev`), open `/learn/intro-game-design/program`, clear `localStorage` (devtools → Application, or `localStorage.clear()` in the console) and reload. Confirm:
 - The sidebar's "Design Basics" module now lists 4 items, the last being "Submit Your Paper Prototype" with an upload icon.
@@ -174,7 +174,7 @@ Start the dev server (`npm run dev`), open `/learn/intro-game-design/program`, c
 - The XP line under the program title reads `0 / 950 XP`.
 - Open `/learn/intro-game-design` (the program detail page) and expand the curriculum accordion — the same two deliverable items appear there with the upload icon, no console errors.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add app/composables/useProgramMockData.ts app/components/ProgramSidebar.vue app/components/ProgramCurriculumAccordion.vue
@@ -192,7 +192,7 @@ git commit -m "Add deliverable curriculum item type and module-ending deliverabl
 **Interfaces:**
 - Produces: translation keys under `program.viewer.deliverable.*` that Task 3 consumes: `startTask`, `descriptionHeading`, `introBody`, `shareIntro`, `shareScreenshots`, `shareVideo`, `shareBuild`, `submitStepsHeading`, `submitStep1`, `submitStep2`, `submitStep3`, `milestone` (params `number`, `total`, `title`), `acceptanceCriteria`, `descriptionPlaceholder`, `linksPlaceholder`, `submit`, `yourSubmission`.
 
-- [ ] **Step 1: Add the English keys**
+- [x] **Step 1: Add the English keys**
 
 In `i18n/locales/en.json`, inside `program.viewer` (as a sibling of `exit`/`sidebar`/`actions`/`content`/`notFound`), add:
 
@@ -220,7 +220,7 @@ In `i18n/locales/en.json`, inside `program.viewer` (as a sibling of `exit`/`side
 
 (Follow this project's writing-style rule of plain hyphens, not em dashes, in copy — matching the existing `"emailNotice"` string's `-` usage a few lines up.)
 
-- [ ] **Step 2: Add the Spanish keys**
+- [x] **Step 2: Add the Spanish keys**
 
 In `i18n/locales/es.json`, inside `program.viewer`, add:
 
@@ -246,14 +246,14 @@ In `i18n/locales/es.json`, inside `program.viewer`, add:
 }
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 ```bash
 node -e "JSON.parse(require('fs').readFileSync('i18n/locales/en.json'));JSON.parse(require('fs').readFileSync('i18n/locales/es.json'));console.log('ok')"
 ```
 Expected: `ok` (both files still parse as valid JSON).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add i18n/locales/en.json i18n/locales/es.json
@@ -275,7 +275,7 @@ git commit -m "Add i18n copy for the deliverable submission UI"
 - Consumes: `FlatCurriculumItem` (from `useProgramCurriculum`, unchanged — `acceptanceCriteria` flows through automatically since `FlatCurriculumItem extends CurriculumItem`).
 - Produces (internal to this task, not consumed by any other task in this plan): `DeliverableSubmission` interface (`{ description: string; links: string[] }`), exported from `useProgramProgress.ts`. `ProgramContentViewer` gains props `totalModules: number`, `submission: DeliverableSubmission | undefined` and emit `'submit-deliverable': [payload: DeliverableSubmission]`. `useProgramProgress(template)`'s return value gains `getSubmission(itemId: string): DeliverableSubmission | undefined` and `submitDeliverable(itemId: string, submission: DeliverableSubmission): void`.
 
-- [ ] **Step 1: Rewrite `ProgramContentViewer.vue`**
+- [x] **Step 1: Rewrite `ProgramContentViewer.vue`**
 
 Replace the entire contents of `app/components/ProgramContentViewer.vue` with:
 
@@ -435,7 +435,7 @@ function submitDeliverable() {
 
 Note `props` is declared but template accesses `item`/`isCompleted`/etc. directly (unwrapped) — this matches the existing file's style (Vue's `<script setup>` template compiler auto-unwraps `defineProps` results referenced by name), so no `props.` prefix needed in the template, consistent with how `item` and `isCompleted` were already used before this change.
 
-- [ ] **Step 2: Rewrite `useProgramProgress.ts`**
+- [x] **Step 2: Rewrite `useProgramProgress.ts`**
 
 Replace the entire contents of `app/composables/useProgramProgress.ts` with:
 
@@ -549,7 +549,7 @@ export function useProgramProgress(template: ProgramTemplate) {
 }
 ```
 
-- [ ] **Step 3: Wire the new props/emit in the page**
+- [x] **Step 3: Wire the new props/emit in the page**
 
 In `app/pages/learn/[programId]/program.vue`, find the `<ProgramContentViewer>` tag and replace it with:
 
@@ -569,7 +569,7 @@ In `app/pages/learn/[programId]/program.vue`, find the `<ProgramContentViewer>` 
 
 The added `:key="activeItem.id"` forces the component to remount when the active item changes, so `ProgramContentViewer`'s local `isStarted`/`description`/`links` refs (added in Step 1) reset cleanly when the learner navigates to a different item — without it, those refs would leak from one deliverable into the next since Vue reuses the component instance across prop changes.
 
-- [ ] **Step 4: Verify — full end-to-end flow**
+- [x] **Step 4: Verify — full end-to-end flow**
 
 Start the dev server, open `/learn/intro-game-design/program`, clear `localStorage`, reload.
 
@@ -582,7 +582,7 @@ Start the dev server, open `/learn/intro-game-design/program`, clear `localStora
 7. Complete the remaining item(s) in module 1 (if any aren't done yet) and confirm module 2 unlocks exactly as before this change (module-lock behavior from the earlier lock/skip feature is unaffected).
 8. Check the browser console for errors throughout — expect none.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add app/components/ProgramContentViewer.vue app/composables/useProgramProgress.ts "app/pages/learn/[programId]/program.vue"

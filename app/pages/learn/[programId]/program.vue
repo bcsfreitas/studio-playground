@@ -57,10 +57,15 @@ function goToNextItem() {
     />
     <ProgramContentViewer
       v-if="activeItem"
+      :key="activeItem.id"
       :item="activeItem"
       :is-completed="progress.isCompleted(activeItem.id)"
+      :module-number="template.curriculum.findIndex(mod => mod.id === activeItem.moduleId) + 1"
+      :total-modules="template.curriculum.length"
+      :submission="progress.getSubmission(activeItem.id)"
       @mark-complete="progress.markComplete(activeItem.id)"
       @next-item="goToNextItem"
+      @submit-deliverable="payload => progress.submitDeliverable(activeItem.id, payload)"
     />
   </template>
   <p v-else class="p-8">{{ t('program.viewer.notFound') }}</p>
