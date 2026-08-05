@@ -19,7 +19,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
     <template #body>
       <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" :notification-count="notificationCount" />
 
-      <UContainer class="pt-10">
+      <UContainer>
 
         <h1 class="text-6xl font-heading font-semibold text-highlighted text-pretty">Maker Tools</h1>
         <h2 class="text-lg text-dimmed mt-2 max-w-2xl">

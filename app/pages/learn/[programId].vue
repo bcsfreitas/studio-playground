@@ -127,7 +127,7 @@ provideProgramTabs({
         :notification-count="notificationCount"
       />
 
-      <UContainer class="pt-10">
+      <UContainer>
         <template v-if="template">
           <!-- The title is the page header and stays across tab switches. The
                program image and description belong to the Overview tab, which

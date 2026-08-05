@@ -71,7 +71,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
     <template #body>
       <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" :notification-count="notificationCount" />
 
-      <UContainer class="pt-10">
+      <UContainer>
 
         <!-- Top CTA banner -->
         <div
