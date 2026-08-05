@@ -95,12 +95,10 @@
         "joinWorkshop": "Unirte a este taller"
       },
       "accessCode": {
+        "label": "Código de acceso",
         "placeholder": "Ingresa el código de acceso",
         "helper": "Esta sesión requiere un código de acceso de tu facilitador.",
         "error": "Ese código no coincide. Consulta con tu facilitador e intenta de nuevo."
-      },
-      "seats": {
-        "filled": "{taken} de {max} cupos ocupados"
       },
       "details": {
         "schedule": "Horario",
@@ -116,6 +114,7 @@
       "notify": {
         "title": "Todavía no hay fechas programadas",
         "body": "Déjanos tu correo y te avisaremos en cuanto se abra la próxima edición.",
+        "label": "Correo electrónico",
         "placeholder": "tu{'@'}ejemplo.com",
         "cta": "Avísame"
       },

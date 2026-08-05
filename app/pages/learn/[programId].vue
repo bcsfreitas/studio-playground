@@ -17,7 +17,9 @@ const template = computed(() => programTemplates.find(p => p.id === programId.va
 // gating on an instance too would 404 a program that exists.
 const instances = computed(() => programInstances.filter(i => i.programId === programId.value))
 
-const phase = ref<LearnerPhase>('enrolled')
+// Matches useProgramPhase()'s inject fallback, and every learnPrograms entry
+// has `enrolled: false` — a first-time visitor is the state to open in.
+const phase = ref<LearnerPhase>('interested')
 provideProgramPhase(phase)
 
 const isEnrolled = computed(() => phase.value !== 'interested')
@@ -72,9 +74,17 @@ const tabs = computed<NavigationMenuItem[]>(() => {
           />
           <!-- Every other tab gets a compact title bar: a 300px hero above the
                classroom on every visit is space the tab's own content needs. -->
-          <h1 v-else class="text-2xl font-heading font-bold text-highlighted text-pretty">
-            {{ template.title }}
-          </h1>
+          <div v-else class="flex items-center gap-3">
+            <h1 class="text-2xl font-heading font-bold text-highlighted text-pretty">
+              {{ template.title }}
+            </h1>
+            <UBadge
+              :label="t(`program.badges.tier.${template.tier}`)"
+              color="secondary"
+              variant="soft"
+              size="md"
+            />
+          </div>
 
           <!-- UNavigationMenu, not UTabs: UTabs switches content client-side and
                its items take no `to`, so it can neither deep-link nor reflect the

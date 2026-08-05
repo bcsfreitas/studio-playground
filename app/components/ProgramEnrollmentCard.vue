@@ -80,6 +80,14 @@ const defaultCohortId = computed(() => {
 
 const selectedCohortId = ref(defaultCohortId.value)
 
+// The card is not remounted when the DevPreviewBar changes phase — <NuxtPage>
+// is keyed on programId, so only the `enrollment` prop changes. Without this
+// the ref keeps the session that was default at setup, and an enrolled learner
+// lands back on someone else's session with an "Enroll" button.
+watch(defaultCohortId, (id) => {
+  selectedCohortId.value = id
+})
+
 const selectedCohort = computed(() =>
   availableCohorts.value.find(c => c.id === selectedCohortId.value) ?? availableCohorts.value[0]
 )
@@ -250,13 +258,15 @@ const enrollModalStartDateLabel = computed(() => {
       <p class="text-xs text-muted mt-1 mb-3">{{ t('program.enroll.notify.body') }}</p>
       <!-- Mockup: there's no backend to post an address to, so the field and
            button are deliberately inert. -->
-      <UInput
-        v-model="notifyEmail"
-        type="email"
-        icon="lucide:mail"
-        :placeholder="t('program.enroll.notify.placeholder')"
-        class="w-full mb-2"
-      />
+      <UFormField :label="t('program.enroll.notify.label')" class="mb-2">
+        <UInput
+          v-model="notifyEmail"
+          type="email"
+          icon="lucide:mail"
+          :placeholder="t('program.enroll.notify.placeholder')"
+          class="w-full"
+        />
+      </UFormField>
       <UButton
         :label="t('program.enroll.notify.cta')"
         color="primary"
@@ -351,13 +361,18 @@ const enrollModalStartDateLabel = computed(() => {
 
         <template v-else-if="selectedStatus === 'requires-access-code'">
           <p class="text-xs text-muted mb-2">{{ t('program.enroll.accessCode.helper') }}</p>
-          <UInput
-            v-model="enteredCode"
-            icon="lucide:key-round"
-            :placeholder="t('program.enroll.accessCode.placeholder')"
-            class="w-full mb-2"
-          />
-          <p v-if="codeError" class="text-xs text-error mb-2">{{ t('program.enroll.accessCode.error') }}</p>
+          <UFormField
+            :label="t('program.enroll.accessCode.label')"
+            :error="codeError ? t('program.enroll.accessCode.error') : undefined"
+            class="mb-2"
+          >
+            <UInput
+              v-model="enteredCode"
+              icon="lucide:key-round"
+              :placeholder="t('program.enroll.accessCode.placeholder')"
+              class="w-full"
+            />
+          </UFormField>
           <UButton
             :label="t('program.enroll.cta.unlockSession')"
             color="primary"
@@ -373,9 +388,6 @@ const enrollModalStartDateLabel = computed(() => {
         </template>
 
         <template v-else>
-          <p v-if="selectedCohort.maxLearners !== null" class="text-xs text-muted mb-3">
-            {{ t('program.enroll.seats.filled', { taken: selectedCohort.seatsTaken, max: selectedCohort.maxLearners }) }}
-          </p>
           <UButton
             :label="t('program.enroll.cta.enroll')"
             icon="lucide:circle-check"

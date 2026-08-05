@@ -95,12 +95,10 @@
         "joinWorkshop": "Join this workshop"
       },
       "accessCode": {
+        "label": "Access code",
         "placeholder": "Enter access code",
         "helper": "This session requires an access code from your facilitator.",
         "error": "That code doesn't match. Check with your facilitator and try again."
-      },
-      "seats": {
-        "filled": "{taken} of {max} seats filled"
       },
       "details": {
         "schedule": "Schedule",
@@ -116,6 +114,7 @@
       "notify": {
         "title": "No dates scheduled yet",
         "body": "Leave your email and we'll tell you as soon as the next run opens.",
+        "label": "Email address",
         "placeholder": "you{'@'}example.com",
         "cta": "Notify me"
       },
