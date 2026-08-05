@@ -50,6 +50,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'announcements',
     author: 'Carlos Medina',
     time: '2 days ago',
+    postedAt: '2026-08-03',
     isMentor: true,
     likes: 14,
     body: 'Milestone 3 working sessions start Monday. Bring whatever you have — half-built is exactly the right amount of built.',
@@ -63,6 +64,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'showcase',
     author: 'Amara Diallo',
     time: '4 days ago',
+    postedAt: '2026-08-01',
     likes: 31,
     image: '/images/img/games/game-built.png',
     body: 'First playable build of The Lantern Keeper. The lighting still fights me but the loop works.',
@@ -77,6 +79,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'questions',
     author: 'Tomas Berg',
     time: '5 days ago',
+    postedAt: '2026-07-31',
     likes: 6,
     body: 'Does the pull request need to pass every check before review, or can I open it early for feedback?',
     comments: [
@@ -89,6 +92,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'general',
     author: 'Leila Haddad',
     time: '1 week ago',
+    postedAt: '2026-07-29',
     likes: 9,
     body: 'Anyone else keep a notebook of ideas that will absolutely not fit in one StoryQuest?',
     comments: []
@@ -99,6 +103,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'general',
     author: 'Priya Sundaram',
     time: '3 days ago',
+    postedAt: '2026-08-02',
     isMentor: true,
     likes: 11,
     body: 'Reminder that Godot 4 and Godot 3 tutorials look almost identical and will absolutely waste your afternoon. Check the version first.',
@@ -112,6 +117,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'showcase',
     author: 'Sofia Marchetti',
     time: '6 days ago',
+    postedAt: '2026-07-30',
     likes: 22,
     image: '/images/img/generic-image.png',
     body: 'Tower of Odds — every platform rolls a die when you land on it. Session 5 level design ideas, taken slightly too far.',
@@ -125,6 +131,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'questions',
     author: 'Owen Pryce',
     time: '1 week ago',
+    postedAt: '2026-07-29',
     likes: 4,
     body: 'My Pong paddle moves twice as fast in the exported build as it does in the editor. Is that a delta time thing?',
     comments: [
@@ -137,6 +144,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'general',
     author: 'Yuki Tanabe',
     time: '2 days ago',
+    postedAt: '2026-08-03',
     likes: 8,
     body: 'Did the Narrative & Storytelling workshop yesterday with no prior sessions and it stood completely on its own. Recommended.',
     comments: []
@@ -147,6 +155,7 @@ const POSTS: ChannelPost[] = [
     channelId: 'showcase',
     author: 'Elena Rossi',
     time: '1 week ago',
+    postedAt: '2026-07-29',
     likes: 17,
     body: 'Driftwood Market, built across three workshops. Still no idea what the currency is.',
     comments: []
@@ -155,6 +164,21 @@ const POSTS: ChannelPost[] = [
 
 export function postsForChannel(programId: string, channelId: string): ChannelPost[] {
   return POSTS.filter(post => post.programId === programId && post.channelId === channelId)
+}
+
+/**
+ * Every post the learner can see, newest first — the Home dashboard's feed.
+ *
+ * Ordered on `postedAt` rather than the `time` label, which is prose and does
+ * not sort. Nothing here derives "now": a relative time computed at render
+ * would differ between the server and the client and trip a hydration
+ * mismatch, so the stored label is displayed as-is.
+ */
+export function postsForProgramChannels(programId: string, channelIds: string[]): ChannelPost[] {
+  const allowed = new Set(channelIds)
+  return POSTS
+    .filter(post => post.programId === programId && allowed.has(post.channelId))
+    .toSorted((a, b) => b.postedAt.localeCompare(a.postedAt))
 }
 
 // SYNTHESIZED: XP totals have no source. Values are spread across a plausible

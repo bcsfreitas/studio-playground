@@ -179,7 +179,11 @@ export interface ChannelPost {
   channelId: string
   author: string
   avatar?: string
+  // Prose label shown to the learner ("2 days ago"), deliberately static —
+  // deriving it at render would differ between server and client.
   time: string
+  // ISO date, used only for ordering. `time` does not sort.
+  postedAt: string
   body: string
   image?: string
   likes: number

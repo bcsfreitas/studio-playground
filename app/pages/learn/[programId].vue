@@ -28,6 +28,7 @@ const isEnrolled = computed(() => phase.value !== 'interested')
 // visitor who never leaves the Overview never downloads the classroom.
 const TAB_COMPONENTS = {
   overview: defineAsyncComponent(() => import('~/components/ProgramTabOverview.vue')),
+  home: defineAsyncComponent(() => import('~/components/ProgramTabHome.vue')),
   about: defineAsyncComponent(() => import('~/components/ProgramTabAbout.vue')),
   community: defineAsyncComponent(() => import('~/components/ProgramTabCommunity.vue')),
   classroom: defineAsyncComponent(() => import('~/components/ProgramTabClassroom.vue')),
@@ -40,10 +41,13 @@ type TabId = keyof typeof TAB_COMPONENTS
 // Learner-only tabs are absent for people who haven't enrolled, not disabled —
 // a locked tab you cannot open is noise. The first entry is the default, and
 // is also the fallback for a `?tab=` value this phase isn't allowed to open.
+//
+// Overview and Home swap rather than coexist: Overview is the pitch, Home is
+// the dashboard, and a learner is only ever in one of those situations.
 const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
   isEnrolled.value
     ? [
-        { id: 'overview', label: t('program.tabs.home') },
+        { id: 'home', label: t('program.tabs.home') },
         { id: 'about', label: t('program.tabs.about') },
         { id: 'community', label: t('program.tabs.community') },
         { id: 'classroom', label: t('program.tabs.classroom') },
@@ -66,11 +70,14 @@ const activeTab = computed<TabId>(() => {
   return match?.id ?? visibleTabs.value[0]!.id
 })
 
-// Overview carries no `?tab` so the canonical program URL stays clean.
+// The default tab carries no `?tab` so the canonical program URL stays clean.
+// Which tab that is depends on phase — Overview before enrolling, Home after.
+const defaultTabId = computed(() => visibleTabs.value[0]!.id)
+
 const tabs = computed<NavigationMenuItem[]>(() =>
   visibleTabs.value.map(tab => ({
     label: tab.label,
-    to: tab.id === 'overview'
+    to: tab.id === defaultTabId.value
       ? { path: `/learn/${programId.value}` }
       : { path: `/learn/${programId.value}`, query: { tab: tab.id } },
     // NuxtLink's own active matching ignores the query string, so every tab

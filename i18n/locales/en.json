@@ -189,6 +189,19 @@
       "justNow": "just now",
       "emptyChannel": "Nothing in {channel} yet",
       "emptyChannelBody": "Be the first to start a topic here."
+    },
+    "home": {
+      "latestActivity": "Latest activity",
+      "noActivity": "No activity yet",
+      "noActivityBody": "Posts from across this program's channels will show up here.",
+      "yourProgress": "Your progress",
+      "completed": "Completed",
+      "completedBody": "You've finished every lesson in this program. Nice work.",
+      "xpEarned": "{earned} / {available} XP",
+      "moduleLabel": "Module {number} of {total}",
+      "lessonLabel": "Lesson {number} of {total}",
+      "continue": "Continue learning",
+      "reviewClassroom": "Review the classroom"
     }
   }
 }
