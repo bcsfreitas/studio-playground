@@ -81,10 +81,10 @@ const previewStates: { id: PreviewState, label: string }[] = [
         >
           <div class="flex flex-col items-start gap-3.5">
             <h1 class="font-heading font-bold text-5xl text-white" >
-              Build worlds together.
+              Press play. Then press make.
             </h1>
             <p class="max-w-[440px] text-md text-white/85">
-              Endstar is a 3D multiplayer game-making platform. Place blocks, wire up levers and traps, script with Lua — and build alongside your friends in the same world, live.
+              Every game in here was made by someone learning to make games. Play them, poke at them, break them a little — then open the toolbox and build the next one. No signup needed to start.
             </p>
           </div>
         </div>
