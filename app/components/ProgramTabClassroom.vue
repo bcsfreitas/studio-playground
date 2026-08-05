@@ -103,163 +103,162 @@ function isHttpLink(link: string) {
 
 <template>
   <UContainer v-if="template && progress" class="pt-10 pb-16">
-    <div class="max-w-3xl">
-      <div class="flex items-baseline justify-between gap-3">
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_324px] gap-8 lg:gap-12">
+      <div class="min-w-0">
         <h2 class="font-heading font-bold text-highlighted">{{ t('program.viewer.yourPath') }}</h2>
-        <span class="text-xs text-muted tabular-nums">
-          {{ t('program.viewer.sidebar.xpProgress', {
-            earned: progress.totalXpEarned.value,
-            available: progress.totalXpAvailable.value
-          }) }}
-        </span>
-      </div>
-      <UProgress :model-value="progress.progressPercent.value" color="primary" class="mt-2" />
 
-      <section v-for="mod in modules" :key="mod.id" class="mt-10">
-        <!-- Module heading sits outside the accordion: it groups the steps and
-             carries their tally, but is not itself something to open. -->
-        <div class="flex items-center gap-2.5">
-          <h3
-            class="font-heading font-bold text-sm uppercase tracking-wide"
-            :class="mod.isLocked ? 'text-dimmed' : 'text-primary-600'"
-          >
-            {{ t('program.viewer.moduleHeading', { number: mod.number, title: mod.title }) }}
-          </h3>
-          <UIcon v-if="mod.isLocked" name="lucide:lock" class="size-3.5 shrink-0 text-dimmed" />
-          <span class="ml-auto text-xs text-muted tabular-nums shrink-0">
-            {{ mod.completedCount }}/{{ mod.items.length }}
-          </span>
-        </div>
-
-        <div class="flex flex-col gap-2 mt-3">
-          <UCollapsible
-            v-for="item in mod.items"
-            :key="item.id"
-            :open="openItemId === item.id"
-            :disabled="mod.isLocked"
-            :ui="{ root: 'rounded-2xl border border-default bg-default' }"
-            @update:open="value => setOpen(item.id, value)"
-          >
-            <button
-              type="button"
-              class="w-full flex items-center gap-3 px-4 py-3 text-left disabled:cursor-not-allowed"
-              :disabled="mod.isLocked"
+        <section v-for="mod in modules" :key="mod.id" class="mt-8">
+          <!-- Module heading sits outside the accordion: it groups the steps and
+               carries their tally, but is not itself something to open. -->
+          <div class="flex items-center gap-2.5">
+            <h3
+              class="font-heading font-bold text-sm uppercase tracking-wide"
+              :class="mod.isLocked ? 'text-dimmed' : 'text-primary-600'"
             >
-              <UIcon
-                :name="progress.isCompleted(item.id)
-                  ? 'lucide:check-circle-2'
-                  : mod.isLocked ? 'lucide:lock' : 'lucide:circle'"
-                class="size-5 shrink-0"
-                :class="progress.isCompleted(item.id)
-                  ? 'text-success'
-                  : mod.isLocked ? 'text-dimmed' : 'text-muted'"
-              />
-              <span
-                class="flex-1 min-w-0 text-sm"
-                :class="[
-                  mod.isLocked ? 'text-dimmed' : 'text-highlighted',
-                  progress.isCompleted(item.id) ? 'line-through decoration-1 text-muted' : ''
-                ]"
-              >{{ item.title }}</span>
-              <UIcon :name="ITEM_TYPE_ICON[item.type]" class="size-3.5 shrink-0 text-dimmed" />
-              <span v-if="item.xp" class="text-xs text-dimmed tabular-nums shrink-0">+{{ item.xp }} XP</span>
-              <UIcon
-                v-if="!mod.isLocked"
-                name="lucide:chevron-down"
-                class="size-4 shrink-0 text-dimmed transition-transform duration-200"
-                :class="openItemId === item.id ? 'rotate-180' : ''"
-              />
-            </button>
+              {{ t('program.viewer.moduleHeading', { number: mod.number, title: mod.title }) }}
+            </h3>
+            <UIcon v-if="mod.isLocked" name="lucide:lock" class="size-3.5 shrink-0 text-dimmed" />
+            <span class="ml-auto text-xs text-muted tabular-nums shrink-0">
+              {{ mod.completedCount }}/{{ mod.items.length }}
+            </span>
+          </div>
 
-            <template #content>
-              <div class="px-4 pb-4 pt-1">
-                <template v-if="item.type === 'deliverable'">
-                  <p class="text-sm text-default">{{ t('program.viewer.deliverable.introBody') }}</p>
-                  <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.shareIntro') }}</p>
-                  <ul class="mt-1 list-disc pl-5 text-sm text-default">
-                    <li>{{ t('program.viewer.deliverable.shareScreenshots') }}</li>
-                    <li>{{ t('program.viewer.deliverable.shareVideo') }}</li>
-                    <li>{{ t('program.viewer.deliverable.shareBuild') }}</li>
-                  </ul>
+          <div class="flex flex-col gap-2 mt-3">
+            <UCollapsible
+              v-for="item in mod.items"
+              :key="item.id"
+              :open="openItemId === item.id"
+              :disabled="mod.isLocked"
+              :ui="{ root: 'rounded-2xl border border-default bg-default' }"
+              @update:open="value => setOpen(item.id, value)"
+            >
+              <button
+                type="button"
+                class="w-full flex items-center gap-3 px-6 py-4 text-left disabled:cursor-not-allowed"
+                :disabled="mod.isLocked"
+              >
+                <UIcon
+                  :name="progress.isCompleted(item.id)
+                    ? 'lucide:check-circle-2'
+                    : mod.isLocked ? 'lucide:lock' : 'lucide:circle'"
+                  class="size-5 shrink-0"
+                  :class="progress.isCompleted(item.id)
+                    ? 'text-success'
+                    : mod.isLocked ? 'text-dimmed' : 'text-muted'"
+                />
+                <span
+                  class="flex-1 min-w-0 text-sm"
+                  :class="[
+                    mod.isLocked ? 'text-dimmed' : 'text-highlighted',
+                    progress.isCompleted(item.id) ? 'line-through decoration-1 text-muted' : ''
+                  ]"
+                >{{ item.title }}</span>
+                <UIcon :name="ITEM_TYPE_ICON[item.type]" class="size-3.5 shrink-0 text-dimmed" />
+                <span v-if="item.xp" class="text-xs text-dimmed tabular-nums shrink-0">+{{ item.xp }} XP</span>
+                <UIcon
+                  v-if="!mod.isLocked"
+                  name="lucide:chevron-down"
+                  class="size-4 shrink-0 text-dimmed transition-transform duration-200"
+                  :class="openItemId === item.id ? 'rotate-180' : ''"
+                />
+              </button>
 
-                  <div v-if="item.acceptanceCriteria?.length" class="mt-4 rounded-xl border border-default p-4">
-                    <h4 class="text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</h4>
+              <template #content>
+                <div class="px-6 pb-6 pt-1">
+                  <template v-if="item.type === 'deliverable'">
+                    <p class="text-sm text-default">{{ t('program.viewer.deliverable.introBody') }}</p>
+                    <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.shareIntro') }}</p>
                     <ul class="mt-1 list-disc pl-5 text-sm text-default">
-                      <li v-for="criterion in item.acceptanceCriteria" :key="criterion">{{ criterion }}</li>
+                      <li>{{ t('program.viewer.deliverable.shareScreenshots') }}</li>
+                      <li>{{ t('program.viewer.deliverable.shareVideo') }}</li>
+                      <li>{{ t('program.viewer.deliverable.shareBuild') }}</li>
                     </ul>
-                  </div>
 
-                  <div v-if="progress.isCompleted(item.id)" class="mt-4 flex flex-col gap-3">
-                    <UBadge :label="t('program.viewer.actions.completed')" color="success" variant="soft" class="self-start" />
-                    <div v-if="progress.getSubmission(item.id)" class="rounded-xl border border-default p-4">
-                      <h4 class="text-sm font-bold text-highlighted">{{ t('program.viewer.deliverable.yourSubmission') }}</h4>
-                      <p class="mt-2 text-sm text-default">{{ progress.getSubmission(item.id)!.description }}</p>
-                      <ul v-if="progress.getSubmission(item.id)!.links.length" class="mt-2 list-disc pl-5 text-sm">
-                        <li v-for="link in progress.getSubmission(item.id)!.links" :key="link">
-                          <ULink
-                            v-if="isHttpLink(link)"
-                            :to="link"
-                            target="_blank"
-                            raw
-                            class="text-primary underline break-all"
-                          >{{ link }}</ULink>
-                          <span v-else class="break-all">{{ link }}</span>
-                        </li>
+                    <div v-if="item.acceptanceCriteria?.length" class="mt-4 rounded-xl border border-default p-4">
+                      <h4 class="text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</h4>
+                      <ul class="mt-1 list-disc pl-5 text-sm text-default">
+                        <li v-for="criterion in item.acceptanceCriteria" :key="criterion">{{ criterion }}</li>
                       </ul>
                     </div>
-                  </div>
 
-                  <div v-else-if="isStarted" class="mt-4 flex flex-col gap-3">
-                    <UTextarea
-                      v-model="description"
-                      :placeholder="t('program.viewer.deliverable.descriptionPlaceholder')"
-                      :rows="4"
-                    />
-                    <UInputTags v-model="links" :placeholder="t('program.viewer.deliverable.linksPlaceholder')" />
+                    <div v-if="progress.isCompleted(item.id)" class="mt-4 flex flex-col gap-3">
+                      <UBadge :label="t('program.viewer.actions.completed')" color="success" variant="soft" class="self-start" />
+                      <div v-if="progress.getSubmission(item.id)" class="rounded-xl border border-default p-4">
+                        <h4 class="text-sm font-bold text-highlighted">{{ t('program.viewer.deliverable.yourSubmission') }}</h4>
+                        <p class="mt-2 text-sm text-default">{{ progress.getSubmission(item.id)!.description }}</p>
+                        <ul v-if="progress.getSubmission(item.id)!.links.length" class="mt-2 list-disc pl-5 text-sm">
+                          <li v-for="link in progress.getSubmission(item.id)!.links" :key="link">
+                            <ULink
+                              v-if="isHttpLink(link)"
+                              :to="link"
+                              target="_blank"
+                              raw
+                              class="text-primary underline break-all"
+                            >{{ link }}</ULink>
+                            <span v-else class="break-all">{{ link }}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div v-else-if="isStarted" class="mt-4 flex flex-col gap-3">
+                      <UTextarea
+                        v-model="description"
+                        :placeholder="t('program.viewer.deliverable.descriptionPlaceholder')"
+                        :rows="4"
+                      />
+                      <UInputTags v-model="links" :placeholder="t('program.viewer.deliverable.linksPlaceholder')" />
+                      <UButton
+                        :label="t('program.viewer.deliverable.submit')"
+                        color="primary"
+                        class="self-start"
+                        :disabled="!description.trim()"
+                        @click="submitDeliverable(item.id)"
+                      />
+                    </div>
+
                     <UButton
-                      :label="t('program.viewer.deliverable.submit')"
-                      color="primary"
-                      class="self-start"
-                      :disabled="!description.trim()"
-                      @click="submitDeliverable(item.id)"
-                    />
-                  </div>
-
-                  <UButton
-                    v-else
-                    :label="t('program.viewer.deliverable.startTask')"
-                    color="primary"
-                    class="mt-4"
-                    @click="isStarted = true"
-                  />
-                </template>
-
-                <template v-else>
-                  <div class="rounded-xl border border-dashed border-default p-10 text-center text-muted text-sm">
-                    {{ t('program.viewer.content.placeholder', { contentType: item.contentType }) }}
-                  </div>
-
-                  <div class="mt-4 flex items-center gap-3">
-                    <UButton
-                      v-if="!progress.isCompleted(item.id)"
-                      :label="t('program.viewer.actions.markComplete')"
-                      icon="lucide:check"
-                      color="primary"
-                      @click="completeAndAdvance(item.id)"
-                    />
-                    <UBadge
                       v-else
-                      :label="t('program.viewer.actions.completed')"
-                      color="success"
-                      variant="soft"
+                      :label="t('program.viewer.deliverable.startTask')"
+                      color="primary"
+                      class="mt-4"
+                      @click="isStarted = true"
                     />
-                  </div>
-                </template>
-              </div>
-            </template>
-          </UCollapsible>
-        </div>
-      </section>
+                  </template>
+
+                  <template v-else>
+                    <div class="rounded-xl border border-dashed border-default p-10 text-center text-muted text-sm">
+                      {{ t('program.viewer.content.placeholder', { contentType: item.contentType }) }}
+                    </div>
+
+                    <div class="mt-4 flex items-center gap-3">
+                      <UButton
+                        v-if="!progress.isCompleted(item.id)"
+                        :label="t('program.viewer.actions.markComplete')"
+                        icon="lucide:check"
+                        color="primary"
+                        @click="completeAndAdvance(item.id)"
+                      />
+                      <UBadge
+                        v-else
+                        :label="t('program.viewer.actions.completed')"
+                        color="success"
+                        variant="soft"
+                      />
+                    </div>
+                  </template>
+                </div>
+              </template>
+            </UCollapsible>
+          </div>
+        </section>
+      </div>
+
+      <div class="lg:sticky lg:top-6 lg:self-start flex flex-col gap-8">
+        <ProgramProgressCard :template="template" />
+        <ProgramCourseMetrics :template="template" />
+        <ProgramCourseBadges :template="template" />
+      </div>
     </div>
   </UContainer>
 

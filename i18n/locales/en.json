@@ -199,6 +199,42 @@
       "lessonLabel": "Lesson {number} of {total}",
       "continue": "Continue learning",
       "reviewClassroom": "Review the classroom"
+    },
+    "metrics": {
+      "title": "Course progress",
+      "lessonsCompleted": "Lessons completed",
+      "tasksDelivered": "Tasks delivered",
+      "xpEarned": "XP earned"
+    },
+    "courseBadges": {
+      "title": "Course badges",
+      "earned": "Earned",
+      "list": {
+        "first-lesson": {
+          "name": "First Steps",
+          "requirement": "Complete your first lesson"
+        },
+        "first-delivery": {
+          "name": "Shipped It",
+          "requirement": "Deliver your first task"
+        },
+        "module-cleared": {
+          "name": "Module Cleared",
+          "requirement": "Finish every step in a module"
+        },
+        "halfway": {
+          "name": "Halfway There",
+          "requirement": "Reach 50% of the program"
+        },
+        "xp-collector": {
+          "name": "XP Collector",
+          "requirement": "Earn 500 XP"
+        },
+        "finisher": {
+          "name": "Finisher",
+          "requirement": "Complete every step in the program"
+        }
+      }
     }
   }
 }
