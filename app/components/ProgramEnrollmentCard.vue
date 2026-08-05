@@ -255,12 +255,19 @@ const enrollModalStartDateLabel = computed(() => {
         :label="t('program.enroll.workshopPickerLabel')"
         class="mt-4"
       >
-        <USelectMenu
-          v-model="selectedWorkshopId"
-          value-key="value"
-          :items="workshopItems"
-          class="w-full"
-        />
+        <!-- Thirteen workshops is too many to lay out open in a 324px rail, so
+             the list scrolls rather than collapsing into a dropdown — every
+             option still reads at a glance. -->
+        <div class="max-h-80 overflow-y-auto pr-1">
+          <URadioGroup
+            v-model="selectedWorkshopId"
+            variant="card"
+            color="primary"
+            value-key="value"
+            :items="workshopItems"
+            :ui="{ fieldset: 'w-full gap-2' }"
+          />
+        </div>
       </UFormField>
 
       <UFormField
@@ -268,12 +275,13 @@ const enrollModalStartDateLabel = computed(() => {
         :label="t('program.enroll.sessionPickerLabel')"
         class="mt-4"
       >
-        <USelectMenu
+        <URadioGroup
           v-model="selectedCohortId"
+          variant="card"
+          color="primary"
           value-key="value"
           :items="cohortItems"
-          :search-input="false"
-          class="w-full"
+          :ui="{ fieldset: 'w-full gap-2' }"
         />
       </UFormField>
 
