@@ -96,6 +96,7 @@ export const feedPosts: FeedPost[] = [
 // The in-progress program shown at the top of home for an active learner,
 // read from the same enrollment fixture the program page uses so the two can't
 // disagree about which program they're in or how far along they are.
+// First record wins — see the ordering note in programData/enrollments.ts.
 const activeEnrollment = enrollmentsByPhase.enrolled[0]
 
 export const continueLearning = (() => {

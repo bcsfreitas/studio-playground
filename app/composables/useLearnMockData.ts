@@ -15,7 +15,7 @@ export const learnPrograms: LearnProgram[] = [
   // Explore: Godot lists 3 instances there; the catalog card only has room for
   // one range, so this uses the soonest upcoming one (Dawn Patrol, Aug 11).
   { id: 'explore-godot', cohortStart: '2026-08-11', cohortEnd: '2026-09-10', enrolled: false },
-  { id: 'core-threadbare', cohortStart: '2026-09-01', cohortEnd: '2026-10-29', enrolled: false },
+  { id: 'core-threadbare', cohortStart: '2026-09-01', cohortEnd: '2026-10-29', enrolled: true, progress: 35 },
   { id: 'explore-threadbare', cohortStart: '2026-08-12', cohortEnd: '2026-11-04', enrolled: false },
   // SYNTHESIZED: Educator Training has no ProgramInstance (it's facilitator-
   // facing, not an open learner cohort — see instances.ts) so there's no real

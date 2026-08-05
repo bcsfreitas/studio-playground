@@ -18,7 +18,23 @@ export const enrollmentsByPhase: Record<LearnerPhase, EnrollmentRecord[]> = {
       enrolledAt: '2026-08-04'
     }
   ],
+  // Order matters: the home page's continue-learning card resumes the first
+  // record, so the flagship program leads.
   enrolled: [
+    {
+      programId: 'core-threadbare',
+      instanceId: 'instance-core-threadbare-utp',
+      cohortId: 'cohort-core-threadbare-night-owls',
+      phase: 'enrolled',
+      progress: 35,
+      enrolledAt: '2026-07-02'
+    },
+    // A second enrolled program, so this phase isn't a single-program fixture.
+    // Explore: Godot is the useful one to double up on: it's the only program
+    // with three instances, so it's what would exercise "already enrolled" in a
+    // multi-session enrollment card — though that card lives on the Overview
+    // tab, which only non-enrolled visitors see, so the branch is unreachable
+    // until an enrolled surface renders it.
     {
       programId: 'explore-godot',
       instanceId: 'instance-explore-godot-2026-08-am',
