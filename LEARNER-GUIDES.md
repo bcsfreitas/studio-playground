@@ -388,9 +388,4 @@ Run before every publish of a standalone guide:
 - Hosted under `jgbourque.github.io/Guides/godot-platformer/<topic>/` until platform
   migration.
 
-## 10. Self-update
 
-When a review round produces a rule that would apply to any future guide (not just the
-current edit), add it here — in the section it fits — rather than letting it live only
-in a conversation. Before adding, scan for an existing rule covering the same ground
-and tighten that instead of duplicating. **[platform convention, adopted here]**
