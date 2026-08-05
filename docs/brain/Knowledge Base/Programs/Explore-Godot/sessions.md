@@ -1,10 +1,4 @@
-# Explore: Godot -- Full Curriculum (English)
-
-Extracted 4 August 2026 from the English source decks in Google Drive. Ten sessions, 60 minutes each, in deck order.
-
-**Program shape:** a cohort course with start and end dates. Sessions run 1 through 10 and each closes with a Self-Check.
-
-**Fidelity note:** on-slide text is verbatim. For Sessions 6-10 the speaker notes and hyperlink URLs were recovered from the plain-text export of each deck. For Sessions 1-5 the speaker notes did not come through the extraction, so the video-guide lists referenced on some slides are named but not linked. Nothing has been invented to fill gaps -- every gap is flagged inline.
+See curriculum.md for program shape, fidelity notes, and the session map.
 
 ---
 

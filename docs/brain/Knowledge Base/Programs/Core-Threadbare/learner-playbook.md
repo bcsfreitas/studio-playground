@@ -1,3 +1,5 @@
+Companion self-directed guide for learners working through Core: Threadbare milestones on their own -- pairs with sessions.md.
+
 # Core: Threadbare -- Learner Playbook
 
 > Converted to markdown from the [Core: Threadbare Learner Playbook](https://docs.google.com/document/d/1MySRewwlOK-H8R8NvU1qjbaYRSUkwcu3EV1JUkXqN2U/edit) (Google Doc). Formatting cleaned up for markdown; content unchanged. Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
