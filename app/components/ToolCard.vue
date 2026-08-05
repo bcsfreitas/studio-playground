@@ -13,7 +13,10 @@ const BADGE_COLOR: Record<ToolCardData['badge'], 'success' | 'warning'> = {
 </script>
 
 <template>
-  <UCard :ui="{ root: 'h-full flex flex-col rounded-3xl', header: 'p-0 relative', body: 'flex flex-col gap-2 flex-1', footer: 'pt-0' }">
+  <!-- `sm:p-0` is not redundant with `p-0`: UCard's default header padding is
+       itself responsive (`sm:px-6`), and a bare `p-0` loses to it above 640px,
+       leaving the thumbnail inset from the card edges. -->
+  <UCard :ui="{ root: 'h-full flex flex-col rounded-3xl', header: 'p-0 sm:p-0 relative', body: 'flex flex-col gap-2 flex-1', footer: 'pt-0' }">
     <template #header>
       <img v-if="tool.image" :src="tool.image" :alt="tool.name" class="h-28 w-full object-cover">
       <div v-else-if="tool.logo" class="h-28 w-full flex items-center justify-center" :style="{ background: tool.logoBg }">
