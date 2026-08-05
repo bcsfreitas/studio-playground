@@ -78,14 +78,17 @@ const tabItems = computed<TabsItem[]>(() =>
 
 // UTabs is controlled rather than self-managing: the query string is the
 // source of truth for which tab is open, so selecting one navigates and the
-// new URL feeds back in through `activeTab`. Routing this way keeps the back
-// button and shareable links working even though these are buttons, not links.
+// new URL feeds back in through `activeTab`.
+//
+// `replace`, not push: switching tabs is changing the view of one page, not
+// moving to a new one. Pushing made every tab click a history entry, so Back
+// walked backwards through tabs instead of leaving the program.
 function goToTab(value: string | number) {
   const tabId = String(value)
   navigateTo({
     path: `/learn/${programId.value}`,
     query: tabId === defaultTabId.value ? {} : { tab: tabId }
-  })
+  }, { replace: true })
 }
 </script>
 
