@@ -5,6 +5,16 @@
       "body": "We couldn't find a program at this address. It may have moved or the link may be out of date.",
       "backToLearn": "Back to Learn"
     },
+    "tabs": {
+      "overview": "Overview",
+      "home": "Home",
+      "about": "About",
+      "community": "Community",
+      "classroom": "Classroom",
+      "projects": "Projects",
+      "resources": "Resources",
+      "notBuiltYet": "This tab isn't built yet. Check back soon."
+    },
     "hero": {
       "deliveredWith": "Delivered with {institution}",
       "facilitatedBy": "Facilitated by {facilitator}"
@@ -72,25 +82,43 @@
         }
       }
     },
-    "enrollment": {
+    "enroll": {
       "sessionPickerLabel": "Choose a session",
+      "workshopPickerLabel": "Choose a workshop",
       "cta": {
         "resume": "Resume learning",
         "startsOn": "Starts {date}",
         "startLearning": "Start learning",
-        "unlockCohort": "Unlock session",
+        "unlockSession": "Unlock session",
         "enrollmentClosed": "Enrollment closed",
-        "enroll": "Enroll in this session"
+        "enroll": "Enroll in this session",
+        "joinWorkshop": "Join this workshop"
       },
       "accessCode": {
+        "label": "Access code",
         "placeholder": "Enter access code",
         "helper": "This session requires an access code from your facilitator.",
         "error": "That code doesn't match. Check with your facilitator and try again."
       },
-      "seats": {
-        "filled": "{taken} of {max} seats filled"
+      "details": {
+        "schedule": "Schedule",
+        "sessions": "Sessions",
+        "sessionCount": "{count} sessions, {minutes} min each",
+        "workshopLength": "One workshop, {minutes} min",
+        "seats": "Seats",
+        "seatsLeft": "{left} of {max} left",
+        "seatsUnlimited": "Open to everyone",
+        "mentor": "Mentor",
+        "mentors": "Mentors"
       },
-      "cohortDescription": {
+      "notify": {
+        "title": "No dates scheduled yet",
+        "body": "Leave your email and we'll tell you as soon as the next run opens.",
+        "label": "Email address",
+        "placeholder": "you{'@'}example.com",
+        "cta": "Notify me"
+      },
+      "sessionDescription": {
         "open": "{taken} of {max} seats - {range}",
         "closed": "Closed - {range}",
         "requiresCode": "Requires an access code",
@@ -100,6 +128,7 @@
       "confirmModal": {
         "title": "Lock in your seat?",
         "body": "You're about to enroll in {program}, {range}.",
+        "workshopBody": "You're about to join {workshop}, part of {program}, on {date}.",
         "cancel": "Cancel",
         "confirm": "Yes, enroll me"
       },
@@ -111,9 +140,6 @@
       }
     },
     "viewer": {
-      "exit": {
-        "label": "Exit"
-      },
       "sidebar": {
         "xpProgress": "{earned} / {available} XP"
       },

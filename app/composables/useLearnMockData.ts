@@ -11,17 +11,17 @@ export interface LearnProgram {
 }
 
 export const learnPrograms: LearnProgram[] = [
-  { id: 'intro-game-design', cohortStart: '2026-06-15', cohortEnd: '2026-08-15', enrolled: true, progress: 65 },
-  { id: 'pixel-art-foundations', cohortStart: '2026-07-01', cohortEnd: '2026-08-26', enrolled: true, progress: 30 },
-  { id: 'ship-your-first-game', cohortStart: '2026-08-03', cohortEnd: '2026-09-28', enrolled: false },
-  { id: 'sound-design-basics', cohortStart: '2026-08-05', cohortEnd: '2026-09-16', enrolled: false },
-  { id: 'level-design-lab', cohortStart: '2026-08-10', cohortEnd: '2026-10-05', enrolled: false },
-  { id: 'creature-rigging-crash-course', cohortStart: '2026-08-17', cohortEnd: '2026-09-04', enrolled: false },
-  { id: 'advanced-shader-programming', cohortStart: '2026-09-01', cohortEnd: '2026-11-03', enrolled: false },
-  { id: 'narrative-design-workshop', cohortStart: '2026-09-14', cohortEnd: '2026-11-09', enrolled: false },
-  { id: '3d-character-modeling', cohortStart: '2026-09-21', cohortEnd: '2026-11-16', enrolled: false },
-  { id: 'multiplayer-networking-fundamentals', cohortStart: '2026-10-05', cohortEnd: '2026-12-07', enrolled: false },
-  { id: 'game-audio-music-composition', cohortStart: '2026-10-12', cohortEnd: '2026-12-14', enrolled: false }
+  // Dates mirror each program's real instance(s) in programData/instances.ts.
+  // Explore: Godot lists 3 instances there; the catalog card only has room for
+  // one range, so this uses the soonest upcoming one (Dawn Patrol, Aug 11).
+  { id: 'explore-godot', cohortStart: '2026-08-11', cohortEnd: '2026-09-10', enrolled: false },
+  { id: 'core-threadbare', cohortStart: '2026-09-01', cohortEnd: '2026-10-29', enrolled: false },
+  { id: 'explore-threadbare', cohortStart: '2026-08-12', cohortEnd: '2026-11-04', enrolled: false },
+  // SYNTHESIZED: Educator Training has no ProgramInstance (it's facilitator-
+  // facing, not an open learner cohort — see instances.ts) so there's no real
+  // date to draw from; a single placeholder session date fills the required
+  // range field.
+  { id: 'educator-training', cohortStart: '2026-09-15', cohortEnd: '2026-09-15', enrolled: false }
 ]
 
 export type CohortTiming = 'in-progress' | 'starting-soon' | 'open-enrollment'
