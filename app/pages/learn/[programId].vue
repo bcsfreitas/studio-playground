@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
-import { programTemplates, programInstances, type LearnerPhase } from '~/composables/useProgramMockData'
+import { programTemplates, programInstances, enrollmentsByPhase, type LearnerPhase } from '~/composables/useProgramMockData'
 import { provideProgramPhase } from '~/composables/useProgramPhase'
 import { provideProgramTabs } from '~/composables/useProgramTabs'
 import { userName, streakDays, xpLabel, notificationCount } from '~/composables/useHomeMockData'
@@ -18,10 +18,23 @@ const template = computed(() => programTemplates.find(p => p.id === programId.va
 // gating on an instance too would 404 a program that exists.
 const instances = computed(() => programInstances.filter(i => i.programId === programId.value))
 
-// Matches useProgramPhase()'s inject fallback, and every learnPrograms entry
-// has `enrolled: false` — a first-time visitor is the state to open in.
-const phase = ref<LearnerPhase>('interested')
+// Read from the enrollment fixtures rather than assumed: a learner who is
+// enrolled in this program should land on the enrolled view, not the pitch.
+// DevPreviewBar still overrides it, which is the point of the preview bar.
+function phaseForProgram(id: string): LearnerPhase {
+  const found = (Object.keys(enrollmentsByPhase) as LearnerPhase[])
+    .find(key => enrollmentsByPhase[key].some(record => record.programId === id))
+  return found ?? 'interested'
+}
+
+const phase = ref<LearnerPhase>(phaseForProgram(programId.value))
 provideProgramPhase(phase)
+
+// The shell is not remounted when the route param changes, so a preview
+// override must not leak from one program onto the next.
+watch(programId, (id) => {
+  phase.value = phaseForProgram(id)
+})
 
 const isEnrolled = computed(() => phase.value !== 'interested')
 
@@ -61,13 +74,27 @@ const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
 
 // Plain component state, not a route param: these behave like tabs, so
 // switching one leaves the URL and history alone.
-const activeTab = ref<TabId>(visibleTabs.value[0]!.id)
+//
+// `?item=` is the one exception, and it isn't a tab: it names a lesson, and a
+// lesson only exists in the classroom. Arriving with one — the home page's
+// "Resume learning" — opens there rather than on the default tab.
+function initialTab(): TabId {
+  const wantsLesson = Boolean(route.query.item)
+  const canOpenClassroom = visibleTabs.value.some(tab => tab.id === 'classroom')
+  return wantsLesson && canOpenClassroom ? 'classroom' : visibleTabs.value[0]!.id
+}
+
+const activeTab = ref<TabId>(initialTab())
 
 // Changing phase changes which tabs exist, and can pull the open one out from
 // under the learner — fall back rather than rendering a tab that is no longer
 // listed. This also stands in for the validation the `?tab=` query needed.
 watch(visibleTabs, (list) => {
   if (!list.some(tab => tab.id === activeTab.value)) activeTab.value = list[0]!.id
+})
+
+watch(programId, () => {
+  activeTab.value = initialTab()
 })
 
 const tabItems = computed<TabsItem[]>(() =>

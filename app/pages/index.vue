@@ -3,6 +3,7 @@ import {
   feedPosts,
   programRecs,
   continueLearning,
+  continueLearningTemplate,
   openTasks,
   bounties,
   upcomingEvents,
@@ -14,6 +15,8 @@ import {
   notificationCount,
   type PreviewState
 } from '~/composables/useHomeMockData'
+import { flattenCurriculum } from '~/composables/useProgramCurriculum'
+import { useProgramProgress } from '~/composables/useProgramProgress'
 
 definePageMeta({ layout: 'dashboard' })
 
@@ -37,6 +40,24 @@ const tabs: { id: typeof tab.value, label: string }[] = [
   { id: 'program', label: 'Program boards' }
 ]
 const filteredPosts = computed(() => feedPosts.filter(p => tab.value === 'all' || p.cat === tab.value))
+
+// The lesson to resume is whichever one isn't finished yet, which lives in
+// localStorage — so this resolves to the first lesson during SSR and settles
+// once useProgramProgress has read storage on mount.
+const resumeProgress = continueLearningTemplate ? useProgramProgress(continueLearningTemplate) : null
+const resumeItems = continueLearningTemplate ? flattenCurriculum(continueLearningTemplate) : []
+
+const resumeItem = computed(() =>
+  resumeItems.find(item => !resumeProgress?.isCompleted(item.id)) ?? resumeItems[0]
+)
+
+// `?item=` is what tells the program shell to open the classroom on that
+// lesson — tabs themselves carry no URL.
+const resumeTo = computed(() => {
+  if (!continueLearning) return '/learn'
+  const base = `/learn/${continueLearning.id}`
+  return resumeItem.value ? `${base}?item=${resumeItem.value.id}` : base
+})
 
 const previewStates: { id: PreviewState, label: string }[] = [
   { id: 'new', label: 'New learner' },
@@ -95,7 +116,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
                   <template #body>
                     <div class="text-xs font-semibold uppercase text-dimmed w-full">Program</div>
                     <div class="mt-1 font-heading font-bold text-highlighted text-2xl">{{ continueLearning.name }}</div>
-                    <div class="text-sm text-muted">Current task: {{ continueLearning.currentTask }}</div>
+                    <div class="text-sm text-muted">Current task: {{ resumeItem?.title }}</div>
                     <div class="flex items-center gap-3 mt-4">
                       <UProgress :model-value="continueLearning.progress" color="primary"/>
                       <span class="text-xs text-default">{{ continueLearning.progress }}%</span>
@@ -105,7 +126,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
                         color="primary"
                         size="xl"
                         icon="lucide:play"
-                        :to="`/learn/${continueLearning.id}`"
+                        :to="resumeTo"
                       >Resume learning</UButton>
                     </div>
                   </template>

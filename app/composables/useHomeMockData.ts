@@ -99,14 +99,16 @@ export const feedPosts: FeedPost[] = [
 // First record wins — see the ordering note in programData/enrollments.ts.
 const activeEnrollment = enrollmentsByPhase.enrolled[0]
 
+export const continueLearningTemplate = programTemplates.find(
+  t => t.id === activeEnrollment?.programId
+)
+
 export const continueLearning = (() => {
-  const template = programTemplates.find(t => t.id === activeEnrollment?.programId)
-  if (!template || !activeEnrollment) return undefined
+  if (!continueLearningTemplate || !activeEnrollment) return undefined
   return {
-    id: template.id,
-    name: template.title,
-    image: template.image,
-    currentTask: template.curriculum[0]?.items[0]?.title ?? '',
+    id: continueLearningTemplate.id,
+    name: continueLearningTemplate.title,
+    image: continueLearningTemplate.image,
     progress: activeEnrollment.progress
   }
 })()
