@@ -67,8 +67,14 @@ const cohortItems = computed(() => availableCohorts.value.map(cohort => ({
   disabled: statusOf(cohort) === 'closed'
 })))
 
+// An enrolled learner's own session outranks any open one. The picker is a
+// collapsed select, so a session the learner isn't looking at is a session
+// they can't see — defaulting past their enrollment showed Explore: Godot's
+// enrolled learner an "Enroll in this session" button and no sign anywhere
+// that they were already in.
 const defaultCohortId = computed(() => {
-  const firstOpen = availableCohorts.value.find(c => statusOf(c) === 'open-with-seats')
+  const firstOpen = availableCohorts.value.find(c => statusOf(c) === 'already-enrolled')
+    ?? availableCohorts.value.find(c => statusOf(c) === 'open-with-seats')
   return (firstOpen ?? availableCohorts.value[0])?.id
 })
 
