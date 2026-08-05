@@ -2,6 +2,7 @@
 import type { ProgramTemplate, ProgramInstance, EnrollmentRecord, Cohort, EnrollmentStatus } from '~/composables/useProgramMockData'
 import { cohortStatusFor, cohortHasStarted, sampleLearnersForProgram } from '~/composables/useProgramMockData'
 import { formatCohortRange } from '~/composables/useLearnMockData'
+import { useProgramTabs } from '~/composables/useProgramTabs'
 
 const props = defineProps<{
   template: ProgramTemplate
@@ -14,6 +15,9 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+
+// Tabs are front-end state, so resuming switches tab rather than navigating.
+const { setTab } = useProgramTabs()
 
 // Cohorts gated by an access code stay locked client-side until the right
 // code is entered — there's no backend, so "unlocked" just means "the code
@@ -317,7 +321,7 @@ const enrollModalStartDateLabel = computed(() => {
             icon="lucide:play"
             color="primary"
             block
-            :to="`/learn/${template.id}?tab=classroom`"
+            @click="setTab('classroom')"
           />
           <template v-else>
             <p class="text-xs text-muted mb-2">
@@ -334,7 +338,7 @@ const enrollModalStartDateLabel = computed(() => {
             icon="lucide:play"
             color="primary"
             block
-            :to="`/learn/${template.id}?tab=classroom`"
+            @click="setTab('classroom')"
           />
         </template>
 

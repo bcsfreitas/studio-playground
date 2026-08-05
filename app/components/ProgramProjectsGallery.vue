@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { LearnerProject } from '~/composables/useProgramMockData'
+import { useProgramTabs } from '~/composables/useProgramTabs'
 
 const props = defineProps<{
   projects: LearnerProject[]
-  programId: string
 }>()
+
+// Tabs are front-end state, so these switch tabs rather than navigating.
+const { setTab } = useProgramTabs()
 
 const { t } = useI18n()
 
@@ -22,10 +25,10 @@ const hasMore = computed(() => props.projects.length > TEASER_COUNT)
       <UPageCard
         v-for="project in visible"
         :key="project.id"
-        :to="`/learn/${programId}?tab=projects`"
         variant="outline"
         :ui="{ root: 'rounded-2xl', body: 'p-0', container: 'p-0 gap-0' }"
         class="overflow-hidden cursor-pointer transition-shadow duration-250 hover:shadow-xl"
+        @click="setTab('projects')"
       >
         <img :src="project.image" alt="" class="w-full h-32 object-cover bg-slate-100">
         <div class="flex flex-col gap-1 p-4">
@@ -42,11 +45,11 @@ const hasMore = computed(() => props.projects.length > TEASER_COUNT)
     <UButton
       v-if="hasMore"
       :label="t('program.projects.seeAll', { count: projects.length })"
-      :to="`/learn/${programId}?tab=projects`"
       color="neutral"
       variant="outline"
       trailing-icon="lucide:arrow-right"
       class="self-start"
+      @click="setTab('projects')"
     />
   </div>
 

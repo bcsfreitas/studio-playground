@@ -74,7 +74,7 @@ const projects = computed(() => projectsForProgram(programId.value))
         <USeparator />
         <section>
           <SectionTitle :title="t('program.sections.projects')" />
-          <ProgramProjectsGallery :projects="projects" :program-id="programId" />
+          <ProgramProjectsGallery :projects="projects" />
         </section>
       </div>
 

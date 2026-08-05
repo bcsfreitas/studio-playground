@@ -2,6 +2,7 @@
 import type { ProgramTemplate } from '~/composables/useProgramMockData'
 import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 import { useProgramProgress } from '~/composables/useProgramProgress'
+import { useProgramTabs } from '~/composables/useProgramTabs'
 
 const props = defineProps<{
   template: ProgramTemplate
@@ -28,10 +29,15 @@ const currentLessonNumber = computed(() => {
   return items.indexOf(currentItem.value) + 1
 })
 
-const ctaTo = computed(() => {
-  const base = `/learn/${props.template.id}?tab=classroom`
-  return currentItem.value ? `${base}&item=${currentItem.value.id}` : base
-})
+// Tabs are front-end state, so this asks the shell to switch rather than
+// navigating. The lesson id still goes through the route, which is where the
+// classroom reads it from.
+const { setTab, openLesson } = useProgramTabs()
+
+function goToCurrentLesson() {
+  if (currentItem.value) openLesson(currentItem.value.id)
+  else setTab('classroom')
+}
 </script>
 
 <template>
@@ -98,7 +104,7 @@ const ctaTo = computed(() => {
         color="primary"
         block
         class="mt-4"
-        :to="ctaTo"
+        @click="goToCurrentLesson"
       />
     </template>
 
@@ -111,7 +117,7 @@ const ctaTo = computed(() => {
         variant="outline"
         block
         class="mt-4"
-        :to="ctaTo"
+        @click="goToCurrentLesson"
       />
     </template>
   </UPageCard>

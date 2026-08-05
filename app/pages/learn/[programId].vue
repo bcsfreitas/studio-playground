@@ -2,6 +2,7 @@
 import type { TabsItem } from '@nuxt/ui'
 import { programTemplates, programInstances, type LearnerPhase } from '~/composables/useProgramMockData'
 import { provideProgramPhase } from '~/composables/useProgramPhase'
+import { provideProgramTabs } from '~/composables/useProgramTabs'
 import { userName, streakDays, xpLabel, notificationCount } from '~/composables/useHomeMockData'
 
 definePageMeta({ layout: 'dashboard' })
@@ -38,8 +39,7 @@ const TAB_COMPONENTS = {
 type TabId = keyof typeof TAB_COMPONENTS
 
 // Learner-only tabs are absent for people who haven't enrolled, not disabled —
-// a locked tab you cannot open is noise. The first entry is the default, and
-// is also the fallback for a `?tab=` value this phase isn't allowed to open.
+// a locked tab you cannot open is noise. The first entry is the default.
 //
 // Overview and Home swap rather than coexist: Overview is the pitch, Home is
 // the dashboard, and a learner is only ever in one of those situations.
@@ -59,37 +59,35 @@ const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
       ]
 )
 
-// Validating against the visible set rather than trusting the query closes the
-// hole the old nested routes had: `?tab=classroom` while not enrolled falls
-// back to the first tab instead of rendering a learner-only surface.
-const activeTab = computed<TabId>(() => {
-  const requested = route.query.tab as string | undefined
-  const match = visibleTabs.value.find(tab => tab.id === requested)
-  return match?.id ?? visibleTabs.value[0]!.id
-})
+// Plain component state, not a route param: these behave like tabs, so
+// switching one leaves the URL and history alone.
+const activeTab = ref<TabId>(visibleTabs.value[0]!.id)
 
-// The default tab carries no `?tab` so the canonical program URL stays clean.
-// Which tab that is depends on phase — Overview before enrolling, Home after.
-const defaultTabId = computed(() => visibleTabs.value[0]!.id)
+// Changing phase changes which tabs exist, and can pull the open one out from
+// under the learner — fall back rather than rendering a tab that is no longer
+// listed. This also stands in for the validation the `?tab=` query needed.
+watch(visibleTabs, (list) => {
+  if (!list.some(tab => tab.id === activeTab.value)) activeTab.value = list[0]!.id
+})
 
 const tabItems = computed<TabsItem[]>(() =>
   visibleTabs.value.map(tab => ({ label: tab.label, value: tab.id }))
 )
 
-// UTabs is controlled rather than self-managing: the query string is the
-// source of truth for which tab is open, so selecting one navigates and the
-// new URL feeds back in through `activeTab`.
-//
-// `replace`, not push: switching tabs is changing the view of one page, not
-// moving to a new one. Pushing made every tab click a history entry, so Back
-// walked backwards through tabs instead of leaving the program.
-function goToTab(value: string | number) {
-  const tabId = String(value)
-  navigateTo({
-    path: `/learn/${programId.value}`,
-    query: tabId === defaultTabId.value ? {} : { tab: tabId }
-  }, { replace: true })
+function setTab(tabId: string) {
+  if (visibleTabs.value.some(tab => tab.id === tabId)) activeTab.value = tabId as TabId
 }
+
+// A tab's content can't link to another tab any more, so the shell hands
+// children these instead. The lesson id still travels in `?item=` because the
+// classroom reads it from the route.
+provideProgramTabs({
+  setTab,
+  openLesson: (itemId: string) => {
+    setTab('classroom')
+    navigateTo({ path: route.path, query: { ...route.query, item: itemId } }, { replace: true })
+  }
+})
 </script>
 
 <template>
@@ -116,7 +114,6 @@ function goToTab(value: string | number) {
                panel is a separate async component below, outside the container,
                so tabs can own their own width and rail. -->
           <UTabs
-            :model-value="activeTab"
             :items="tabItems"
             color="primary"
             variant="pill"
@@ -131,7 +128,7 @@ function goToTab(value: string | number) {
               list: 'w-fit',
               trigger: 'grow-0'
             }"
-            @update:model-value="goToTab"
+            v-model="activeTab"
           />
         </template>
 
