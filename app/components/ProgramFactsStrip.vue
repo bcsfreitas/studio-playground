@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
 import type { LearningType, ProgramTemplate } from '~/composables/useProgramMockData'
-import FlagUs from './FlagUs.vue'
-import FlagEs from './FlagEs.vue'
 
 const props = defineProps<{
   template: ProgramTemplate
@@ -11,10 +8,10 @@ const props = defineProps<{
 const { t } = useI18n()
 
 // Only English and Spanish programs exist today, so language maps straight
-// to a flag component (same flags as the topbar's LanguageSwitcher).
-const LANGUAGE_FLAG: Record<string, Component> = {
-  English: FlagUs,
-  Spanish: FlagEs
+// to its short code (same convention as the topbar's LanguageSwitcher).
+const LANGUAGE_CODE: Record<string, string> = {
+  English: 'EN',
+  Spanish: 'ES'
 }
 
 // Reuses the icon-per-type mapping from ProgramHero's badges, so the same
@@ -34,7 +31,7 @@ const stats = computed(() => [
     key: 'totalXp',
     icon: undefined as string | undefined,
     iconClass: '',
-    flag: undefined as Component | undefined,
+    code: undefined as string | undefined,
     image: '/images/icons/xp.png' as string | undefined,
     value: `${props.template.totalXp} XP`
   },
@@ -42,7 +39,7 @@ const stats = computed(() => [
     key: 'difficulty',
     icon: 'lucide:gauge',
     iconClass: 'text-secondary-600',
-    flag: undefined,
+    code: undefined,
     image: undefined,
     value: t(`program.badges.difficulty.${props.template.difficulty}`)
   },
@@ -50,7 +47,7 @@ const stats = computed(() => [
     key: 'language',
     icon: undefined,
     iconClass: '',
-    flag: LANGUAGE_FLAG[props.template.language],
+    code: LANGUAGE_CODE[props.template.language],
     image: undefined,
     value: props.template.language
   },
@@ -58,7 +55,7 @@ const stats = computed(() => [
     key: 'learningType',
     icon: LEARNING_TYPE_ICON[props.template.learningType],
     iconClass: 'text-purple-600',
-    flag: undefined,
+    code: undefined,
     image: undefined,
     value: t(`program.badges.learningType.${props.template.learningType}`)
   }
@@ -70,11 +67,12 @@ const stats = computed(() => [
     <SectionTitle :title="t('program.sections.overview')" />
     <div class="grid grid-cols-2 gap-y-4 gap-x-6">
       <div v-for="stat in stats" :key="stat.key" class="flex items-center gap-3">
-        <component
-          :is="stat.flag"
-          v-if="stat.flag"
-          class="h-8 w-10 shrink-0"
-        />
+        <div
+          v-if="stat.code"
+          class="flex items-center justify-center size-8 shrink-0 rounded-full bg-elevated text-xs font-bold text-muted"
+        >
+          {{ stat.code }}
+        </div>
         <img v-else-if="stat.image" :src="stat.image" alt="" class="size-8 shrink-0" />
         <div v-else class="flex items-center justify-center size-8 shrink-0" :class="stat.iconClass">
           <Icon :name="stat.icon!" class="size-5" />

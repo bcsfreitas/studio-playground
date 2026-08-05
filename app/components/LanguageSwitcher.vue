@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
 import type { DropdownMenuItem } from '@nuxt/ui'
-import FlagUs from './FlagUs.vue'
-import FlagEs from './FlagEs.vue'
 
 const { locale, locales, setLocale } = useI18n()
-
-const flags: Record<string, Component> = { en: FlagUs, es: FlagEs }
 
 const items = computed<DropdownMenuItem[]>(() =>
   locales.value.map((l) => ({
@@ -21,12 +16,14 @@ const items = computed<DropdownMenuItem[]>(() =>
   <UDropdownMenu :items="items" :content="{ align: 'end' }">
     <UButton color="neutral" variant="ghost" square aria-label="Change language">
       <template #leading>
-        <component :is="flags[locale]" class="h-4 w-5" />
+        <span class="text-xs font-bold text-muted">{{ locale.toUpperCase() }}</span>
       </template>
     </UButton>
 
     <template #item-leading="{ item }">
-      <component :is="flags[(item as DropdownMenuItem & { value: string }).value]" class="h-4 w-5" />
+      <span class="w-5 text-center text-xs font-bold text-muted">
+        {{ (item as DropdownMenuItem & { value: string }).value.toUpperCase() }}
+      </span>
     </template>
 
     <template #item-trailing="{ item }">
