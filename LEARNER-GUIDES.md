@@ -73,6 +73,9 @@ numbered sections below.
     building and running; new concepts arrive as staged reveals, not all at once. (§2)
 12. **Figures depict the minimal case** — project extras stripped — and animations pace
     to wall-clock reading: slower plus Replay beats faster plus loop. (§4)
+13. **Callouts are three primitives, one sprite.** Point at UI elements with
+    `.callout-icon` + `.callout-cursor` + `.callout-pulse`, drawn from a single
+    SVG sprite. No inline SVG paths in figure markup. (§4)
 
 ---
 
@@ -220,6 +223,41 @@ Rules for both:
 - Any locator's mock interior may be swapped for a real screenshot `<img>` later
   without touching CSS/JS — build panels so that swap stays clean.
 
+### Callouts inside figures
+
+A locator's amber outline says *where a panel lives*. Callouts say *what to
+click inside it* — an icon, a button, a menu item. Every guide will need to
+point at UI elements, so callouts are a family primitive, not a per-guide
+invention.
+
+- **Three composable pieces**, no more:
+  - **`.callout-icon`** — an inline icon rendered from the guide's SVG sprite.
+    Sized in `em` by default so it scales with surrounding text; `.is-tiny`
+    for cramped wireframes, `.is-large` for feature callouts. Color defaults
+    to node-blue (`info`); override with `.is-amber` when the icon *is* the
+    target being highlighted.
+  - **`.callout-cursor`** — a small amber cursor arrow. Sits absolute-positioned
+    off the bottom-right of its parent, pointing at whatever it's paired with.
+    One shape, one size, one color.
+  - **`.callout-pulse`** — a class you add to *any* element to make it emit two
+    amber ring pulses when the parent `.fig-panel` gets `.play`, then rest.
+    Same 1.6s ease-out timing across every guide.
+- **Sprite, not inline SVG.** Every callout icon is a `<symbol>` in a hidden
+  SVG sprite at the top of `<body>`, referenced via `<svg><use href="#..."/></svg>`.
+  Adding a new icon = one `<symbol>` + one variant class. No inline SVG paths
+  in figure markup — that's what makes copy-paste between guides safe.
+- **The eye moves outline → callout in sequence.** Panel-level outline
+  pulses first (delay ~1.0s), interior callout pulses second (delay ~1.6s).
+  Same stagger every time; use the `--callout-delay` custom property to
+  override only when a figure has more than one callout.
+- **Callouts obey the motion rules.** `opacity`, `box-shadow`, and `transform`
+  only. No layout-affecting properties. `prefers-reduced-motion` hides the
+  pulse and cursor animations but keeps the icon visible, so "click this" is
+  legible without motion.
+- **One callout per figure by default.** Multiple callouts in one figure are
+  allowed only when they're a cause-effect pair on the same idea (attach
+  button pulses → script icon appears) — the same rule as figures overall.
+
 ## 5. Interaction patterns
 
 - **Step completion.** Each step's number circle is the toggle: hover previews a ✓,
@@ -292,7 +330,9 @@ rules apply in full. **[platform — non-negotiable]**
   `nuxt-ui-remote` MCP for anything the skill doesn't cover.
 - Icons: `lucide` via `@nuxt/icon` for all *page chrome* (replay, close, chevrons —
   no emoji in platform builds). Godot node icons stay custom, because accuracy to
-  Godot's own iconography is the point.
+  Godot's own iconography is the point. The callout sprite pattern (§4) carries
+  over verbatim on platform — Godot icons remain `<symbol>` refs; only page-chrome
+  icons swap to `lucide`.
 - Comments explain the *why* — a constraint, a workaround, an invariant — never the
   *what*. Applies to guide code the same as app code.
 - Writing style rules (§2, last bullet) govern commits, PRs, and docs for guide work.
@@ -332,6 +372,8 @@ Run before every publish of a standalone guide:
 - [ ] Keyboard: tab to any circle, Enter/Space toggles; terms and replays reachable.
 - [ ] Language toggle: no raw placeholder text in either language, title swaps.
 - [ ] Figures: each plays once on scroll-in, Replay restarts it, captions localized.
+- [ ] Callouts: every icon references the SVG sprite via `<use href="#...">` — no
+      inline `<path>` data inside figure markup outside the sprite itself.
 - [ ] Motion (platform builds): no overshoot/bounce easing; animations touch only
       `transform`/`opacity`; durations from tokens for UI feedback.
 - [ ] Contrast: no white text on solid primary/warning/info/success — soft pairings.
