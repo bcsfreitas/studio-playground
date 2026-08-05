@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ProgramTemplate, ProgramInstance } from '~/composables/useProgramMockData'
+import { avatarForName } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
   template: ProgramTemplate
@@ -45,7 +46,7 @@ const sessionMinutes = computed(() => props.instances[0]?.sessions[0]?.durationM
       </h3>
       <div class="flex flex-col gap-2 mt-2">
         <div v-for="teacher in teachers" :key="teacher" class="flex items-center gap-2">
-          <UAvatar :text="teacher.charAt(0)" size="xs" />
+          <UAvatar :src="avatarForName(teacher)" :alt="teacher" :text="teacher.charAt(0)" size="xs" />
           <span class="text-sm text-default">{{ teacher }}</span>
         </div>
       </div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ProgramMember } from '~/composables/useProgramMockData'
+import { avatarForName } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
   members: ProgramMember[]
@@ -29,7 +30,7 @@ const hasMore = computed(() => props.members.length > SHOWN)
 
     <ul class="flex flex-col gap-2.5">
       <li v-for="member in featured" :key="member.id" class="flex items-center gap-2.5">
-        <UAvatar :text="member.name.charAt(0)" size="sm" />
+        <UAvatar :src="avatarForName(member.name)" :alt="member.name" :text="member.name.charAt(0)" size="sm" />
         <div class="min-w-0 flex-1">
           <div class="text-sm text-default truncate">{{ member.name }}</div>
           <div class="text-xs text-dimmed tabular-nums">{{ t('program.community.memberXp', { xp: n(member.xp) }) }}</div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ChannelPost } from '~/composables/useProgramMockData'
-import { channelsForProgram, postsForChannel, membersForProgram } from '~/composables/useProgramMockData'
+import { channelsForProgram, postsForChannel, membersForProgram, avatarForName } from '~/composables/useProgramMockData'
 import { useProgramPhase } from '~/composables/useProgramPhase'
 
 const route = useRoute()
@@ -80,7 +80,7 @@ function addPost(body: string) {
             v-for="post in posts"
             :key="post.id"
             :author="post.author"
-            :avatar="post.avatar"
+            :avatar="post.avatar ?? avatarForName(post.author)"
             :time="post.time"
             :image="post.image"
             :likes="post.likes"

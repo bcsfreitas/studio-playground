@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { programTemplates, channelsForProgram, postsForProgramChannels } from '~/composables/useProgramMockData'
+import { programTemplates, channelsForProgram, postsForProgramChannels, avatarForName } from '~/composables/useProgramMockData'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -39,7 +39,7 @@ const channelName = computed(() => {
             v-for="post in posts"
             :key="post.id"
             :author="post.author"
-            :avatar="post.avatar"
+            :avatar="post.avatar ?? avatarForName(post.author)"
             :time="`${channelName(post.channelId)} · ${post.time}`"
             :image="post.image"
             :likes="post.likes"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ProgramTemplate, ProgramInstance, EnrollmentRecord, Cohort, EnrollmentStatus } from '~/composables/useProgramMockData'
-import { cohortStatusFor, cohortHasStarted, sampleLearnersForProgram } from '~/composables/useProgramMockData'
+import { cohortStatusFor, cohortHasStarted, sampleLearnersForProgram, avatarForName } from '~/composables/useProgramMockData'
 import { formatCohortRange } from '~/composables/useLearnMockData'
 import { useProgramTabs } from '~/composables/useProgramTabs'
 
@@ -163,12 +163,11 @@ const detailRows = computed(() => {
 
 const enrolledCount = computed(() => selectedCohort.value?.seatsTaken ?? 0)
 
-// Initials, not photographs — there is no learner avatar artwork in the repo,
-// and ProgramSocialProof already renders authors this way.
+// The initial stays as UAvatar's fallback for a portrait that fails to load.
 const enrolledAvatars = computed(() =>
   sampleLearnersForProgram(props.template.id)
     .slice(0, 4)
-    .map(name => ({ alt: name, text: name.charAt(0) }))
+    .map(name => ({ alt: name, text: name.charAt(0), src: avatarForName(name) }))
 )
 
 // Educator Training has no instances at all, and a program whose every group
@@ -298,7 +297,7 @@ const enrollModalStartDateLabel = computed(() => {
 
       <div v-if="enrolledCount" class="mt-4 flex items-center gap-2.5">
         <UAvatarGroup v-if="enrolledAvatars.length" size="xs" :max="4">
-          <UAvatar v-for="learner in enrolledAvatars" :key="learner.alt" :text="learner.text" :alt="learner.alt" />
+          <UAvatar v-for="learner in enrolledAvatars" :key="learner.alt" :src="learner.src" :text="learner.text" :alt="learner.alt" />
         </UAvatarGroup>
         <span class="text-xs text-muted">
           {{ t('program.enroll.enrolledCount', enrolledCount, { count: enrolledCount }) }}

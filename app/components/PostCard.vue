@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PostComment } from '~/composables/useHomeMockData'
+import { avatarForName } from '~/composables/useProgramMockData'
 
 const props = withDefaults(defineProps<{
   author?: string
@@ -99,7 +100,7 @@ function focusComment() {
 
         <div v-if="localComments.length" class="flex flex-col gap-2">
           <div v-for="c in localComments" :key="c.id" class="flex items-start gap-3 pb-3">
-            <UAvatar :src="c.avatar" :text="c.author.charAt(0).toUpperCase()" size="2xl" />
+            <UAvatar :src="c.avatar ?? avatarForName(c.author)" :text="c.author.charAt(0).toUpperCase()" size="2xl" />
             <div class="flex-1 min-w-0 text-sm leading-5">
               <span class="font-semibold text-highlighted">{{ c.author }}</span>
               <UBadge v-if="c.isMentor" label="Mentor" color="secondary" variant="soft" size="sm" class="ml-2 align-middle" />

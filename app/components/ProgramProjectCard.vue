@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { LearnerProject } from '~/composables/useProgramMockData'
+import { avatarForName } from '~/composables/useProgramMockData'
 
 defineProps<{
   project: LearnerProject
@@ -26,7 +27,7 @@ const { t } = useI18n()
         <h3 class="font-heading font-bold text-highlighted text-pretty">{{ project.title }}</h3>
         <p class="text-sm text-muted line-clamp-2">{{ project.blurb }}</p>
         <div class="flex items-center gap-2 mt-auto pt-2">
-          <UAvatar :text="project.authorName.charAt(0)" size="xs" />
+          <UAvatar :src="avatarForName(project.authorName)" :alt="project.authorName" :text="project.authorName.charAt(0)" size="xs" />
           <span class="text-xs text-dimmed truncate">
             {{ t('program.projects.by', { author: project.authorName }) }}
           </span>

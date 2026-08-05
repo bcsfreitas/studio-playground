@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { LearnerProject } from '~/composables/useProgramMockData'
 import { useProgramTabs } from '~/composables/useProgramTabs'
+import { avatarForName } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
   projects: LearnerProject[]
@@ -35,7 +36,7 @@ const hasMore = computed(() => props.projects.length > TEASER_COUNT)
           <div class="font-heading font-bold text-sm text-highlighted">{{ project.title }}</div>
           <p class="text-xs text-muted line-clamp-2">{{ project.blurb }}</p>
           <div class="flex items-center gap-2 mt-1">
-            <UAvatar :text="project.authorName.charAt(0)" size="2xs" />
+            <UAvatar :src="avatarForName(project.authorName)" :alt="project.authorName" :text="project.authorName.charAt(0)" size="2xs" />
             <span class="text-xs text-dimmed">{{ project.authorName }}</span>
           </div>
         </div>
