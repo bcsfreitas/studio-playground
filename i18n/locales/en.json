@@ -5,6 +5,16 @@
       "body": "We couldn't find a program at this address. It may have moved or the link may be out of date.",
       "backToLearn": "Back to Learn"
     },
+    "tabs": {
+      "overview": "Overview",
+      "home": "Home",
+      "about": "About",
+      "community": "Community",
+      "classroom": "Classroom",
+      "projects": "Projects",
+      "resources": "Resources",
+      "notBuiltYet": "This tab isn't built yet. Check back soon."
+    },
     "hero": {
       "deliveredWith": "Delivered with {institution}",
       "facilitatedBy": "Facilitated by {facilitator}"
@@ -111,9 +121,6 @@
       }
     },
     "viewer": {
-      "exit": {
-        "label": "Exit"
-      },
       "sidebar": {
         "xpProgress": "{earned} / {available} XP"
       },

@@ -5,7 +5,11 @@ import { formatCohortRange } from '~/composables/useLearnMockData'
 
 const props = defineProps<{
   template: ProgramTemplate
-  instance: ProgramInstance
+  // Every instance of the program, not just one. Explore: Godot runs three,
+  // and its earliest has already ended — showing only that one told learners
+  // enrollment was closed while the catalog advertised open seats. May be
+  // empty: Educator Training has no instances at all.
+  instances: ProgramInstance[]
   enrollment: EnrollmentRecord | undefined
 }>()
 
@@ -52,7 +56,9 @@ function cohortDescription(cohort: Cohort) {
 
 // A full cohort isn't offered as an option at all — there's no waitlist flow,
 // so surfacing it just to show a disabled "full" state serves no purpose.
-const availableCohorts = computed(() => props.instance.cohorts.filter(c => statusOf(c) !== 'full'))
+const availableCohorts = computed(() =>
+  props.instances.flatMap(i => i.cohorts).filter(c => statusOf(c) !== 'full')
+)
 
 const cohortItems = computed(() => availableCohorts.value.map(cohort => ({
   value: cohort.id,
@@ -140,8 +146,7 @@ const enrollModalStartDateLabel = computed(() => {
           icon="lucide:play"
           color="primary"
           block
-          :to="`/learn/${template.id}/program`"
-          target="_blank"
+          :to="`/learn/${template.id}/classroom`"
         />
         <template v-else>
           <p class="text-xs text-muted mb-2">
@@ -158,8 +163,7 @@ const enrollModalStartDateLabel = computed(() => {
           icon="lucide:play"
           color="primary"
           block
-          :to="`/learn/${template.id}/program`"
-          target="_blank"
+          :to="`/learn/${template.id}/classroom`"
         />
       </template>
 

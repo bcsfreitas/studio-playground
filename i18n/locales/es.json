@@ -5,6 +5,16 @@
       "body": "No pudimos encontrar un programa en esta dirección. Puede que se haya movido o que el enlace esté desactualizado.",
       "backToLearn": "Volver a Learn"
     },
+    "tabs": {
+      "overview": "Resumen",
+      "home": "Inicio",
+      "about": "Acerca de",
+      "community": "Comunidad",
+      "classroom": "Aula",
+      "projects": "Proyectos",
+      "resources": "Recursos",
+      "notBuiltYet": "Esta pestaña aún no está lista. Vuelve pronto."
+    },
     "hero": {
       "deliveredWith": "Impartido con {institution}",
       "facilitatedBy": "Facilitado por {facilitator}"
@@ -111,9 +121,6 @@
       }
     },
     "viewer": {
-      "exit": {
-        "label": "Salir"
-      },
       "sidebar": {
         "xpProgress": "{earned} / {available} XP"
       },

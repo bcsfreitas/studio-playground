@@ -1,9 +1,8 @@
-import type { PreviewState } from '~/composables/useHomeMockData'
 import type { EnrollmentRecord, LearnerPhase } from './types'
 
 // One fixture per LearnerPhase, each pointing at a real instance/cohort from
-// instances.ts, so the enrollment card and (later) the tabbed shell have
-// something real to key off while previewing a phase. These are independent
+// instances.ts, so the enrollment card and the tabbed shell have something
+// real to key off while previewing a phase. These are independent
 // preview scenarios, not one learner's history — the cohort a record points
 // to won't always line up with "today" the way instances.ts's own schedule
 // data does (e.g. game-owner points at a cohort that hasn't started yet by
@@ -59,19 +58,4 @@ export const enrollmentsByPhase: Record<LearnerPhase, EnrollmentRecord[]> = {
       enrolledAt: '2026-05-01'
     }
   ]
-}
-
-// Deprecated: PreviewState (new/active/guest) predates LearnerPhase and
-// drives the home page's own preview pill, which isn't changing here.
-// [programId].vue:19 still reads this shape — Task 7 rewrites that page to
-// key off LearnerPhase directly and deletes this alias.
-export const enrollmentsByPreviewState: Record<PreviewState, EnrollmentRecord[]> = {
-  active: [
-    ...enrollmentsByPhase.interested,
-    ...enrollmentsByPhase.enrolled,
-    ...enrollmentsByPhase.completed,
-    ...enrollmentsByPhase['game-owner']
-  ],
-  new: [],
-  guest: []
 }
