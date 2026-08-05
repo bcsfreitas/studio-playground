@@ -20,6 +20,10 @@ const enrollment = computed(() =>
 </script>
 
 <template>
+  <!-- One page serves two tabs: it is "Overview" before enrolling and "Home"
+       after. The enrolled learner's real Home dashboard lands in the next
+       slice, and the "About" tab stays a stub until then — at that point About
+       takes over this Overview content and Home stops rendering it. -->
   <UContainer v-if="template">
     <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_324px] gap-8 lg:gap-12 pt-10 pb-16">
       <div class="flex flex-col gap-15 min-w-0">

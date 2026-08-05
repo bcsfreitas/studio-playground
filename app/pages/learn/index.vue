@@ -83,7 +83,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
             multiple
             value-key="value"
             icon="lucide:bar-chart-3"
-            placeholder="Dificulty"
+            placeholder="Difficulty"
             :items="difficultyItems"
             size="lg"
             class="w-48"

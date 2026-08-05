@@ -97,7 +97,7 @@ function isHttpLink(link: string) {
          classroom's own navigation and has no counterpart on the other tabs. -->
     <div class="grid grid-cols-1 lg:grid-cols-[288px_minmax(0,1fr)] gap-8 lg:gap-12">
       <aside class="lg:sticky lg:top-6 lg:self-start min-w-0">
-        <h3 class="font-heading font-bold text-highlighted">{{ template.title }}</h3>
+        <h2 class="font-heading font-bold text-highlighted">{{ template.title }}</h2>
         <UProgress :model-value="progress.progressPercent.value" color="primary" class="mt-2" />
         <div class="text-xs text-muted mt-1">
           {{ t('program.viewer.sidebar.xpProgress', { earned: progress.totalXpEarned.value, available: progress.totalXpAvailable.value }) }}
@@ -172,7 +172,7 @@ function isHttpLink(link: string) {
             </div>
 
             <div class="mt-6">
-              <h2 class="font-heading font-bold text-highlighted">{{ t('program.viewer.deliverable.descriptionHeading') }}</h2>
+              <h3 class="font-heading font-bold text-highlighted">{{ t('program.viewer.deliverable.descriptionHeading') }}</h3>
               <p class="mt-2 text-sm text-default">{{ t('program.viewer.deliverable.introBody') }}</p>
               <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.shareIntro') }}</p>
               <ul class="mt-1 list-disc pl-5 text-sm text-default">
@@ -191,9 +191,9 @@ function isHttpLink(link: string) {
             </div>
 
             <div class="mt-6 rounded-xl border border-default p-6">
-              <h2 class="font-heading font-bold text-highlighted">
+              <h3 class="font-heading font-bold text-highlighted">
                 {{ t('program.viewer.deliverable.milestone', { number: moduleNumber, total: template.curriculum.length, title: activeItem.moduleTitle }) }}
-              </h2>
+              </h3>
               <h3 class="mt-3 text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</h3>
               <ul class="mt-1 list-disc pl-5 text-sm text-default">
                 <li v-for="criterion in activeItem.acceptanceCriteria" :key="criterion">{{ criterion }}</li>

@@ -147,28 +147,28 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
         {
           id: 'item-ct-4-resource-1',
           type: 'resource',
-          title: 'Gather and Reflect on Player Feedback (GitHub link)',
+          title: 'Gather and Reflect on Player Feedback',
           xp: XP.resource,
           contentType: 'text'
         },
         {
           id: 'item-ct-4-resource-2',
           type: 'resource',
-          title: 'Refine Your Game on the Project Board (GitHub link)',
+          title: 'Refine Your Game on the Project Board',
           xp: XP.resource,
           contentType: 'text'
         },
         {
           id: 'item-ct-4-resource-3',
           type: 'resource',
-          title: 'Publish your StoryQuest (GitHub link)',
+          title: 'Publish your StoryQuest',
           xp: XP.resource,
           contentType: 'text'
         },
         {
           id: 'item-ct-4-resource-4',
           type: 'resource',
-          title: 'Submit a StoryQuest Upstream (GitHub link)',
+          title: 'Submit a StoryQuest Upstream',
           xp: XP.resource,
           contentType: 'text'
         },
@@ -213,14 +213,14 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
         {
           id: 'item-ct-5-resource-1',
           type: 'resource',
-          title: 'Present your StoryQuest (GitHub link)',
+          title: 'Present your StoryQuest',
           xp: XP.resource,
           contentType: 'text'
         },
         {
           id: 'item-ct-5-resource-2',
           type: 'resource',
-          title: 'Game Design Awards (folder with description and images)',
+          title: 'Game Design Awards',
           xp: XP.resource,
           contentType: 'text'
         },

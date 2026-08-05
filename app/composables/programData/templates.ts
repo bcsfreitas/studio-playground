@@ -2,8 +2,8 @@ import type { ProgramTemplate, StudioOwner } from './types'
 import { curriculumByProgram } from './curriculum'
 import { microcredentials } from './credentials'
 
-// Copied rather than imported from useProgramMockData.ts — Task 5 deletes that
-// file once the barrel points here instead.
+// Copied rather than imported from useProgramMockData.ts: that file is the
+// barrel and re-exports this module, so importing back from it is a cycle.
 const ENDLESS_STUDIOS: StudioOwner = { name: 'Endless Studios', logo: '/images/logo-endless.svg' }
 
 // No learner quote in the Knowledge Base docs is attributable to a real
@@ -62,7 +62,7 @@ export const programTemplates: ProgramTemplate[] = [
   {
     id: 'explore-threadbare',
     title: 'Explore: Threadbare',
-    description: 'Thirteen standalone one-hour workshops across game design, art, engineering, and go-to-market. Join any combination, in any order — there’s no date range to wait for — join any single workshop.',
+    description: 'Thirteen standalone one-hour workshops across game design, art, engineering, and go-to-market. Join any combination, in any order — there’s no date range to wait for.',
     image: '/images/img/bg-threadbare.png',
     // SYNTHESIZED: no named facilitator in source — these workshops run through
     // many partner educators (Urban Arts, Glasswing, Wichita, etc.), not one person.
