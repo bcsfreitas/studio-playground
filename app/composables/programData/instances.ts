@@ -200,7 +200,7 @@ export const programInstances: ProgramInstance[] = [
     programId: 'explore-godot',
     enrollmentModel: 'cohort',
     visibility: 'public',
-    scheduleLabel: 'Tue/Thu, May 12 – June 11, 2026 (first Endless-led online cohort)',
+    scheduleLabel: 'Tue/Thu, May 12 – June 11, 2026',
     // SYNTHESIZED: no facilitator name exists in source for this cohort.
     mentors: ['Devon Ashby'],
     sessions: buildSessions(
@@ -224,8 +224,8 @@ export const programInstances: ProgramInstance[] = [
         startDate: '2026-05-12',
         endDate: '2026-06-11',
         // 02-programs-and-offerings.md:12 — "68 enrolled / 30 participated". The
-        // 30-participant figure is this program's graduateCount; seats here
-        // reflect the 68 who enrolled into the cohort.
+        // 30-participant figure is this program's studentsCompletedCount; seats
+        // here reflect the 68 who enrolled into the cohort.
         maxLearners: 68,
         seatsTaken: 68
       }

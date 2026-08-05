@@ -107,8 +107,6 @@ export interface ProgramTemplate {
   studentsCompletedCount: number
   testimonials: Testimonial[]
   certificate: ProgramCertificate
-  // Real figures from 02-programs-and-offerings.md where the doc states one.
-  graduateCount: number
 }
 
 export interface Cohort {

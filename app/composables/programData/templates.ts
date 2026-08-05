@@ -16,7 +16,7 @@ export const programTemplates: ProgramTemplate[] = [
   {
     id: 'core-threadbare',
     title: 'Core: Threadbare',
-    description: 'A structured, cohort-based game-making experience. Build and submit a StoryQuest — a playable Godot mini-game for the live Threadbare repo — across five milestones, then open a GitHub pull request to ship it.',
+    description: 'A structured, group-based game-making experience. Build and submit a StoryQuest — a playable Godot mini-game for the live Threadbare repo — across five milestones, then open a GitHub pull request to ship it.',
     image: '/images/img/bg-threadbare.png',
     // SYNTHESIZED: no single named facilitator exists in source — Core: Threadbare
     // runs across many partner sites and UTP GameLab cohorts, each with its own
@@ -49,22 +49,20 @@ export const programTemplates: ProgramTemplate[] = [
       'A Discord account, and Git, GitHub, and Godot installed on your computer',
       'An Endless Studios Platform account (email learning@endlessaccess.org if you need an access code)'
     ],
-    // 02-programs-and-offerings.md:8 — "~575 contributed in 2025". No separate
-    // "completed" figure exists in source, so this mirrors graduateCount rather
-    // than inventing a second, different-looking number.
+    // 02-programs-and-offerings.md:8 — "~575 contributed in 2025", the one real
+    // completion figure this program has in source.
     studentsCompletedCount: 575,
     testimonials: NO_TESTIMONIALS,
     certificate: {
       name: 'Core: Threadbare Certificate',
       issuingOrg: 'Endless Studios',
       microcredentials: [microcredentials['community-game-making']!]
-    },
-    graduateCount: 575
+    }
   },
   {
     id: 'explore-threadbare',
     title: 'Explore: Threadbare',
-    description: 'Thirteen standalone one-hour workshops across game design, art, engineering, and go-to-market. Join any combination, in any order — this is not a cohort, so there’s no date range to wait for.',
+    description: 'Thirteen standalone one-hour workshops across game design, art, engineering, and go-to-market. Join any combination, in any order — there’s no date range to wait for — join any single workshop.',
     image: '/images/img/bg-threadbare.png',
     // SYNTHESIZED: no named facilitator in source — these workshops run through
     // many partner educators (Urban Arts, Glasswing, Wichita, etc.), not one person.
@@ -90,18 +88,16 @@ export const programTemplates: ProgramTemplate[] = [
     // No prerequisite is stated anywhere in source — each workshop is designed to
     // be joined cold, per curriculum.md's "standalone" framing.
     prerequisites: [],
-    // No completion figure exists for this program in source (workshops track
-    // attendance per session, not a program-level "completed" count). 0 chosen
-    // over inventing a plausible-sounding number.
+    // 02-programs-and-offerings.md:11 states no completion figure for this
+    // program (workshops track attendance per session, not a program-level
+    // "completed" count). 0 chosen over inventing a plausible-sounding number.
     studentsCompletedCount: 0,
     testimonials: NO_TESTIMONIALS,
     certificate: {
       name: 'Explore: Threadbare Certificate',
       issuingOrg: 'Endless Studios',
       microcredentials: [microcredentials['intro-game-making']!]
-    },
-    // 02-programs-and-offerings.md:11 states no completion figure for this program.
-    graduateCount: 0
+    }
   },
   {
     id: 'explore-godot',
@@ -131,18 +127,15 @@ export const programTemplates: ProgramTemplate[] = [
     // No prerequisite is stated in source; see the difficulty comment above for
     // the one real caveat about who this program actually suits.
     prerequisites: [],
-    // 02-programs-and-offerings.md:12 — "30 participated" of the "68 enrolled" in
-    // the one real cohort. No other completion figure exists, so this mirrors
-    // graduateCount rather than inventing a second, different-looking number.
+    // 02-programs-and-offerings.md:12 — "68 enrolled / 30 participated". 30 is
+    // the one real completion figure this program has in source.
     studentsCompletedCount: 30,
     testimonials: NO_TESTIMONIALS,
     certificate: {
       name: 'Explore: Godot Certificate',
       issuingOrg: 'Endless Studios',
       microcredentials: [microcredentials['intro-game-making']!]
-    },
-    // 02-programs-and-offerings.md:12 — "68 enrolled / 30 participated".
-    graduateCount: 30
+    }
   },
   {
     id: 'educator-training',
@@ -181,7 +174,6 @@ export const programTemplates: ProgramTemplate[] = [
       name: 'Educator Training Certificate',
       issuingOrg: 'Endless Studios',
       microcredentials: []
-    },
-    graduateCount: 0
+    }
   }
 ]
