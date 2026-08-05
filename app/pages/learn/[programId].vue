@@ -66,8 +66,6 @@ const activeTab = computed<TabId>(() => {
   return match?.id ?? visibleTabs.value[0]!.id
 })
 
-const isOverviewTab = computed(() => activeTab.value === 'overview')
-
 // Overview carries no `?tab` so the canonical program URL stays clean.
 const tabs = computed<NavigationMenuItem[]>(() =>
   visibleTabs.value.map(tab => ({
@@ -93,27 +91,14 @@ const tabs = computed<NavigationMenuItem[]>(() =>
       />
 
       <UContainer>
-        <div style="height: 40px; width: 100%" />
 
         <template v-if="template">
+          <!-- The hero is the page header, not the Overview tab's content, so
+               it stays put across tab switches. -->
           <ProgramHero
-            v-if="isOverviewTab"
             :template="template"
             :institution="instances[0]?.deliveringInstitution"
           />
-          <!-- Every other tab gets a compact title bar: a 300px hero above the
-               classroom on every visit is space the tab's own content needs. -->
-          <div v-else class="flex items-center gap-3">
-            <h1 class="text-2xl font-heading font-bold text-highlighted text-pretty">
-              {{ template.title }}
-            </h1>
-            <UBadge
-              :label="t(`program.badges.tier.${template.tier}`)"
-              color="secondary"
-              variant="soft"
-              size="md"
-            />
-          </div>
 
           <!-- UNavigationMenu, not UTabs: UTabs' items take no `to`, so its
                triggers are buttons rather than links. These navigate via the
