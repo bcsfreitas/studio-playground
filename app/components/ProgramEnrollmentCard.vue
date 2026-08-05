@@ -39,19 +39,19 @@ function statusOf(cohort: Cohort): EnrollmentStatus {
 function cohortLabel(cohort: Cohort) {
   return cohort.startDate
     ? formatCohortRange(cohort.startDate, cohort.endDate!)
-    : t('program.enrollment.cohortDescription.selfPaced')
+    : t('program.enroll.sessionDescription.selfPaced')
 }
 
 function cohortDescription(cohort: Cohort) {
   const status = statusOf(cohort)
   const range = cohort.startDate ? formatCohortRange(cohort.startDate, cohort.endDate!) : ''
   if (status === 'already-enrolled') {
-    return t('program.enrollment.cohortDescription.alreadyEnrolled', { progress: props.enrollment?.progress ?? 0 })
+    return t('program.enroll.sessionDescription.alreadyEnrolled', { progress: props.enrollment?.progress ?? 0 })
   }
-  if (status === 'self-paced-always-open') return t('program.enrollment.cohortDescription.selfPaced')
-  if (status === 'requires-access-code') return t('program.enrollment.cohortDescription.requiresCode')
-  if (status === 'closed') return t('program.enrollment.cohortDescription.closed', { range })
-  return t('program.enrollment.cohortDescription.open', { taken: cohort.seatsTaken, max: cohort.maxLearners, range })
+  if (status === 'self-paced-always-open') return t('program.enroll.sessionDescription.selfPaced')
+  if (status === 'requires-access-code') return t('program.enroll.sessionDescription.requiresCode')
+  if (status === 'closed') return t('program.enroll.sessionDescription.closed', { range })
+  return t('program.enroll.sessionDescription.open', { taken: cohort.seatsTaken, max: cohort.maxLearners, range })
 }
 
 // A full cohort isn't offered as an option at all — there's no waitlist flow,
@@ -80,6 +80,116 @@ const selectedCohort = computed(() =>
 
 const selectedStatus = computed(() => selectedCohort.value ? statusOf(selectedCohort.value) : undefined)
 
+// Explore: Threadbare's 13 workshops are each joinable on their own and must
+// never be shown as one date range (Explore-Threadbare/curriculum.md:5). The
+// single Cohort such an instance carries exists only because ProgramInstance
+// requires one, so its enrollment status says nothing about the program —
+// this branch takes precedence over the status machinery below.
+const workshopInstance = computed(() =>
+  props.instances.length === 1 && props.instances[0]!.enrollmentModel === 'workshop-series'
+    ? props.instances[0]
+    : undefined
+)
+
+// startsAt carries an explicit UTC designator (see programData/instances.ts),
+// so format in UTC too: any other zone would make the server and the browser
+// print different times for the same session and break hydration.
+function formatSessionDateTime(iso: string) {
+  const at = new Date(iso)
+  const date = at.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC'
+  })
+  const time = at.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short'
+  })
+  return `${date}, ${time}`
+}
+
+const workshopItems = computed(() => (workshopInstance.value?.sessions ?? []).map(session => ({
+  value: session.id,
+  label: session.title,
+  description: formatSessionDateTime(session.startsAt)
+})))
+
+// Deliberately the first workshop rather than the next upcoming one: picking
+// by "now" would resolve differently on the server and in the browser.
+const selectedWorkshopId = ref(workshopInstance.value?.sessions[0]?.id)
+
+const selectedWorkshop = computed(() => {
+  const sessions = workshopInstance.value?.sessions
+  if (!sessions) return undefined
+  return sessions.find(s => s.id === selectedWorkshopId.value) ?? sessions[0]
+})
+
+const selectedInstance = computed(() =>
+  workshopInstance.value ?? props.instances.find(i => i.id === selectedCohort.value?.instanceId)
+)
+
+const detailRows = computed(() => {
+  const instance = selectedInstance.value
+  if (!instance) return []
+
+  const rows: { label: string, value: string }[] = []
+  const workshop = selectedWorkshop.value
+
+  if (workshop) {
+    rows.push({ label: t('program.enroll.details.schedule'), value: formatSessionDateTime(workshop.startsAt) })
+    rows.push({
+      label: t('program.enroll.details.sessions'),
+      value: t('program.enroll.details.workshopLength', { minutes: workshop.durationMinutes })
+    })
+  } else {
+    rows.push({ label: t('program.enroll.details.schedule'), value: instance.scheduleLabel })
+    const firstSession = instance.sessions[0]
+    if (firstSession) {
+      rows.push({
+        label: t('program.enroll.details.sessions'),
+        value: t('program.enroll.details.sessionCount', {
+          count: instance.sessions.length,
+          minutes: firstSession.durationMinutes
+        })
+      })
+    }
+  }
+
+  const cohort = selectedCohort.value
+  if (cohort) {
+    rows.push({
+      label: t('program.enroll.details.seats'),
+      value: cohort.maxLearners === null
+        ? t('program.enroll.details.seatsUnlimited')
+        : t('program.enroll.details.seatsLeft', {
+            left: Math.max(cohort.maxLearners - cohort.seatsTaken, 0),
+            max: cohort.maxLearners
+          })
+    })
+  }
+
+  if (instance.mentors.length) {
+    rows.push({
+      label: instance.mentors.length > 1
+        ? t('program.enroll.details.mentors')
+        : t('program.enroll.details.mentor'),
+      value: instance.mentors.join(', ')
+    })
+  }
+
+  return rows
+})
+
+// Educator Training has no instances at all, and a program whose every group
+// is full has nothing bookable either — both get the notify-me capture
+// instead of an empty card.
+const showNotifyCapture = computed(() => !availableCohorts.value.length)
+
+const notifyEmail = ref('')
+
 function submitCode() {
   if (!selectedCohort.value) return
   if (enteredCode.value.trim() === selectedCohort.value.accessCode) {
@@ -100,14 +210,20 @@ function openEnrollModal() {
 }
 
 function confirmEnrollment() {
-  if (!selectedCohort.value) return
-  justEnrolledCohortId.value = selectedCohort.value.id
+  // A workshop-series instance has no real cohort to mark as taken (see
+  // workshopInstance) — it only advances to the success step.
+  if (!workshopInstance.value) {
+    if (!selectedCohort.value) return
+    justEnrolledCohortId.value = selectedCohort.value.id
+  }
   enrollModalStep.value = 'success'
 }
 
-// Session-start-date line in the success view — a specific date ("Starts
-// Tuesday, Aug 4"), not the full range already shown in the picker.
+// Start-date line in the success view — one specific date ("Starts Tuesday,
+// Aug 4"), not the full range already shown in the picker. For a workshop
+// series it's the chosen workshop's own date and time.
 const enrollModalStartDateLabel = computed(() => {
+  if (selectedWorkshop.value) return formatSessionDateTime(selectedWorkshop.value.startsAt)
   const startDate = selectedCohort.value?.startDate
   if (!startDate) return ''
   return new Date(startDate).toLocaleDateString('en-US', {
@@ -121,94 +237,155 @@ const enrollModalStartDateLabel = computed(() => {
 
 <template>
   <UPageCard variant="soft">
-      <div class="font-heading font-bold text-highlighted line-clamp-2">{{ template.title }}</div>
+    <div class="font-heading font-bold text-highlighted line-clamp-2">{{ template.title }}</div>
 
-    <URadioGroup
-      v-if="availableCohorts.length > 1"
-      v-model="selectedCohortId"
-      variant="card"
-      :legend="t('program.enrollment.sessionPickerLabel')"
-      :items="cohortItems"
-      class="mt-4"
-    />
-
-    <USeparator class="mt-4" />
-
-    <div v-if="selectedCohort" class="mt-4">
-      <template v-if="selectedStatus === 'already-enrolled'">
-        <div class="flex items-center gap-3 mb-3">
-          <UProgress :model-value="enrollment?.progress ?? 0" color="primary" />
-          <span class="text-xs text-default">{{ enrollment?.progress ?? 0 }}%</span>
-        </div>
-        <UButton
-          v-if="selectedCohort && cohortHasStarted(selectedCohort)"
-          :label="t('program.enrollment.cta.resume')"
-          icon="lucide:play"
-          color="primary"
-          block
-          :to="`/learn/${template.id}/classroom`"
-        />
-        <template v-else>
-          <p class="text-xs text-muted mb-2">
-            {{ t('program.enrollment.cta.startsOn', { date: enrollModalStartDateLabel }) }}
-          </p>
-          <UButton :label="t('program.enrollment.cta.resume')" icon="lucide:play" color="primary" block disabled />
-        </template>
-      </template>
-
-      <template v-else-if="selectedStatus === 'self-paced-always-open'">
-        <UBadge :label="t('program.enrollment.cohortDescription.selfPaced')" color="neutral" variant="soft" class="mb-3" />
-        <UButton
-          :label="t('program.enrollment.cta.startLearning')"
-          icon="lucide:play"
-          color="primary"
-          block
-          :to="`/learn/${template.id}/classroom`"
-        />
-      </template>
-
-      <template v-else-if="selectedStatus === 'requires-access-code'">
-        <p class="text-xs text-muted mb-2">{{ t('program.enrollment.accessCode.helper') }}</p>
-        <UInput
-          v-model="enteredCode"
-          icon="lucide:key-round"
-          :placeholder="t('program.enrollment.accessCode.placeholder')"
-          class="w-full mb-2"
-        />
-        <p v-if="codeError" class="text-xs text-error mb-2">{{ t('program.enrollment.accessCode.error') }}</p>
-        <UButton
-          :label="t('program.enrollment.cta.unlockCohort')"
-          color="primary"
-          block
-          :disabled="!enteredCode.trim()"
-          @click="submitCode"
-        />
-      </template>
-
-      <template v-else-if="selectedStatus === 'closed'">
-        <UBadge :label="t('program.enrollment.cta.enrollmentClosed')" color="neutral" variant="soft" class="mb-3" />
-        <UButton :label="t('program.enrollment.cta.enrollmentClosed')" color="neutral" variant="soft" block disabled />
-      </template>
-
-      <template v-else>
-        <p v-if="selectedCohort.maxLearners !== null" class="text-xs text-muted mb-3">
-          {{ t('program.enrollment.seats.filled', { taken: selectedCohort.seatsTaken, max: selectedCohort.maxLearners }) }}
-        </p>
-        <UButton
-          :label="t('program.enrollment.cta.enroll')"
-          icon="lucide:circle-check"
-          color="primary"
-          block
-          @click="openEnrollModal"
-        />
-      </template>
+    <div v-if="showNotifyCapture" class="mt-4">
+      <div class="font-heading font-semibold text-sm text-default">{{ t('program.enroll.notify.title') }}</div>
+      <p class="text-xs text-muted mt-1 mb-3">{{ t('program.enroll.notify.body') }}</p>
+      <!-- Mockup: there's no backend to post an address to, so the field and
+           button are deliberately inert. -->
+      <UInput
+        v-model="notifyEmail"
+        type="email"
+        icon="lucide:mail"
+        :placeholder="t('program.enroll.notify.placeholder')"
+        class="w-full mb-2"
+      />
+      <UButton
+        :label="t('program.enroll.notify.cta')"
+        color="primary"
+        block
+        :disabled="!notifyEmail.trim()"
+      />
     </div>
+
+    <template v-else>
+      <UFormField
+        v-if="workshopInstance"
+        :label="t('program.enroll.workshopPickerLabel')"
+        class="mt-4"
+      >
+        <USelectMenu
+          v-model="selectedWorkshopId"
+          value-key="value"
+          :items="workshopItems"
+          class="w-full"
+        />
+      </UFormField>
+
+      <UFormField
+        v-else-if="cohortItems.length > 1"
+        :label="t('program.enroll.sessionPickerLabel')"
+        class="mt-4"
+      >
+        <USelectMenu
+          v-model="selectedCohortId"
+          value-key="value"
+          :items="cohortItems"
+          :search-input="false"
+          class="w-full"
+        />
+      </UFormField>
+
+      <dl v-if="detailRows.length" class="mt-4 flex flex-col gap-2">
+        <div
+          v-for="row in detailRows"
+          :key="row.label"
+          class="flex items-baseline justify-between gap-3 text-xs"
+        >
+          <dt class="text-muted shrink-0">{{ row.label }}</dt>
+          <dd class="text-default text-right">{{ row.value }}</dd>
+        </div>
+      </dl>
+
+      <USeparator class="mt-4" />
+
+      <div v-if="selectedCohort" class="mt-4">
+        <template v-if="workshopInstance">
+          <UButton
+            :label="t('program.enroll.cta.joinWorkshop')"
+            icon="lucide:calendar-plus"
+            color="primary"
+            block
+            @click="openEnrollModal"
+          />
+        </template>
+
+        <template v-else-if="selectedStatus === 'already-enrolled'">
+          <div class="flex items-center gap-3 mb-3">
+            <UProgress :model-value="enrollment?.progress ?? 0" color="primary" />
+            <span class="text-xs text-default">{{ enrollment?.progress ?? 0 }}%</span>
+          </div>
+          <UButton
+            v-if="cohortHasStarted(selectedCohort)"
+            :label="t('program.enroll.cta.resume')"
+            icon="lucide:play"
+            color="primary"
+            block
+            :to="`/learn/${template.id}/classroom`"
+          />
+          <template v-else>
+            <p class="text-xs text-muted mb-2">
+              {{ t('program.enroll.cta.startsOn', { date: enrollModalStartDateLabel }) }}
+            </p>
+            <UButton :label="t('program.enroll.cta.resume')" icon="lucide:play" color="primary" block disabled />
+          </template>
+        </template>
+
+        <template v-else-if="selectedStatus === 'self-paced-always-open'">
+          <UBadge :label="t('program.enroll.sessionDescription.selfPaced')" color="neutral" variant="soft" class="mb-3" />
+          <UButton
+            :label="t('program.enroll.cta.startLearning')"
+            icon="lucide:play"
+            color="primary"
+            block
+            :to="`/learn/${template.id}/classroom`"
+          />
+        </template>
+
+        <template v-else-if="selectedStatus === 'requires-access-code'">
+          <p class="text-xs text-muted mb-2">{{ t('program.enroll.accessCode.helper') }}</p>
+          <UInput
+            v-model="enteredCode"
+            icon="lucide:key-round"
+            :placeholder="t('program.enroll.accessCode.placeholder')"
+            class="w-full mb-2"
+          />
+          <p v-if="codeError" class="text-xs text-error mb-2">{{ t('program.enroll.accessCode.error') }}</p>
+          <UButton
+            :label="t('program.enroll.cta.unlockSession')"
+            color="primary"
+            block
+            :disabled="!enteredCode.trim()"
+            @click="submitCode"
+          />
+        </template>
+
+        <template v-else-if="selectedStatus === 'closed'">
+          <UBadge :label="t('program.enroll.cta.enrollmentClosed')" color="neutral" variant="soft" class="mb-3" />
+          <UButton :label="t('program.enroll.cta.enrollmentClosed')" color="neutral" variant="soft" block disabled />
+        </template>
+
+        <template v-else>
+          <p v-if="selectedCohort.maxLearners !== null" class="text-xs text-muted mb-3">
+            {{ t('program.enroll.seats.filled', { taken: selectedCohort.seatsTaken, max: selectedCohort.maxLearners }) }}
+          </p>
+          <UButton
+            :label="t('program.enroll.cta.enroll')"
+            icon="lucide:circle-check"
+            color="primary"
+            block
+            @click="openEnrollModal"
+          />
+        </template>
+      </div>
+    </template>
 
     <UModal v-model:open="enrollModalOpen">
       <template #title>
         <span class="sr-only">{{ enrollModalStep === 'confirm'
-          ? t('program.enrollment.confirmModal.title')
-          : t('program.enrollment.successModal.title') }}</span>
+          ? t('program.enroll.confirmModal.title')
+          : t('program.enroll.successModal.title') }}</span>
       </template>
       <template #body>
         <div v-if="enrollModalStep === 'confirm' && selectedCohort" class="flex flex-col items-center text-center gap-3">
@@ -216,10 +393,19 @@ const enrollModalStartDateLabel = computed(() => {
             <UIcon name="lucide:calendar-check" class="size-6" />
           </div>
           <div class="font-heading font-bold text-lg text-highlighted">
-            {{ t('program.enrollment.confirmModal.title') }}
+            {{ t('program.enroll.confirmModal.title') }}
           </div>
           <p class="text-sm text-muted">
-            {{ t('program.enrollment.confirmModal.body', { program: template.title, range: cohortLabel(selectedCohort) }) }}
+            <template v-if="selectedWorkshop">
+              {{ t('program.enroll.confirmModal.workshopBody', {
+                workshop: selectedWorkshop.title,
+                program: template.title,
+                date: enrollModalStartDateLabel
+              }) }}
+            </template>
+            <template v-else>
+              {{ t('program.enroll.confirmModal.body', { program: template.title, range: cohortLabel(selectedCohort) }) }}
+            </template>
           </p>
         </div>
 
@@ -228,26 +414,28 @@ const enrollModalStartDateLabel = computed(() => {
             <UIcon name="lucide:check" class="size-6" />
           </div>
           <div class="font-heading font-bold text-lg text-highlighted">
-            {{ t('program.enrollment.successModal.title') }}
+            {{ t('program.enroll.successModal.title') }}
           </div>
           <div class="w-full rounded-xl border border-default p-4 text-left">
-            <div class="font-heading font-semibold text-default">{{ template.title }}</div>
-            <div class="text-sm text-muted">{{ t('program.enrollment.successModal.starts', { date: enrollModalStartDateLabel }) }}</div>
+            <div class="font-heading font-semibold text-default">
+              {{ selectedWorkshop ? selectedWorkshop.title : template.title }}
+            </div>
+            <div class="text-sm text-muted">{{ t('program.enroll.successModal.starts', { date: enrollModalStartDateLabel }) }}</div>
           </div>
           <p class="text-sm text-muted">
-            {{ t('program.enrollment.successModal.emailNotice') }}
+            {{ t('program.enroll.successModal.emailNotice') }}
           </p>
         </div>
       </template>
 
       <template #footer>
         <template v-if="enrollModalStep === 'confirm'">
-          <UButton :label="t('program.enrollment.confirmModal.cancel')" color="neutral" variant="outline" @click="enrollModalOpen = false" />
-          <UButton :label="t('program.enrollment.confirmModal.confirm')" color="primary" @click="confirmEnrollment" />
+          <UButton :label="t('program.enroll.confirmModal.cancel')" color="neutral" variant="outline" @click="enrollModalOpen = false" />
+          <UButton :label="t('program.enroll.confirmModal.confirm')" color="primary" @click="confirmEnrollment" />
         </template>
         <UButton
           v-else
-          :label="t('program.enrollment.successModal.done')"
+          :label="t('program.enroll.successModal.done')"
           color="primary"
           block
           @click="enrollModalOpen = false"

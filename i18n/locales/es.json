@@ -82,15 +82,17 @@
         }
       }
     },
-    "enrollment": {
+    "enroll": {
       "sessionPickerLabel": "Elige una sesión",
+      "workshopPickerLabel": "Elige un taller",
       "cta": {
         "resume": "Continuar aprendiendo",
         "startsOn": "Comienza el {date}",
         "startLearning": "Comenzar a aprender",
-        "unlockCohort": "Desbloquear sesión",
+        "unlockSession": "Desbloquear sesión",
         "enrollmentClosed": "Inscripción cerrada",
-        "enroll": "Inscribirte en esta sesión"
+        "enroll": "Inscribirte en esta sesión",
+        "joinWorkshop": "Unirte a este taller"
       },
       "accessCode": {
         "placeholder": "Ingresa el código de acceso",
@@ -100,7 +102,24 @@
       "seats": {
         "filled": "{taken} de {max} cupos ocupados"
       },
-      "cohortDescription": {
+      "details": {
+        "schedule": "Horario",
+        "sessions": "Sesiones",
+        "sessionCount": "{count} sesiones, {minutes} min cada una",
+        "workshopLength": "Un taller, {minutes} min",
+        "seats": "Cupos",
+        "seatsLeft": "{left} de {max} disponibles",
+        "seatsUnlimited": "Abierto para todos",
+        "mentor": "Mentor",
+        "mentors": "Mentores"
+      },
+      "notify": {
+        "title": "Todavía no hay fechas programadas",
+        "body": "Déjanos tu correo y te avisaremos en cuanto se abra la próxima edición.",
+        "placeholder": "tu{'@'}ejemplo.com",
+        "cta": "Avísame"
+      },
+      "sessionDescription": {
         "open": "{taken} de {max} cupos - {range}",
         "closed": "Cerrado - {range}",
         "requiresCode": "Requiere un código de acceso",
@@ -110,6 +129,7 @@
       "confirmModal": {
         "title": "¿Reservar tu lugar?",
         "body": "Estás a punto de inscribirte en {program}, {range}.",
+        "workshopBody": "Estás a punto de unirte a {workshop}, parte de {program}, el {date}.",
         "cancel": "Cancelar",
         "confirm": "Sí, inscríbeme"
       },

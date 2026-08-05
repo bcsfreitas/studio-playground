@@ -16,7 +16,8 @@ export interface ProgramSession {
   index: number
   title: string
   drivingQuestion?: string
-  startsAt: string        // ISO 8601
+  // ISO 8601, always with an explicit UTC designator — see instances.ts.
+  startsAt: string
   durationMinutes: number
 }
 

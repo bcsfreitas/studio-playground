@@ -82,15 +82,17 @@
         }
       }
     },
-    "enrollment": {
+    "enroll": {
       "sessionPickerLabel": "Choose a session",
+      "workshopPickerLabel": "Choose a workshop",
       "cta": {
         "resume": "Resume learning",
         "startsOn": "Starts {date}",
         "startLearning": "Start learning",
-        "unlockCohort": "Unlock session",
+        "unlockSession": "Unlock session",
         "enrollmentClosed": "Enrollment closed",
-        "enroll": "Enroll in this session"
+        "enroll": "Enroll in this session",
+        "joinWorkshop": "Join this workshop"
       },
       "accessCode": {
         "placeholder": "Enter access code",
@@ -100,7 +102,24 @@
       "seats": {
         "filled": "{taken} of {max} seats filled"
       },
-      "cohortDescription": {
+      "details": {
+        "schedule": "Schedule",
+        "sessions": "Sessions",
+        "sessionCount": "{count} sessions, {minutes} min each",
+        "workshopLength": "One workshop, {minutes} min",
+        "seats": "Seats",
+        "seatsLeft": "{left} of {max} left",
+        "seatsUnlimited": "Open to everyone",
+        "mentor": "Mentor",
+        "mentors": "Mentors"
+      },
+      "notify": {
+        "title": "No dates scheduled yet",
+        "body": "Leave your email and we'll tell you as soon as the next run opens.",
+        "placeholder": "you{'@'}example.com",
+        "cta": "Notify me"
+      },
+      "sessionDescription": {
         "open": "{taken} of {max} seats - {range}",
         "closed": "Closed - {range}",
         "requiresCode": "Requires an access code",
@@ -110,6 +129,7 @@
       "confirmModal": {
         "title": "Lock in your seat?",
         "body": "You're about to enroll in {program}, {range}.",
+        "workshopBody": "You're about to join {workshop}, part of {program}, on {date}.",
         "cancel": "Cancel",
         "confirm": "Yes, enroll me"
       },

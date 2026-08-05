@@ -48,7 +48,12 @@ function buildSessions(
     index: i + 1,
     title: seed.title,
     drivingQuestion: seed.drivingQuestion,
-    startsAt: `${addDays(startDate, offsets[i]!)}T${time}:00`,
+    // Explicitly UTC. Without the `Z` the string is a "local time" per the
+    // spec, so the SSR render (UTC) and the browser (any other zone) would
+    // parse it to different instants and hydration would mismatch on every
+    // rendered session time. Formatters must pass `timeZone: 'UTC'` to match,
+    // the same convention formatCohortRange uses for date-only strings.
+    startsAt: `${addDays(startDate, offsets[i]!)}T${time}:00Z`,
     durationMinutes
   }))
 }
