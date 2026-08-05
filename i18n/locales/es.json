@@ -176,6 +176,19 @@
       "teachers": "Docente | Docente | Docentes",
       "tools": "Herramientas que usarás",
       "prerequisites": "Requisitos previos"
+    },
+    "community": {
+      "channels": "Canales",
+      "restricted": "Solo para personas inscritas en este programa",
+      "members": "Miembros",
+      "memberXp": "{xp} XP",
+      "seeAllMembers": "Ver los {count} miembros",
+      "composerPlaceholder": "Inicia un tema en {channel}…",
+      "postingTo": "Publicando en {channel}",
+      "post": "Publicar",
+      "justNow": "ahora mismo",
+      "emptyChannel": "Todavía no hay nada en {channel}",
+      "emptyChannelBody": "Sé la primera persona en iniciar un tema aquí."
     }
   }
 }

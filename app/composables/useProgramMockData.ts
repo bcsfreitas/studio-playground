@@ -8,6 +8,7 @@ export * from './programData/templates'
 export * from './programData/instances'
 export * from './programData/enrollments'
 export * from './programData/projects'
+export * from './programData/community'
 
 /**
  * Precedence order matters: already-enrolled and self-paced both bypass the

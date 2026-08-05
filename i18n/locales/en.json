@@ -176,6 +176,19 @@
       "teachers": "Teacher | Teacher | Teachers",
       "tools": "Tools you'll use",
       "prerequisites": "Prerequisites"
+    },
+    "community": {
+      "channels": "Channels",
+      "restricted": "Only for people enrolled in this program",
+      "members": "Members",
+      "memberXp": "{xp} XP",
+      "seeAllMembers": "See all {count} members",
+      "composerPlaceholder": "Start a topic in {channel}…",
+      "postingTo": "Posting to {channel}",
+      "post": "Post",
+      "justNow": "just now",
+      "emptyChannel": "Nothing in {channel} yet",
+      "emptyChannelBody": "Be the first to start a topic here."
     }
   }
 }

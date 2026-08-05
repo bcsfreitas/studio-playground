@@ -163,3 +163,32 @@ export interface LearnerProject {
   authorName: string
   blurb: string
 }
+
+// A channel in a program's community feed. `restricted` channels are for
+// enrolled learners only — everyone else never sees them listed.
+export interface ProgramChannel {
+  id: string
+  name: string
+  icon: string
+  restricted: boolean
+}
+
+export interface ChannelPost {
+  id: string
+  programId: string
+  channelId: string
+  author: string
+  avatar?: string
+  time: string
+  body: string
+  image?: string
+  likes: number
+  isMentor?: boolean
+  comments: { id: string, author: string, time: string, body: string, isMentor?: boolean }[]
+}
+
+export interface ProgramMember {
+  id: string
+  name: string
+  xp: number
+}
