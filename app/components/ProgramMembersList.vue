@@ -18,8 +18,11 @@ const hasMore = computed(() => props.members.length > SHOWN)
 
 <template>
   <!-- Deliberately not a card: the channel list above is the card, and a second
-       one would make the sidebar read as two competing panels. -->
-  <div v-if="members.length" class="flex flex-col gap-3">
+       one would make the sidebar read as two competing panels.
+       The horizontal padding matches UPageCard's own `p-4 sm:p-6`, so this
+       content lines up with the card above it at every breakpoint rather than
+       hanging out past its edge. -->
+  <div v-if="members.length" class="flex flex-col gap-3 px-4 sm:px-6">
     <h3 class="text-xs font-semibold text-dimmed uppercase tracking-wide">
       {{ t('program.community.members') }}
     </h3>

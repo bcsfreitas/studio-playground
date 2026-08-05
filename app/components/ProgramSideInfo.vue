@@ -22,8 +22,11 @@ const sessionMinutes = computed(() => props.instances[0]?.sessions[0]?.durationM
 
 <template>
   <!-- Deliberately not a card: this is supporting detail beside the enrollment
-       card, and a second card would read as a second call to action. -->
-  <div class="flex flex-col gap-6">
+       card, and a second card would read as a second call to action.
+       The horizontal padding matches UPageCard's own `p-4 sm:p-6`, so this
+       content lines up with the card above it at every breakpoint rather than
+       hanging out past its edge. -->
+  <div class="flex flex-col gap-6 px-4 sm:px-6">
     <section>
       <h3 class="text-xs font-semibold text-dimmed uppercase tracking-wide">
         {{ t('program.sideInfo.sessions') }}
