@@ -2,6 +2,7 @@
 import {
   feedPosts,
   programRecs,
+  continueLearning,
   openTasks,
   bounties,
   upcomingEvents,
@@ -84,22 +85,28 @@ const previewStates: { id: PreviewState, label: string }[] = [
                 </SectionTitle>
 
                 <UPageCard
+                  v-if="continueLearning"
                   orientation="horizontal"
                   reverse
                   class="transition-shadow duration-250 hover:shadow-2xl"
                 >
-                  <img src="/images/img/bg-threadbare.png" alt="Intro to Game Design" class="h-full object-cover rounded-2xl">
+                  <img :src="continueLearning.image" :alt="continueLearning.name" class="h-full object-cover rounded-2xl">
 
                   <template #body>
                     <div class="text-xs font-semibold uppercase text-dimmed w-full">Program</div>
-                    <div class="mt-1 font-heading font-bold text-highlighted text-2xl">Intro to Game Design</div>
-                    <div class="text-sm text-muted">Current task: Grey-box your first level </div>
+                    <div class="mt-1 font-heading font-bold text-highlighted text-2xl">{{ continueLearning.name }}</div>
+                    <div class="text-sm text-muted">Current task: {{ continueLearning.currentTask }}</div>
                     <div class="flex items-center gap-3 mt-4">
-                      <UProgress :model-value="42" color="primary"/>
-                      <span class="text-xs text-default">42%</span>
+                      <UProgress :model-value="continueLearning.progress" color="primary"/>
+                      <span class="text-xs text-default">{{ continueLearning.progress }}%</span>
                     </div>
                     <div class="mt-3">
-                      <UButton color="primary" size="xl" icon="lucide:play">Resume learning</UButton>
+                      <UButton
+                        color="primary"
+                        size="xl"
+                        icon="lucide:play"
+                        :to="`/learn/${continueLearning.id}`"
+                      >Resume learning</UButton>
                     </div>
                   </template>
                 </UPageCard>
@@ -119,7 +126,8 @@ const previewStates: { id: PreviewState, label: string }[] = [
                 <div class="grid grid-cols-2 gap-4">
                   <ProgramTile
                     v-for="r in programRecs.slice(0, 2)"
-                    :key="r.name"
+                    :key="r.id"
+                    :to="`/learn/${r.id}`"
                     :image="r.image"
                     :name="r.name"
                     :description="r.description"

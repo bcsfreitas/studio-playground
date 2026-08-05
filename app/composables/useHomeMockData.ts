@@ -1,3 +1,6 @@
+import { programTemplates } from '~/composables/programData/templates'
+import { enrollmentsByPhase } from '~/composables/programData/enrollments'
+
 export type PreviewState = 'active' | 'new' | 'guest'
 
 export const userName = 'Nova'
@@ -90,16 +93,42 @@ export const feedPosts: FeedPost[] = [
   }
 ]
 
-export const programRecs = [
-  { name: 'Intro to Game Design', description: 'Build your first playable prototype, one task at a time.', tasksCount: 8, status: 'Beginner', image: '/images/img/bg-threadbare.png' },
-  { name: 'Pixel Art Foundations', description: 'Draw, animate, and export sprite art for your games.', tasksCount: 6, status: 'Beginner', image: '/images/img/generic-image.png' },
-  { name: 'Ship Your First Game', description: 'Take a project from idea to a shared, playable build.', tasksCount: 10, status: 'Intermediate', image: '/images/img/games/game-built.png' }
-]
+// The in-progress program shown at the top of home for an active learner,
+// read from the same enrollment fixture the program page uses so the two can't
+// disagree about which program they're in or how far along they are.
+const activeEnrollment = enrollmentsByPhase.enrolled[0]
+
+export const continueLearning = (() => {
+  const template = programTemplates.find(t => t.id === activeEnrollment?.programId)
+  if (!template || !activeEnrollment) return undefined
+  return {
+    id: template.id,
+    name: template.title,
+    image: template.image,
+    currentTask: template.curriculum[0]?.items[0]?.title ?? '',
+    progress: activeEnrollment.progress
+  }
+})()
+
+// Derived from the real catalog rather than restated, so the home page can
+// never drift from what /learn and the program pages show. Educator Training
+// is excluded: it trains facilitators to run programs, so it has no place in a
+// learner's recommendations.
+export const programRecs = programTemplates
+  .filter(template => template.id !== 'educator-training')
+  .map(template => ({
+    id: template.id,
+    name: template.title,
+    description: template.description,
+    tasksCount: template.curriculum.reduce((sum, mod) => sum + mod.items.length, 0),
+    status: template.difficulty,
+    image: template.image
+  }))
 
 export const openTasks = [
   { name: 'Fix ladder-climb collision', status: 'New', project: 'threadbare · GitHub', projectImage: '/images/icons/github-mark.svg', due: '3 days', dueSoon: false },
-  { name: 'Grey-box your first level', status: 'In Progress', project: 'Intro to Game Design', projectImage: '/images/img/default-bg.png', due: 'Friday', dueSoon: true },
-  { name: 'Title-screen mockup', status: 'Feedback', project: 'Pixel Art Foundations', projectImage: '/images/img/generic-image.png', due: 'Today', dueSoon: true },
+  { name: 'Grey-box your first level', status: 'In Progress', project: 'Explore: Godot', projectImage: '/images/img/bg-threadbare.png', due: 'Friday', dueSoon: true },
+  { name: 'Draft your StoryQuest idea', status: 'Feedback', project: 'Core: Threadbare', projectImage: '/images/img/bg-threadbare.png', due: 'Today', dueSoon: true },
   { name: 'Balance enemy spawn rates', status: 'In Review', project: 'threadbare · GitHub', projectImage: '/images/icons/github-mark.svg', due: 'Next week', dueSoon: false }
 ]
 
@@ -126,7 +155,7 @@ export interface UpcomingEvent {
 
 export const upcomingEvents: UpcomingEvent[] = [
   { mon: 'JUL', day: '22', title: 'Creator Jam kickoff', meta: 'Community event · 4:00 PM', kind: 'community' },
-  { mon: 'JUL', day: '24', title: 'Playtest build due', meta: 'Intro to Game Design · task deadline', kind: 'program' },
+  { mon: 'JUL', day: '24', title: 'Playtest build due', meta: 'Core: Threadbare · task deadline', kind: 'program' },
   { mon: 'JUL', day: '28', title: 'Threadbare v1.0 milestone', meta: 'GitHub · threadbare', kind: 'github' },
   { mon: 'AUG', day: '01', title: 'Summer Show & Tell', meta: 'Community event · live demos', kind: 'community' }
 ]

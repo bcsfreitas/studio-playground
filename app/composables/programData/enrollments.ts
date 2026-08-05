@@ -10,7 +10,6 @@ import type { EnrollmentRecord, LearnerPhase } from './types'
 export const enrollmentsByPhase: Record<LearnerPhase, EnrollmentRecord[]> = {
   interested: [
     {
-      learnerId: 'active',
       programId: 'explore-threadbare',
       instanceId: 'instance-explore-threadbare-fall2026',
       cohortId: 'cohort-explore-threadbare-loom-weavers',
@@ -21,7 +20,6 @@ export const enrollmentsByPhase: Record<LearnerPhase, EnrollmentRecord[]> = {
   ],
   enrolled: [
     {
-      learnerId: 'active',
       programId: 'explore-godot',
       instanceId: 'instance-explore-godot-2026-08-am',
       cohortId: 'cohort-explore-godot-dawn-patrol',
@@ -36,7 +34,6 @@ export const enrollmentsByPhase: Record<LearnerPhase, EnrollmentRecord[]> = {
   // cohort) so it is at least distinguishable while previewing.
   onboarded: [
     {
-      learnerId: 'active',
       programId: 'explore-godot',
       instanceId: 'instance-explore-godot-2026-05',
       cohortId: 'cohort-explore-godot-pioneers',

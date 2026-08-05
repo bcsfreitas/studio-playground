@@ -1,5 +1,3 @@
-import type { PreviewState } from '~/composables/useHomeMockData'
-
 // Learner-facing lifecycle. Drives which tabs render and what the first tab
 // shows — see docs/superpowers/specs/2026-08-05-program-page-shell-design.md.
 export type LearnerPhase = 'interested' | 'enrolled' | 'onboarded'
@@ -136,7 +134,6 @@ export interface ProgramInstance {
 }
 
 export interface EnrollmentRecord {
-  learnerId: PreviewState
   programId: string
   instanceId: string
   cohortId: string
