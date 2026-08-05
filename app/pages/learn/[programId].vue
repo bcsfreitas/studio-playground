@@ -1,29 +1,26 @@
 <script setup lang="ts">
-import * as locales from '@nuxt/ui/locale'
-import { programTemplates, programInstances, enrollmentsByPreviewState } from '~/composables/useProgramMockData'
+import { programTemplates, programInstances, enrollmentsByPreviewState, type LearnerPhase } from '~/composables/useProgramMockData'
 import { userName, streakDays, xpLabel, notificationCount, type PreviewState } from '~/composables/useHomeMockData'
 
 definePageMeta({ layout: 'dashboard' })
 
 const route = useRoute()
-const { t, locale, setLocale } = useI18n()
+const { t } = useI18n()
 
 const programId = computed(() => route.params.programId as string)
 const template = computed(() => programTemplates.find(p => p.id === programId.value))
 const instance = computed(() => programInstances.find(i => i.programId === programId.value))
 
+// PreviewState (home page) and LearnerPhase (this page) are separate axes —
+// see useHomeMockData.ts. Task 7 wires `phase` into the enrollment lookup and
+// tab selection; for now it just drives DevPreviewBar so the control exists.
 const state = ref<PreviewState>('active')
 const isActive = computed(() => state.value === 'active')
+const phase = ref<LearnerPhase>('enrolled')
 
 const enrollment = computed(() =>
   enrollmentsByPreviewState[state.value].find(e => e.programId === programId.value)
 )
-
-const previewStates: { id: PreviewState, label: string }[] = [
-  { id: 'new', label: 'New learner' },
-  { id: 'active', label: 'Active learner' },
-  { id: 'guest', label: 'Guest' }
-]
 </script>
 
 <template>
@@ -113,28 +110,5 @@ const previewStates: { id: PreviewState, label: string }[] = [
     </template>
   </UDashboardPanel>
 
-  <!-- Dev-only preview state + locale switcher (not part of the product's real UI) -->
-  <div class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-2">
-    <div
-      class="flex items-center gap-1"
-      style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
-    >
-      <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>
-      <div
-        v-for="p in previewStates"
-        :key="p.id"
-        class="px-3 py-1.5 rounded-full text-[12.5px] font-semibold cursor-pointer select-none transition-all duration-150"
-        :class="state === p.id ? 'bg-white text-slate-900' : 'text-slate-300'"
-        @click="state = p.id"
-      >
-        {{ p.label }}
-      </div>
-    </div>
-    <ULocaleSelect
-      :model-value="locale"
-      :locales="Object.values(locales)"
-      size="sm"
-      @update:model-value="setLocale($event)"
-    />
-  </div>
+  <DevPreviewBar v-model="phase" />
 </template>
