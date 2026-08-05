@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
+import type { TabsItem } from '@nuxt/ui'
 import { programTemplates, programInstances, type LearnerPhase } from '~/composables/useProgramMockData'
 import { provideProgramPhase } from '~/composables/useProgramPhase'
 import { userName, streakDays, xpLabel, notificationCount } from '~/composables/useHomeMockData'
@@ -72,17 +72,21 @@ const activeTab = computed<TabId>(() => {
 // Which tab that is depends on phase — Overview before enrolling, Home after.
 const defaultTabId = computed(() => visibleTabs.value[0]!.id)
 
-const tabs = computed<NavigationMenuItem[]>(() =>
-  visibleTabs.value.map(tab => ({
-    label: tab.label,
-    to: tab.id === defaultTabId.value
-      ? { path: `/learn/${programId.value}` }
-      : { path: `/learn/${programId.value}`, query: { tab: tab.id } },
-    // NuxtLink's own active matching ignores the query string, so every tab
-    // would highlight at once — drive it off the resolved tab instead.
-    active: activeTab.value === tab.id
-  }))
+const tabItems = computed<TabsItem[]>(() =>
+  visibleTabs.value.map(tab => ({ label: tab.label, value: tab.id }))
 )
+
+// UTabs is controlled rather than self-managing: the query string is the
+// source of truth for which tab is open, so selecting one navigates and the
+// new URL feeds back in through `activeTab`. Routing this way keeps the back
+// button and shareable links working even though these are buttons, not links.
+function goToTab(value: string | number) {
+  const tabId = String(value)
+  navigateTo({
+    path: `/learn/${programId.value}`,
+    query: tabId === defaultTabId.value ? {} : { tab: tabId }
+  })
+}
 </script>
 
 <template>
@@ -105,16 +109,18 @@ const tabs = computed<NavigationMenuItem[]>(() =>
             {{ template.title }}
           </h1>
 
-          <!-- UNavigationMenu, not UTabs: UTabs' items take no `to`, so its
-               triggers are buttons rather than links. These navigate via the
-               router, which keeps the back button and shareable links working
-               even though the content itself switches client-side. -->
-          <UNavigationMenu
-            :items="tabs"
-            variant="link"
-            highlight
+          <!-- `content: false` — UTabs renders only the strip here. Each tab's
+               panel is a separate async component below, outside the container,
+               so tabs can own their own width and rail. -->
+          <UTabs
+            :model-value="activeTab"
+            :items="tabItems"
+            color="primary"
+            variant="pill"
+            size="xl"
+            :content="false"
             class="mt-8"
-            :ui="{ list: 'flex-1 border-b border-default' }"
+            @update:model-value="goToTab"
           />
         </template>
 
