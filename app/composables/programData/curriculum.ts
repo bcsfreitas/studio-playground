@@ -267,6 +267,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-1-1',
           type: 'topic',
           title: 'Core Gameplay & Mechanics',
+          drivingQuestion: 'What makes the player return to a game over and over again?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -281,6 +282,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-1-2',
           type: 'topic',
           title: 'Narrative & Storytelling',
+          drivingQuestion: "How can writing change the player's experience?",
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -309,6 +311,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-1-3',
           type: 'topic',
           title: 'Game Feel & UX',
+          drivingQuestion: 'How do designers invite players to discover their own path through a game?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -323,6 +326,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-1-4',
           type: 'topic',
           title: 'Progression & Motivation',
+          drivingQuestion: 'How do game makers give the core loop a refresh?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -361,6 +365,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-2-1',
           type: 'topic',
           title: 'Animation & Effects',
+          drivingQuestion: "How can animation deepen the player's connection to the game world?",
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -375,6 +380,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-2-2',
           type: 'topic',
           title: 'Aesthetics & Visual Design',
+          drivingQuestion: 'How can one pixel art asset help shape the story of a game?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -410,6 +416,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-2-3',
           type: 'topic',
           title: 'Music & Sound',
+          drivingQuestion: 'How can sound deepen your connection to a moment in a game?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -445,6 +452,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-3-1',
           type: 'topic',
           title: 'Gameplay & Systems Programming',
+          drivingQuestion: 'How does programming shape what players feel & experience?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -459,6 +467,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-3-2',
           type: 'topic',
           title: 'Optimization & Performance',
+          drivingQuestion: "How do unseen systems shape a player's experience moment to moment?",
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -473,6 +482,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-3-3',
           type: 'topic',
           title: 'Project & Workflow Management',
+          drivingQuestion: 'How can you lead a team to enhance a game experience?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -487,6 +497,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-3-4',
           type: 'topic',
           title: 'QA & Playtesting',
+          drivingQuestion: 'How does a development team make sure that a game is ready to be released?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -521,6 +532,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-4-1',
           type: 'topic',
           title: 'Marketing',
+          drivingQuestion: 'How can we bring a digital game to life for players to enjoy in the real world?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -535,6 +547,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-et-4-2',
           type: 'topic',
           title: 'Publishing & Distribution',
+          drivingQuestion: 'How do players get games?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -576,6 +589,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-1',
           type: 'topic',
           title: 'Why do we play games? Why do we mod them?',
+          drivingQuestion: 'Why do we play games? Why do we mod them?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -590,6 +604,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-2',
           type: 'topic',
           title: 'Should game makers also be game players?',
+          drivingQuestion: 'Should game makers also be game players?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -626,6 +641,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-3',
           type: 'topic',
           title: 'How do game makers create a fun and engaging level?',
+          drivingQuestion: 'How do game makers create a fun and engaging level?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -640,6 +656,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-4',
           type: 'topic',
           title: 'What helps an idea move from concept to something real?',
+          drivingQuestion: 'What helps an idea move from concept to something real?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -676,6 +693,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-5',
           type: 'topic',
           title: 'What makes a level good? What makes it great?',
+          drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -690,6 +708,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-6',
           type: 'topic',
           title: 'What makes a level good? What makes it great?',
+          drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -704,6 +723,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-7',
           type: 'topic',
           title: 'What makes a level good? What makes it great?',
+          drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -718,6 +738,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-8',
           type: 'topic',
           title: 'What makes a level good? What makes it great?',
+          drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -754,6 +775,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-9',
           type: 'topic',
           title: 'What makes a level "polished?"',
+          drivingQuestion: 'What makes a level "polished?"',
           xp: XP.topic,
           contentType: 'slideshow'
         },
@@ -768,6 +790,7 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           id: 'item-eg-10',
           type: 'topic',
           title: 'Where do you go from here?',
+          drivingQuestion: 'Where do you go from here?',
           xp: XP.topic,
           contentType: 'slideshow'
         },

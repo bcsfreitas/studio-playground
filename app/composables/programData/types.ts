@@ -52,6 +52,7 @@ export interface CurriculumItem {
   id: string
   type: CurriculumItemType
   title: string
+  drivingQuestion?: string
   xp: number
   contentType: CurriculumContentType
   acceptanceCriteria?: string[]
