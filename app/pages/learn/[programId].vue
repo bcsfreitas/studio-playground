@@ -93,12 +93,12 @@ const tabs = computed<NavigationMenuItem[]>(() =>
       <UContainer>
 
         <template v-if="template">
-          <!-- The hero is the page header, not the Overview tab's content, so
-               it stays put across tab switches. -->
-          <ProgramHero
-            :template="template"
-            :institution="instances[0]?.deliveringInstitution"
-          />
+          <!-- The title is the page header and stays across tab switches. The
+               program image and description belong to the Overview tab, which
+               renders them itself. -->
+          <h1 class="text-5xl font-heading font-bold text-highlighted text-pretty pt-10">
+            {{ template.title }}
+          </h1>
 
           <!-- UNavigationMenu, not UTabs: UTabs' items take no `to`, so its
                triggers are buttons rather than links. These navigate via the

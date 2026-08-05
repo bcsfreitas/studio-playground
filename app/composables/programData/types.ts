@@ -152,3 +152,14 @@ export type EnrollmentStatus =
   | 'closed'
   | 'full'
   | 'open-with-seats'
+
+// A finished project a learner shipped through the program. The Overview tab
+// shows a teaser gallery of these; the Projects tab is the full library.
+export interface LearnerProject {
+  id: string
+  programId: string
+  title: string
+  image: string
+  authorName: string
+  blurb: string
+}

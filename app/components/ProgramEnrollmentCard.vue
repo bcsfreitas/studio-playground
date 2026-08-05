@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ProgramTemplate, ProgramInstance, EnrollmentRecord, Cohort, EnrollmentStatus } from '~/composables/useProgramMockData'
-import { cohortStatusFor, cohortHasStarted } from '~/composables/useProgramMockData'
+import { cohortStatusFor, cohortHasStarted, sampleLearnersForProgram } from '~/composables/useProgramMockData'
 import { formatCohortRange } from '~/composables/useLearnMockData'
 
 const props = defineProps<{
@@ -145,57 +145,27 @@ const selectedInstance = computed(() =>
   workshopInstance.value ?? props.instances.find(i => i.id === selectedCohort.value?.instanceId)
 )
 
+// Session counts, teachers, tools and prerequisites deliberately live in
+// ProgramSideInfo beside this card, not in it — the card is the dates, who's
+// already here, and the action.
+//
+// Only workshops need a date row: the cohort picker's own value is the date
+// range, so repeating it here would just say the same thing twice.
 const detailRows = computed(() => {
-  const instance = selectedInstance.value
-  if (!instance) return []
-
-  const rows: { label: string, value: string }[] = []
   const workshop = selectedWorkshop.value
-
-  if (workshop) {
-    rows.push({ label: t('program.enroll.details.schedule'), value: formatSessionDateTime(workshop.startsAt) })
-    rows.push({
-      label: t('program.enroll.details.sessions'),
-      value: t('program.enroll.details.workshopLength', { minutes: workshop.durationMinutes })
-    })
-  } else {
-    rows.push({ label: t('program.enroll.details.schedule'), value: instance.scheduleLabel })
-    const firstSession = instance.sessions[0]
-    if (firstSession) {
-      rows.push({
-        label: t('program.enroll.details.sessions'),
-        value: t('program.enroll.details.sessionCount', {
-          count: instance.sessions.length,
-          minutes: firstSession.durationMinutes
-        })
-      })
-    }
-  }
-
-  const cohort = selectedCohort.value
-  if (cohort) {
-    rows.push({
-      label: t('program.enroll.details.seats'),
-      value: cohort.maxLearners === null
-        ? t('program.enroll.details.seatsUnlimited')
-        : t('program.enroll.details.seatsLeft', {
-            left: Math.max(cohort.maxLearners - cohort.seatsTaken, 0),
-            max: cohort.maxLearners
-          })
-    })
-  }
-
-  if (instance.mentors.length) {
-    rows.push({
-      label: instance.mentors.length > 1
-        ? t('program.enroll.details.mentors')
-        : t('program.enroll.details.mentor'),
-      value: instance.mentors.join(', ')
-    })
-  }
-
-  return rows
+  if (!workshop) return []
+  return [{ label: t('program.enroll.details.schedule'), value: formatSessionDateTime(workshop.startsAt) }]
 })
+
+const enrolledCount = computed(() => selectedCohort.value?.seatsTaken ?? 0)
+
+// Initials, not photographs — there is no learner avatar artwork in the repo,
+// and ProgramSocialProof already renders authors this way.
+const enrolledAvatars = computed(() =>
+  sampleLearnersForProgram(props.template.id)
+    .slice(0, 4)
+    .map(name => ({ alt: name, text: name.charAt(0) }))
+)
 
 // Educator Training has no instances at all, and a program whose every group
 // is full has nothing bookable either — both get the notify-me capture
@@ -313,6 +283,15 @@ const enrollModalStartDateLabel = computed(() => {
           <dd class="text-default text-right">{{ row.value }}</dd>
         </div>
       </dl>
+
+      <div v-if="enrolledCount" class="mt-4 flex items-center gap-2.5">
+        <UAvatarGroup v-if="enrolledAvatars.length" size="xs" :max="4">
+          <UAvatar v-for="learner in enrolledAvatars" :key="learner.alt" :text="learner.text" :alt="learner.alt" />
+        </UAvatarGroup>
+        <span class="text-xs text-muted">
+          {{ t('program.enroll.enrolledCount', enrolledCount, { count: enrolledCount }) }}
+        </span>
+      </div>
 
       <USeparator class="mt-4" />
 

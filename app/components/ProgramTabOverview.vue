@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { programTemplates, programInstances, enrollmentsByPhase } from '~/composables/useProgramMockData'
+import { programTemplates, programInstances, enrollmentsByPhase, projectsForProgram } from '~/composables/useProgramMockData'
 import { useProgramPhase } from '~/composables/useProgramPhase'
 
 const route = useRoute()
@@ -17,45 +17,43 @@ const phase = useProgramPhase()
 const enrollment = computed(() =>
   enrollmentsByPhase[phase.value].find(e => e.programId === programId.value)
 )
+
+const projects = computed(() => projectsForProgram(programId.value))
 </script>
 
 <template>
-  <!-- One page serves two tabs: it is "Overview" before enrolling and "Home"
-       after. The enrolled learner's real Home dashboard lands in the next
-       slice, and the "About" tab stays a stub until then — at that point About
-       takes over this Overview content and Home stops rendering it. -->
+  <!-- One component serves two tabs: it is "Overview" before enrolling and
+       "Home" after. The enrolled learner's real Home dashboard lands in the
+       next slice, and the "About" tab stays a stub until then — at that point
+       About takes over this content and Home stops rendering it. -->
   <UContainer v-if="template">
     <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_324px] gap-8 lg:gap-12 pt-10 pb-16">
       <div class="flex flex-col gap-15 min-w-0">
-        <ProgramFactsStrip :template="template" />
-
-        <!-- Mobile-only: right rail is sticky on lg+, but below that the
-             enrollment CTA needs to sit right after the facts, not after
-             the entire scroll of curriculum/testimonials/certificate. -->
-        <USeparator class="lg:hidden" />
-        <ProgramEnrollmentCard
-          class="lg:hidden"
+        <ProgramHero
           :template="template"
-          :instances="instances"
-          :enrollment="enrollment"
+          :institution="instances[0]?.deliveringInstitution"
         />
+
+        <!-- Mobile-only: the right rail is sticky on lg+, but below that the
+             enrollment CTA needs to sit right after the description, not after
+             the entire scroll of curriculum/testimonials/certificate. -->
+        <div class="lg:hidden flex flex-col gap-8">
+          <USeparator />
+          <ProgramEnrollmentCard
+            :template="template"
+            :instances="instances"
+            :enrollment="enrollment"
+          />
+          <ProgramSideInfo :template="template" :instances="instances" />
+        </div>
+
+        <USeparator />
+        <ProgramFactsStrip :template="template" />
 
         <USeparator />
         <section>
           <SectionTitle :title="t('program.sections.curriculum')" />
           <ProgramCurriculumAccordion :modules="template.curriculum" />
-        </section>
-
-        <USeparator />
-        <section>
-          <SectionTitle :title="t('program.sections.tools')" />
-          <ProgramToolsList :tools="template.toolsUsed" />
-        </section>
-
-        <USeparator />
-        <section>
-          <SectionTitle :title="t('program.sections.prerequisites')" />
-          <ProgramPrerequisites :prerequisites="template.prerequisites" />
         </section>
 
         <USeparator />
@@ -72,11 +70,18 @@ const enrollment = computed(() =>
           <SectionTitle :title="t('program.sections.certificate')" />
           <ProgramCertificateShowcase :certificate="template.certificate" />
         </section>
+
+        <USeparator />
+        <section>
+          <SectionTitle :title="t('program.sections.projects')" />
+          <ProgramProjectsGallery :projects="projects" :program-id="programId" />
+        </section>
       </div>
 
       <div class="hidden lg:block">
-        <div class="sticky top-6">
+        <div class="sticky top-6 flex flex-col gap-8">
           <ProgramEnrollmentCard :template="template" :instances="instances" :enrollment="enrollment" />
+          <ProgramSideInfo :template="template" :instances="instances" />
         </div>
       </div>
     </div>

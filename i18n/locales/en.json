@@ -50,7 +50,8 @@
       "tools": "Tools you'll use",
       "prerequisites": "Prerequisites",
       "testimonials": "What learners say",
-      "certificate": "What you'll earn"
+      "certificate": "What you'll earn",
+      "projects": "Projects built by other learners"
     },
     "curriculum": {
       "xpBadge": "+{xp} XP"
@@ -101,15 +102,7 @@
         "error": "That code doesn't match. Check with your facilitator and try again."
       },
       "details": {
-        "schedule": "Schedule",
-        "sessions": "Sessions",
-        "sessionCount": "{count} sessions, {minutes} min each",
-        "workshopLength": "One workshop, {minutes} min",
-        "seats": "Seats",
-        "seatsLeft": "{left} of {max} left",
-        "seatsUnlimited": "Open to everyone",
-        "mentor": "Mentor",
-        "mentors": "Mentors"
+        "schedule": "Schedule"
       },
       "notify": {
         "title": "No dates scheduled yet",
@@ -137,7 +130,8 @@
         "starts": "Starts {date}",
         "emailNotice": "We've sent a confirmation to your email - keep an eye on your inbox for reminders as the session gets closer.",
         "done": "Got it"
-      }
+      },
+      "enrolledCount": "No one has enrolled yet | {count} person enrolled | {count} people enrolled"
     },
     "viewer": {
       "sidebar": {
@@ -171,6 +165,17 @@
         "submit": "Submit for completion",
         "yourSubmission": "Your submission"
       }
+    },
+    "projects": {
+      "seeAll": "See all {count} projects",
+      "empty": "No projects have been shared from this program yet."
+    },
+    "sideInfo": {
+      "sessions": "Sessions",
+      "sessionCount": "{count} sessions · {minutes} min each",
+      "teachers": "Teacher | Teacher | Teachers",
+      "tools": "Tools you'll use",
+      "prerequisites": "Prerequisites"
     }
   }
 }
