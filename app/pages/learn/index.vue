@@ -59,8 +59,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
     <template #body>
       <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" :notification-count="notificationCount" />
 
-      <UContainer>
-        <div style="height: 40px; width: 100%" />
+      <UContainer class="pt-10">
 
         <h1 class="text-6xl font-heading font-semibold text-highlighted text-pretty ">Learn</h1>
         <h2 class="text-lg text-dimmed mt-2">Browse programs, track what you're enrolled in, and find your next program.</h2>

@@ -127,13 +127,12 @@ provideProgramTabs({
         :notification-count="notificationCount"
       />
 
-      <UContainer>
-
+      <UContainer class="pt-10">
         <template v-if="template">
           <!-- The title is the page header and stays across tab switches. The
                program image and description belong to the Overview tab, which
                renders them itself. -->
-          <h1 class="text-5xl font-heading font-bold text-highlighted text-pretty pt-10">
+          <h1 class="text-5xl font-heading font-bold text-highlighted text-pretty">
             {{ template.title }}
           </h1>
 
