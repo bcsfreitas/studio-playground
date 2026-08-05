@@ -17,35 +17,6 @@ const template = programTemplates.find(p => p.id === programId)
 const flatItems = template ? flattenCurriculum(template) : []
 const progress = template ? useProgramProgress(template) : null
 
-const activeItemId = computed(() => {
-  const queryItem = route.query.item as string | undefined
-  const item = queryItem ? flatItems.find(candidate => candidate.id === queryItem) : undefined
-  if (item && !progress?.isModuleLocked(item.moduleId)) return item.id
-  return flatItems[0]?.id
-})
-
-const activeItem = computed(() => flatItems.find(item => item.id === activeItemId.value))
-
-const moduleNumber = computed(() => {
-  if (!template || !activeItem.value) return 0
-  return template.curriculum.findIndex(mod => mod.id === activeItem.value!.moduleId) + 1
-})
-
-function selectItem(itemId: string) {
-  const item = flatItems.find(candidate => candidate.id === itemId)
-  if (!item || progress?.isModuleLocked(item.moduleId)) return
-  // Spread the existing query: the active tab now lives in `?tab`, and
-  // replacing the whole query object would drop it and bounce the learner
-  // back to the first tab mid-lesson.
-  navigateTo({ path: route.path, query: { ...route.query, item: itemId } }, { replace: true })
-}
-
-function goToNextItem() {
-  const index = flatItems.findIndex(item => item.id === activeItemId.value)
-  const next = flatItems[index + 1]
-  if (next) selectItem(next.id)
-}
-
 const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   task: 'lucide:circle-check',
   topic: 'lucide:file-text',
@@ -54,33 +25,73 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
   deliverable: 'lucide:upload'
 }
 
-const modules = computed(() => template ? template.curriculum.map(mod => ({
-  label: mod.title,
-  value: mod.id,
-  moduleItems: mod.items,
-  isLocked: progress!.isModuleLocked(mod.id)
-})) : [])
+function isOpenable(itemId: string) {
+  const item = flatItems.find(candidate => candidate.id === itemId)
+  return Boolean(item) && !progress?.isModuleLocked(item!.moduleId)
+}
 
-// Unlocked modules start expanded so the learner immediately sees where they
-// can go; locked ones stay collapsed since there's nothing actionable inside.
-const expandedModules = computed(() => modules.value.filter(mod => !mod.isLocked).map(mod => mod.value))
+// The step the learner should be on: the first one they haven't finished.
+function firstUnfinishedId() {
+  return flatItems.find(item => !progress?.isCompleted(item.id))?.id ?? flatItems[0]?.id
+}
 
-// Deliverable submission draft — cleared whenever the learner moves to a
-// different item, since it's a fresh form each time, not per-item state.
+// Exactly one step is open at a time, across the whole classroom rather than
+// per module — so this is a single ref rather than UAccordion's own per-group
+// state. A `?item=` deep link (the Home dashboard's CTA) wins if it points
+// somewhere reachable.
+const queryItem = route.query.item as string | undefined
+const openItemId = ref<string | undefined>(
+  queryItem && isOpenable(queryItem) ? queryItem : firstUnfinishedId()
+)
+
+function setOpen(itemId: string, open: boolean) {
+  if (open && !isOpenable(itemId)) return
+  openItemId.value = open ? itemId : undefined
+  if (!open) return
+  // Keep the URL pointing at the open step so a refresh or a shared link
+  // lands in the same place. Spread the query — the active tab lives in
+  // `?tab` and dropping it would bounce the learner out of the classroom.
+  navigateTo({ path: route.path, query: { ...route.query, item: itemId } }, { replace: true })
+}
+
+// Completing a step advances to the next one, which is the checklist rhythm:
+// finish, tick, move on.
+function completeAndAdvance(itemId: string) {
+  progress?.markComplete(itemId)
+  const next = flatItems[flatItems.findIndex(item => item.id === itemId) + 1]
+  if (next && isOpenable(next.id)) setOpen(next.id, true)
+  else openItemId.value = undefined
+}
+
+const modules = computed(() => (template?.curriculum ?? []).map((mod, index) => ({
+  id: mod.id,
+  number: index + 1,
+  title: mod.title,
+  items: mod.items,
+  isLocked: progress!.isModuleLocked(mod.id),
+  completedCount: mod.items.filter(item => progress!.isCompleted(item.id)).length
+})))
+
+// One draft at a time is enough: only one step is ever open, so the form can
+// reset whenever the open step changes rather than tracking state per item.
 const isStarted = ref(false)
 const description = ref('')
 const links = ref<string[]>([])
-watch(activeItemId, () => {
+watch(openItemId, () => {
   isStarted.value = false
   description.value = ''
   links.value = []
 })
 
-function submitDeliverable() {
-  if (!activeItem.value || !progress) return
+function submitDeliverable(itemId: string) {
+  if (!progress) return
   const trimmed = description.value.trim()
   if (!trimmed) return
-  progress.submitDeliverable(activeItem.value.id, { description: trimmed, links: links.value.filter(Boolean) })
+  progress.submitDeliverable(itemId, { description: trimmed, links: links.value.filter(Boolean) })
+  // Submitting completes the step, so it advances like any other — and this is
+  // the moment the next module unlocks, since deliverables close each one.
+  const next = flatItems[flatItems.findIndex(item => item.id === itemId) + 1]
+  if (next && isOpenable(next.id)) setOpen(next.id, true)
 }
 
 // Submissions are free-text pasted by the learner into localStorage, so guard
@@ -91,185 +102,164 @@ function isHttpLink(link: string) {
 </script>
 
 <template>
-  <UContainer v-if="template && progress && activeItem" class="pt-10 pb-16">
-    <!-- Two columns owned by this tab, not the shell: the module list is the
-         classroom's own navigation and has no counterpart on the other tabs. -->
-    <div class="grid grid-cols-1 lg:grid-cols-[288px_minmax(0,1fr)] gap-8 lg:gap-12">
-      <aside class="lg:sticky lg:top-6 lg:self-start min-w-0">
-        <h2 class="font-heading font-bold text-highlighted">{{ template.title }}</h2>
-        <UProgress :model-value="progress.progressPercent.value" color="primary" class="mt-2" />
-        <div class="text-xs text-muted mt-1">
-          {{ t('program.viewer.sidebar.xpProgress', { earned: progress.totalXpEarned.value, available: progress.totalXpAvailable.value }) }}
+  <UContainer v-if="template && progress" class="pt-10 pb-16">
+    <div class="max-w-3xl">
+      <div class="flex items-baseline justify-between gap-3">
+        <h2 class="font-heading font-bold text-highlighted">{{ t('program.viewer.yourPath') }}</h2>
+        <span class="text-xs text-muted tabular-nums">
+          {{ t('program.viewer.sidebar.xpProgress', {
+            earned: progress.totalXpEarned.value,
+            available: progress.totalXpAvailable.value
+          }) }}
+        </span>
+      </div>
+      <UProgress :model-value="progress.progressPercent.value" color="primary" class="mt-2" />
+
+      <section v-for="mod in modules" :key="mod.id" class="mt-10">
+        <!-- Module heading sits outside the accordion: it groups the steps and
+             carries their tally, but is not itself something to open. -->
+        <div class="flex items-center gap-2.5">
+          <h3
+            class="font-heading font-bold text-sm uppercase tracking-wide"
+            :class="mod.isLocked ? 'text-dimmed' : 'text-primary-600'"
+          >
+            {{ t('program.viewer.moduleHeading', { number: mod.number, title: mod.title }) }}
+          </h3>
+          <UIcon v-if="mod.isLocked" name="lucide:lock" class="size-3.5 shrink-0 text-dimmed" />
+          <span class="ml-auto text-xs text-muted tabular-nums shrink-0">
+            {{ mod.completedCount }}/{{ mod.items.length }}
+          </span>
         </div>
 
-        <UAccordion
-          class="mt-4"
-          :items="modules"
-          :default-value="expandedModules"
-          type="multiple"
-          :ui="{
-            root: 'flex flex-col gap-3',
-            item: 'rounded-2xl border border-default px-3',
-            trigger: 'py-3'
-          }"
-        >
-          <template #leading="{ item }">
-            <UIcon
-              v-if="item.isLocked"
-              name="lucide:lock"
-              class="size-7 p-1.5 shrink-0 text-dimmed"
-            />
-          </template>
-          <template #default="{ item }">
-            <span
-              class="font-heading font-bold text-sm"
-              :class="item.isLocked ? 'text-dimmed' : 'text-primary-600'"
+        <div class="flex flex-col gap-2 mt-3">
+          <UCollapsible
+            v-for="item in mod.items"
+            :key="item.id"
+            :open="openItemId === item.id"
+            :disabled="mod.isLocked"
+            :ui="{ root: 'rounded-2xl border border-default bg-default' }"
+            @update:open="value => setOpen(item.id, value)"
+          >
+            <button
+              type="button"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left disabled:cursor-not-allowed"
+              :disabled="mod.isLocked"
             >
-              {{ item.label }}
-            </span>
-          </template>
-          <template #content="{ item }">
-            <ul class="flex flex-col gap-1 pb-3">
-              <li v-for="lesson in item.moduleItems" :key="lesson.id">
-                <button
-                  type="button"
-                  class="w-full text-left px-2 py-1.5 rounded text-sm flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                  :class="lesson.id === activeItemId ? 'bg-primary/10 text-primary' : 'text-default'"
-                  :disabled="item.isLocked"
-                  @click="selectItem(lesson.id)"
-                >
-                  <UIcon
-                    :name="progress.isCompleted(lesson.id) ? 'lucide:check-circle' : 'lucide:circle'"
-                    class="size-4 shrink-0"
+              <UIcon
+                :name="progress.isCompleted(item.id)
+                  ? 'lucide:check-circle-2'
+                  : mod.isLocked ? 'lucide:lock' : 'lucide:circle'"
+                class="size-5 shrink-0"
+                :class="progress.isCompleted(item.id)
+                  ? 'text-success'
+                  : mod.isLocked ? 'text-dimmed' : 'text-muted'"
+              />
+              <span
+                class="flex-1 min-w-0 text-sm"
+                :class="[
+                  mod.isLocked ? 'text-dimmed' : 'text-highlighted',
+                  progress.isCompleted(item.id) ? 'line-through decoration-1 text-muted' : ''
+                ]"
+              >{{ item.title }}</span>
+              <UIcon :name="ITEM_TYPE_ICON[item.type]" class="size-3.5 shrink-0 text-dimmed" />
+              <span v-if="item.xp" class="text-xs text-dimmed tabular-nums shrink-0">+{{ item.xp }} XP</span>
+              <UIcon
+                v-if="!mod.isLocked"
+                name="lucide:chevron-down"
+                class="size-4 shrink-0 text-dimmed transition-transform duration-200"
+                :class="openItemId === item.id ? 'rotate-180' : ''"
+              />
+            </button>
+
+            <template #content>
+              <div class="px-4 pb-4 pt-1">
+                <template v-if="item.type === 'deliverable'">
+                  <p class="text-sm text-default">{{ t('program.viewer.deliverable.introBody') }}</p>
+                  <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.shareIntro') }}</p>
+                  <ul class="mt-1 list-disc pl-5 text-sm text-default">
+                    <li>{{ t('program.viewer.deliverable.shareScreenshots') }}</li>
+                    <li>{{ t('program.viewer.deliverable.shareVideo') }}</li>
+                    <li>{{ t('program.viewer.deliverable.shareBuild') }}</li>
+                  </ul>
+
+                  <div v-if="item.acceptanceCriteria?.length" class="mt-4 rounded-xl border border-default p-4">
+                    <h4 class="text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</h4>
+                    <ul class="mt-1 list-disc pl-5 text-sm text-default">
+                      <li v-for="criterion in item.acceptanceCriteria" :key="criterion">{{ criterion }}</li>
+                    </ul>
+                  </div>
+
+                  <div v-if="progress.isCompleted(item.id)" class="mt-4 flex flex-col gap-3">
+                    <UBadge :label="t('program.viewer.actions.completed')" color="success" variant="soft" class="self-start" />
+                    <div v-if="progress.getSubmission(item.id)" class="rounded-xl border border-default p-4">
+                      <h4 class="text-sm font-bold text-highlighted">{{ t('program.viewer.deliverable.yourSubmission') }}</h4>
+                      <p class="mt-2 text-sm text-default">{{ progress.getSubmission(item.id)!.description }}</p>
+                      <ul v-if="progress.getSubmission(item.id)!.links.length" class="mt-2 list-disc pl-5 text-sm">
+                        <li v-for="link in progress.getSubmission(item.id)!.links" :key="link">
+                          <ULink
+                            v-if="isHttpLink(link)"
+                            :to="link"
+                            target="_blank"
+                            raw
+                            class="text-primary underline break-all"
+                          >{{ link }}</ULink>
+                          <span v-else class="break-all">{{ link }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div v-else-if="isStarted" class="mt-4 flex flex-col gap-3">
+                    <UTextarea
+                      v-model="description"
+                      :placeholder="t('program.viewer.deliverable.descriptionPlaceholder')"
+                      :rows="4"
+                    />
+                    <UInputTags v-model="links" :placeholder="t('program.viewer.deliverable.linksPlaceholder')" />
+                    <UButton
+                      :label="t('program.viewer.deliverable.submit')"
+                      color="primary"
+                      class="self-start"
+                      :disabled="!description.trim()"
+                      @click="submitDeliverable(item.id)"
+                    />
+                  </div>
+
+                  <UButton
+                    v-else
+                    :label="t('program.viewer.deliverable.startTask')"
+                    color="primary"
+                    class="mt-4"
+                    @click="isStarted = true"
                   />
-                  <span class="truncate flex-1">{{ lesson.title }}</span>
-                  <UIcon :name="ITEM_TYPE_ICON[lesson.type]" class="size-3.5 text-dimmed shrink-0" />
-                </button>
-              </li>
-            </ul>
-          </template>
-        </UAccordion>
-      </aside>
+                </template>
 
-      <div class="min-w-0">
-        <UPageCard :key="activeItem.id">
-          <div class="flex items-center gap-2.5">
-            <span class="font-heading font-bold text-sm text-primary-600">{{ activeItem.moduleTitle }}</span>
-            <span v-if="activeItem.type !== 'deliverable'" class="text-xs text-muted uppercase">· {{ activeItem.contentType }}</span>
-          </div>
+                <template v-else>
+                  <div class="rounded-xl border border-dashed border-default p-10 text-center text-muted text-sm">
+                    {{ t('program.viewer.content.placeholder', { contentType: item.contentType }) }}
+                  </div>
 
-          <template v-if="activeItem.type === 'deliverable'">
-            <div class="flex items-start justify-between gap-4 mt-3">
-              <h2 class="text-2xl font-heading font-bold text-highlighted">{{ activeItem.title }}</h2>
-              <UButton
-                v-if="!progress.isCompleted(activeItem.id) && !isStarted"
-                :label="t('program.viewer.deliverable.startTask')"
-                color="primary"
-                class="shrink-0"
-                @click="isStarted = true"
-              />
-            </div>
-
-            <div class="mt-6">
-              <h3 class="font-heading font-bold text-highlighted">{{ t('program.viewer.deliverable.descriptionHeading') }}</h3>
-              <p class="mt-2 text-sm text-default">{{ t('program.viewer.deliverable.introBody') }}</p>
-              <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.shareIntro') }}</p>
-              <ul class="mt-1 list-disc pl-5 text-sm text-default">
-                <li>{{ t('program.viewer.deliverable.shareScreenshots') }}</li>
-                <li>{{ t('program.viewer.deliverable.shareVideo') }}</li>
-                <li>{{ t('program.viewer.deliverable.shareBuild') }}</li>
-              </ul>
-              <template v-if="!isStarted && !progress.isCompleted(activeItem.id)">
-                <p class="mt-3 text-sm text-default">{{ t('program.viewer.deliverable.submitStepsHeading') }}</p>
-                <ul class="mt-1 list-disc pl-5 text-sm text-default">
-                  <li>{{ t('program.viewer.deliverable.submitStep1') }}</li>
-                  <li>{{ t('program.viewer.deliverable.submitStep2') }}</li>
-                  <li>{{ t('program.viewer.deliverable.submitStep3') }}</li>
-                </ul>
-              </template>
-            </div>
-
-            <div class="mt-6 rounded-xl border border-default p-6">
-              <h3 class="font-heading font-bold text-highlighted">
-                {{ t('program.viewer.deliverable.milestone', { number: moduleNumber, total: template.curriculum.length, title: activeItem.moduleTitle }) }}
-              </h3>
-              <h3 class="mt-3 text-sm font-bold text-default">{{ t('program.viewer.deliverable.acceptanceCriteria') }}</h3>
-              <ul class="mt-1 list-disc pl-5 text-sm text-default">
-                <li v-for="criterion in activeItem.acceptanceCriteria" :key="criterion">{{ criterion }}</li>
-              </ul>
-            </div>
-
-            <div class="mt-4 text-sm text-muted">+{{ activeItem.xp }} XP</div>
-
-            <div v-if="progress.isCompleted(activeItem.id)" class="mt-6 flex flex-col gap-3">
-              <div class="flex items-center gap-3">
-                <UBadge :label="t('program.viewer.actions.completed')" color="success" variant="soft" />
-                <UButton :label="t('program.viewer.actions.nextItem')" variant="outline" @click="goToNextItem" />
+                  <div class="mt-4 flex items-center gap-3">
+                    <UButton
+                      v-if="!progress.isCompleted(item.id)"
+                      :label="t('program.viewer.actions.markComplete')"
+                      icon="lucide:check"
+                      color="primary"
+                      @click="completeAndAdvance(item.id)"
+                    />
+                    <UBadge
+                      v-else
+                      :label="t('program.viewer.actions.completed')"
+                      color="success"
+                      variant="soft"
+                    />
+                  </div>
+                </template>
               </div>
-              <div v-if="progress.getSubmission(activeItem.id)" class="rounded-xl border border-default p-4">
-                <h3 class="text-sm font-bold text-highlighted">{{ t('program.viewer.deliverable.yourSubmission') }}</h3>
-                <p class="mt-2 text-sm text-default">{{ progress.getSubmission(activeItem.id)!.description }}</p>
-                <ul v-if="progress.getSubmission(activeItem.id)!.links.length" class="mt-2 list-disc pl-5 text-sm">
-                  <li v-for="link in progress.getSubmission(activeItem.id)!.links" :key="link">
-                    <ULink
-                      v-if="isHttpLink(link)"
-                      :to="link"
-                      target="_blank"
-                      raw
-                      class="text-primary underline break-all"
-                    >
-                      {{ link }}
-                    </ULink>
-                    <span v-else class="break-all">{{ link }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div v-else-if="isStarted" class="mt-6 flex flex-col gap-3">
-              <UTextarea
-                v-model="description"
-                :placeholder="t('program.viewer.deliverable.descriptionPlaceholder')"
-                :rows="4"
-              />
-              <UInputTags
-                v-model="links"
-                :placeholder="t('program.viewer.deliverable.linksPlaceholder')"
-              />
-              <UButton
-                :label="t('program.viewer.deliverable.submit')"
-                color="primary"
-                class="self-start"
-                :disabled="!description.trim()"
-                @click="submitDeliverable"
-              />
-            </div>
-          </template>
-
-          <template v-else>
-            <h2 class="text-2xl font-heading font-bold text-highlighted mt-3">{{ activeItem.title }}</h2>
-
-            <div class="mt-6 rounded-xl border border-dashed border-default p-12 text-center text-muted">
-              {{ t('program.viewer.content.placeholder', { contentType: activeItem.contentType }) }}
-            </div>
-
-            <div class="mt-6 flex items-center gap-3">
-              <span v-if="activeItem.xp" class="text-sm text-muted">+{{ activeItem.xp }} XP</span>
-
-              <UButton
-                v-if="!progress.isCompleted(activeItem.id)"
-                :label="t('program.viewer.actions.markComplete')"
-                color="primary"
-                @click="progress.markComplete(activeItem.id)"
-              />
-              <template v-else>
-                <UBadge :label="t('program.viewer.actions.completed')" color="success" variant="soft" />
-                <UButton :label="t('program.viewer.actions.nextItem')" variant="outline" @click="goToNextItem" />
-              </template>
-            </div>
-          </template>
-        </UPageCard>
-      </div>
+            </template>
+          </UCollapsible>
+        </div>
+      </section>
     </div>
   </UContainer>
 

@@ -138,8 +138,7 @@
       },
       "actions": {
         "markComplete": "Mark as complete",
-        "completed": "Completed",
-        "nextItem": "Go to next item"
+        "completed": "Completed"
       },
       "content": {
         "placeholder": "{contentType} placeholder"
@@ -147,23 +146,19 @@
       "notFound": "Program not found.",
       "deliverable": {
         "startTask": "Start this task",
-        "descriptionHeading": "Description",
         "introBody": "Share proof of what you built for this module - a link to screenshots, a short video, or a playable build if you have one.",
         "shareIntro": "You can share:",
         "shareScreenshots": "A link to screenshots",
         "shareVideo": "A link to a short video",
         "shareBuild": "A link to a playable build (such as a zipped export of your game)",
-        "submitStepsHeading": "To submit your work:",
-        "submitStep1": "Click Start this task to open the submission form.",
-        "submitStep2": "Add one or more links to what you built.",
-        "submitStep3": "In the description field, explain what you changed and why.",
-        "milestone": "Milestone {number} of {total}: {title}",
         "acceptanceCriteria": "Acceptance Criteria:",
         "descriptionPlaceholder": "Describe what you changed and how it affected the player experience...",
         "linksPlaceholder": "Paste a link and press Enter",
         "submit": "Submit for completion",
         "yourSubmission": "Your submission"
-      }
+      },
+      "yourPath": "Your path",
+      "moduleHeading": "Module {number} — {title}"
     },
     "projects": {
       "seeAll": "See all {count} projects",

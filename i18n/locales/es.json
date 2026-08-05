@@ -138,8 +138,7 @@
       },
       "actions": {
         "markComplete": "Marcar como completado",
-        "completed": "Completado",
-        "nextItem": "Ir al siguiente elemento"
+        "completed": "Completado"
       },
       "content": {
         "placeholder": "Marcador de posición de {contentType}"
@@ -147,23 +146,19 @@
       "notFound": "Programa no encontrado.",
       "deliverable": {
         "startTask": "Iniciar esta tarea",
-        "descriptionHeading": "Descripción",
         "introBody": "Comparte evidencia de lo que construiste para este módulo: un enlace a capturas de pantalla, un video corto o una versión jugable si la tienes.",
         "shareIntro": "Puedes compartir:",
         "shareScreenshots": "Un enlace a capturas de pantalla",
         "shareVideo": "Un enlace a un video corto",
         "shareBuild": "Un enlace a una versión jugable (como un export comprimido de tu juego)",
-        "submitStepsHeading": "Para enviar tu trabajo:",
-        "submitStep1": "Haz clic en Iniciar esta tarea para abrir el formulario de envío.",
-        "submitStep2": "Agrega uno o más enlaces a lo que construiste.",
-        "submitStep3": "En el campo de descripción, explica qué cambiaste y por qué.",
-        "milestone": "Hito {number} de {total}: {title}",
         "acceptanceCriteria": "Criterios de aceptación:",
         "descriptionPlaceholder": "Describe qué cambiaste y cómo afectó la experiencia del jugador...",
         "linksPlaceholder": "Pega un enlace y presiona Enter",
         "submit": "Enviar para completar",
         "yourSubmission": "Tu envío"
-      }
+      },
+      "yourPath": "Tu recorrido",
+      "moduleHeading": "Módulo {number} — {title}"
     },
     "projects": {
       "seeAll": "Ver los {count} proyectos",
