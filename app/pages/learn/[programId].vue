@@ -120,6 +120,14 @@ function goToTab(value: string | number) {
             size="xl"
             :content="false"
             class="mt-8"
+            :ui="{
+              // UTabs stretches by default: the list is `w-full` and every
+              // trigger is `grow`. Sized to its labels instead, and the root
+              // left-aligned since it centres its children.
+              root: 'items-start',
+              list: 'w-fit',
+              trigger: 'grow-0'
+            }"
             @update:model-value="goToTab"
           />
         </template>
