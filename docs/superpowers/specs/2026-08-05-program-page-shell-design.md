@@ -53,7 +53,7 @@ Four programs, all content sourced from `docs/brain/Knowledge Base/Programs/`:
 | Explore: Godot | Explore | 10 sessions, 60 min each | cohort | Intro to Game Making (3 criteria) | 68 enrolled / 30 participated, May 12 – Jun 11 2026 |
 | Educator Training | — | 4 sections | cohort | none | facilitator-facing, not learner-facing |
 
-Modules map to milestones for Core: Threadbare, to disciplines for Explore: Threadbare, and to sessions for Explore: Godot.
+Modules map to milestones for Core: Threadbare, to disciplines for Explore: Threadbare, and to grouped sessions for Explore: Godot — its 10 sessions become 4 coherent modules rather than 10 single-topic ones, which would just be accordion noise.
 
 Route slugs: `core-threadbare`, `explore-threadbare`, `explore-godot`, `educator-training`.
 
@@ -86,7 +86,9 @@ interface ProgramSession {
 interface MicrocredentialCriterion { id: string, label: string }
 ```
 
-Extended: `Microcredential.criteria`, `ProgramInstance.{enrollmentModel, visibility, accessCode, scheduleLabel, sessions, mentors}`, `Cohort.name`, `EnrollmentRecord.phase`, `ProgramTemplate.graduateCount`.
+Extended: `Microcredential.criteria`, `ProgramInstance.{enrollmentModel, visibility, accessCode, scheduleLabel, sessions, mentors}`, `Cohort.name`, `EnrollmentRecord.phase`.
+
+An earlier draft of this spec also added `ProgramTemplate.graduateCount`. That was a mistake — `studentsCompletedCount` already existed and is already rendered by `ProgramSocialProof.vue` with translated plural strings. `studentsCompletedCount` is authoritative; there is no `graduateCount`.
 
 `ProgramInstance.visibility: 'public' | 'private'` — private instances are institution-commissioned and need an access code.
 
