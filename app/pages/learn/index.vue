@@ -63,7 +63,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
         <div style="height: 40px; width: 100%" />
 
         <h1 class="text-6xl font-heading font-semibold text-highlighted text-pretty ">Learn</h1>
-        <h2 class="text-lg text-dimmed mt-2">Browse programs, track what you're enrolled in, and find your next cohort.</h2>
+        <h2 class="text-lg text-dimmed mt-2">Browse programs, track what you're enrolled in, and find your next program.</h2>
 
         <div class="flex flex-wrap items-center gap-3 my-8">
 

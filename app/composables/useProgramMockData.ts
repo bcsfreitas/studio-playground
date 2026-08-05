@@ -49,7 +49,7 @@ export function cohortHasStarted(cohort: Cohort, today = new Date()): boolean {
 // Programs with no matching instance (catalog-only mock entries) are treated
 // as available, since there's no cohort data to say otherwise.
 export function hasAvailableCohort(programId: string): boolean {
-  const instance = programInstances.find(i => i.programId === programId)
-  if (!instance) return true
-  return instance.cohorts.some(c => cohortStatusFor(c, undefined, false) !== 'full')
+  const cohorts = programInstances.filter(i => i.programId === programId).flatMap(i => i.cohorts)
+  if (!cohorts.length) return true
+  return cohorts.some(c => cohortStatusFor(c, undefined, false) !== 'full')
 }

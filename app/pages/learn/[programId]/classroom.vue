@@ -161,7 +161,7 @@ function isHttpLink(link: string) {
 
           <template v-if="activeItem.type === 'deliverable'">
             <div class="flex items-start justify-between gap-4 mt-3">
-              <h1 class="text-2xl font-heading font-bold text-highlighted">{{ activeItem.title }}</h1>
+              <h2 class="text-2xl font-heading font-bold text-highlighted">{{ activeItem.title }}</h2>
               <UButton
                 v-if="!progress.isCompleted(activeItem.id) && !isStarted"
                 :label="t('program.viewer.deliverable.startTask')"
@@ -248,7 +248,7 @@ function isHttpLink(link: string) {
           </template>
 
           <template v-else>
-            <h1 class="text-2xl font-heading font-bold text-highlighted mt-3">{{ activeItem.title }}</h1>
+            <h2 class="text-2xl font-heading font-bold text-highlighted mt-3">{{ activeItem.title }}</h2>
 
             <div class="mt-6 rounded-xl border border-dashed border-default p-12 text-center text-muted">
               {{ t('program.viewer.content.placeholder', { contentType: activeItem.contentType }) }}
