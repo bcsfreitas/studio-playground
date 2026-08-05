@@ -222,6 +222,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
                   :likes="p.likes"
                   :comments="p.comments"
                   :is-mentor="p.isMentor"
+                  :can-comment="isLoggedIn"
                 >
                   {{ p.body }}
                 </PostCard>

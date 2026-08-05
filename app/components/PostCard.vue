@@ -10,10 +10,15 @@ const props = withDefaults(defineProps<{
   likes?: number
   comments?: PostComment[]
   isMentor?: boolean
+  // Guests can read a post but not reply to one. The box stays visible on
+  // purpose: platform-architecture.md treats commenting as a commitment
+  // trigger — the prompt to create an account, not something hidden away.
+  canComment?: boolean
 }>(), {
   author: 'creator',
   time: 'just now',
-  comments: () => []
+  comments: () => [],
+  canComment: true
 })
 
 const liked = ref(false)
@@ -28,6 +33,7 @@ const localComments = ref<PostComment[]>([...props.comments])
 const newComment = ref('')
 
 function submitComment() {
+  if (!props.canComment) return
   const body = newComment.value.trim()
   if (!body) return
   localComments.value.push({ id: crypto.randomUUID(), author: 'You', time: 'just now', body })
@@ -119,7 +125,7 @@ function focusComment() {
         <USeparator class="-mx-4 sm:-mx-6" />
 
         <div class="px-4 sm:px-6 pt-6">
-          <div class="flex align-center gap-2.5">
+          <div v-if="canComment" class="flex align-center gap-2.5">
             <UAvatar text="Y" size="2xl" />
             <UTextarea
               ref="commentInput"
@@ -139,6 +145,11 @@ function focusComment() {
               :disabled="!newComment.trim()"
               @click="submitComment"
             />
+          </div>
+
+          <div v-else class="flex items-center justify-between gap-3">
+            <p class="text-sm text-muted">Sign in to join the conversation.</p>
+            <UButton label="Sign in" color="primary" variant="soft" size="sm" />
           </div>
         </div>
       </div>
