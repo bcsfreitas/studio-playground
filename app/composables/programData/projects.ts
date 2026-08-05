@@ -62,6 +62,54 @@ export const learnerProjects: LearnerProject[] = [
     image: PLACEHOLDER_IMAGES[0],
     authorName: 'Yuki Tanabe',
     blurb: 'A trading scene built across three workshop sessions.'
+  },
+  {
+    id: 'proj-ct-mend',
+    programId: 'core-threadbare',
+    title: 'The Mending Hour',
+    image: PLACEHOLDER_IMAGES[3],
+    authorName: 'Tomas Berg',
+    blurb: 'Every night the town unravels. You have until dawn to stitch it back.'
+  },
+  {
+    id: 'proj-ct-spool',
+    programId: 'core-threadbare',
+    title: 'Spooltown',
+    image: PLACEHOLDER_IMAGES[1],
+    authorName: 'Leila Haddad',
+    blurb: 'A village sim where the currency is thread and everyone owes someone.'
+  },
+  {
+    id: 'proj-eg-cavern',
+    programId: 'explore-godot',
+    title: 'Cavern Run',
+    image: PLACEHOLDER_IMAGES[2],
+    authorName: 'Hana Kimura',
+    blurb: 'Ten rooms, one torch, and a light meter that never stops dropping.'
+  },
+  {
+    id: 'proj-eg-orbit',
+    programId: 'explore-godot',
+    title: 'Low Orbit Delivery',
+    image: PLACEHOLDER_IMAGES[0],
+    authorName: 'Zara Nkemdi',
+    blurb: 'Physics-driven parcel drops. The parcels are not happy about it.'
+  },
+  {
+    id: 'proj-et-signal',
+    programId: 'explore-threadbare',
+    title: 'Signal Garden',
+    image: PLACEHOLDER_IMAGES[2],
+    authorName: 'Elena Rossi',
+    blurb: 'A one-hour build from the Game Feel workshop that grew legs.'
+  },
+  {
+    id: 'proj-et-relay',
+    programId: 'explore-threadbare',
+    title: 'Relay',
+    image: PLACEHOLDER_IMAGES[1],
+    authorName: 'Marcus Idowu',
+    blurb: 'Two players, one keyboard, no talking allowed.'
   }
 ]
 

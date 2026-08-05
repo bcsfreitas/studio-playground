@@ -162,7 +162,10 @@
     },
     "projects": {
       "seeAll": "See all {count} projects",
-      "empty": "No projects have been shared from this program yet."
+      "empty": "No projects have been shared from this program yet.",
+      "by": "by {author}",
+      "libraryTitle": "No projects yet | 1 finished project | {count} finished projects",
+      "emptyBody": "Finished projects from this program will appear here."
     },
     "sideInfo": {
       "sessions": "Sessions",

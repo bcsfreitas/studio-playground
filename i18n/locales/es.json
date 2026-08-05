@@ -162,7 +162,10 @@
     },
     "projects": {
       "seeAll": "Ver los {count} proyectos",
-      "empty": "Todavía no se han compartido proyectos de este programa."
+      "empty": "Todavía no se han compartido proyectos de este programa.",
+      "by": "por {author}",
+      "libraryTitle": "Todavía no hay proyectos | 1 proyecto terminado | {count} proyectos terminados",
+      "emptyBody": "Aquí aparecerán los proyectos terminados de este programa."
     },
     "sideInfo": {
       "sessions": "Sesiones",
