@@ -6,7 +6,7 @@
 // This is middleware rather than a `routeRules` redirect because Nitro only
 // accepts `**` as the final segment of a pattern — `/learn/**/classroom` never
 // matches, and silently serves a blank 200 instead of failing loudly.
-const LEGACY_TAB_PATH = /^\/learn\/([^/]+)\/(overview|about|community|classroom|projects|resources|program)\/?$/
+const LEGACY_TAB_PATH = /^\/learn\/([^/]+)\/(overview|community|classroom|projects|resources|program)\/?$/
 
 // `program` was the classroom's original URL, so it maps to the same tab.
 const TAB_FOR_SEGMENT: Record<string, string> = {

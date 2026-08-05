@@ -29,7 +29,6 @@ const isEnrolled = computed(() => phase.value !== 'interested')
 const TAB_COMPONENTS = {
   overview: defineAsyncComponent(() => import('~/components/ProgramTabOverview.vue')),
   home: defineAsyncComponent(() => import('~/components/ProgramTabHome.vue')),
-  about: defineAsyncComponent(() => import('~/components/ProgramTabAbout.vue')),
   community: defineAsyncComponent(() => import('~/components/ProgramTabCommunity.vue')),
   classroom: defineAsyncComponent(() => import('~/components/ProgramTabClassroom.vue')),
   projects: defineAsyncComponent(() => import('~/components/ProgramTabProjects.vue')),
@@ -48,7 +47,6 @@ const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
   isEnrolled.value
     ? [
         { id: 'home', label: t('program.tabs.home') },
-        { id: 'about', label: t('program.tabs.about') },
         { id: 'community', label: t('program.tabs.community') },
         { id: 'classroom', label: t('program.tabs.classroom') },
         { id: 'projects', label: t('program.tabs.projects') },
