@@ -23,7 +23,7 @@ Branch: `program-rework`. Slice 1 spec: `2026-08-05-program-page-shell-design.md
 
 ## Needs a decision, not just a fix
 
-**No route guard on learner-only tabs.** Gating is nav-level only: with phase `interested`, Classroom, Resources, and About are absent from the tab strip, but navigating directly to `/learn/<slug>/classroom` renders the full page, and the three-item nav then highlights nothing. There is no auth layer in the app at all, so this is a gap the phase work exposed rather than one it created. Add a real guard when session state lands.
+**~~No route guard on learner-only tabs.~~ Resolved.** When tabs moved from nested routes to `?tab=` page state, the requested tab became validated against the set the current phase can see, so `?tab=classroom` while not enrolled falls back to Overview instead of rendering a learner-only surface. This is still presentation-level gating, not authorization — there is no auth layer in the app — but the surface is no longer reachable by typing a URL.
 
 ## Source-document bugs (upstream, not code)
 

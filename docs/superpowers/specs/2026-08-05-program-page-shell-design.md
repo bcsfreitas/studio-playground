@@ -20,7 +20,7 @@ Overview tab content → enrolled Home dashboard → Community → Classroom rew
 | Missing data (dates, XP, testimonials) | Synthesize, and mark every synthesized field in code |
 | Learner phase switching | Extend the existing dev-only PREVIEW AS pill |
 | Enrollment card | Dropdown picker + detail summary + CTA |
-| Tab routing | Real nested routes |
+| Tab routing | ~~Real nested routes~~ — reversed after implementation; tabs are `?tab=` page state on one route |
 | Learner-only tabs when not enrolled | Hidden entirely |
 | Overview once enrolled | Becomes Home; overview content moves to a new About tab |
 
@@ -115,19 +115,25 @@ XP by step type: topic 25, survey 15, resource 10, task 50, deliverable 200 — 
 
 ## Route shell
 
+> **Superseded after implementation.** This section originally specified nested routes, one page file per tab. That shipped, and was then reversed: tabs are page state on a single route, not routes of their own. What follows is what the code actually does.
+
 ```
-app/pages/learn/[programId].vue           parent — topbar, program header, tabs, <NuxtPage>
-app/pages/learn/[programId]/index.vue     Overview (interested) / Home (enrolled)
-app/pages/learn/[programId]/about.vue     enrolled only
-app/pages/learn/[programId]/community.vue
-app/pages/learn/[programId]/classroom.vue the current program.vue, moved
-app/pages/learn/[programId]/projects.vue
-app/pages/learn/[programId]/resources.vue enrolled only
+app/pages/learn/[programId].vue        the whole page — topbar, header, tab nav, active tab
+app/components/ProgramTabOverview.vue  Overview (interested) / Home (enrolled)
+app/components/ProgramTabAbout.vue     enrolled only
+app/components/ProgramTabCommunity.vue
+app/components/ProgramTabClassroom.vue enrolled only
+app/components/ProgramTabProjects.vue
+app/components/ProgramTabResources.vue enrolled only
 ```
 
-The parent currently has no `<NuxtPage>`, which is why `[programId].vue` and `[programId]/program.vue` behave as unrelated routes today. Adding it makes the nesting real.
+The active tab lives in `?tab=`, and Overview carries no param so `/learn/:id` stays the canonical URL. Tabs navigate through the router, so the back button and shareable links still work, but no tab is a route.
 
-`/learn/:id/program` redirects to `/learn/:id/classroom` so existing links do not 404.
+Each tab is a `defineAsyncComponent`, so its chunk loads the first time that tab is opened. There is deliberately no `<KeepAlive>`: a tab remounts per visit, matching what the nested routes did, so the switch changed the URL scheme and nothing else.
+
+`?tab=` is validated against the tabs the current phase can see, so `?tab=classroom` while not enrolled falls back to Overview. The nested-route version had no such guard.
+
+`app/middleware/legacy-program-tab.global.ts` 301s the old `/learn/:id/{classroom,program,community,…}` URLs to the matching `?tab=`. It is middleware rather than a `routeRules` redirect because Nitro only accepts `**` as a pattern's final segment — `/learn/**/classroom` never matches and silently serves a blank 200.
 
 ### Tab visibility
 
@@ -180,7 +186,7 @@ New key groups: `program.tabs.*` (tab labels), `program.enroll.*` (picker, seats
 
 ## Verification
 
-1. `npm run dev`, then confirm each route returns 200 and renders: `/learn/core-threadbare`, `/learn/core-threadbare/community`, `/learn/core-threadbare/classroom`, `/learn/core-threadbare/projects`, `/learn/core-threadbare/resources`, `/learn/core-threadbare/about`.
+1. `npm run dev`, then confirm each tab returns 200 and renders: `/learn/core-threadbare`, and the same URL with `?tab=` set to `community`, `classroom`, `projects`, `resources`, and `about`.
 2. `/learn/core-threadbare/program` redirects to `/learn/core-threadbare/classroom`.
 3. Cycle all four phases on the preview pill; confirm the tab list changes between interested and enrolled, and that the first tab's heading switches Overview → Home.
 4. Exercise all three enrollment-card cases against real programs — many instances, one instance, zero instances — plus a private instance showing the access-code field, and Explore: Threadbare showing workshop dates rather than a range.

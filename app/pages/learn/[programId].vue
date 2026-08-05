@@ -24,33 +24,62 @@ provideProgramPhase(phase)
 
 const isEnrolled = computed(() => phase.value !== 'interested')
 
-// Matching on the path rather than the generated route name: the name of the
-// index child depends on Nuxt's file-router naming, and a rename of any tab
-// file would silently flip the hero off.
-const isOverviewRoute = computed(() => route.path.replace(/\/$/, '') === `/learn/${programId.value}`)
+// Each tab's component is loaded the first time that tab is opened, so a
+// visitor who never leaves the Overview never downloads the classroom.
+const TAB_COMPONENTS = {
+  overview: defineAsyncComponent(() => import('~/components/ProgramTabOverview.vue')),
+  about: defineAsyncComponent(() => import('~/components/ProgramTabAbout.vue')),
+  community: defineAsyncComponent(() => import('~/components/ProgramTabCommunity.vue')),
+  classroom: defineAsyncComponent(() => import('~/components/ProgramTabClassroom.vue')),
+  projects: defineAsyncComponent(() => import('~/components/ProgramTabProjects.vue')),
+  resources: defineAsyncComponent(() => import('~/components/ProgramTabResources.vue'))
+} as const
 
-const tabs = computed<NavigationMenuItem[]>(() => {
-  const base = `/learn/${programId.value}`
+type TabId = keyof typeof TAB_COMPONENTS
 
-  // Learner-only tabs are absent from the nav entirely for people who haven't
-  // enrolled, not disabled — a locked tab you cannot open is noise.
-  if (!isEnrolled.value) {
-    return [
-      { label: t('program.tabs.overview'), to: base, exact: true },
-      { label: t('program.tabs.community'), to: `${base}/community` },
-      { label: t('program.tabs.projects'), to: `${base}/projects` }
-    ]
-  }
+// Learner-only tabs are absent for people who haven't enrolled, not disabled —
+// a locked tab you cannot open is noise. The first entry is the default, and
+// is also the fallback for a `?tab=` value this phase isn't allowed to open.
+const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
+  isEnrolled.value
+    ? [
+        { id: 'overview', label: t('program.tabs.home') },
+        { id: 'about', label: t('program.tabs.about') },
+        { id: 'community', label: t('program.tabs.community') },
+        { id: 'classroom', label: t('program.tabs.classroom') },
+        { id: 'projects', label: t('program.tabs.projects') },
+        { id: 'resources', label: t('program.tabs.resources') }
+      ]
+    : [
+        { id: 'overview', label: t('program.tabs.overview') },
+        { id: 'community', label: t('program.tabs.community') },
+        { id: 'projects', label: t('program.tabs.projects') }
+      ]
+)
 
-  return [
-    { label: t('program.tabs.home'), to: base, exact: true },
-    { label: t('program.tabs.about'), to: `${base}/about` },
-    { label: t('program.tabs.community'), to: `${base}/community` },
-    { label: t('program.tabs.classroom'), to: `${base}/classroom` },
-    { label: t('program.tabs.projects'), to: `${base}/projects` },
-    { label: t('program.tabs.resources'), to: `${base}/resources` }
-  ]
+// Validating against the visible set rather than trusting the query closes the
+// hole the old nested routes had: `?tab=classroom` while not enrolled falls
+// back to the first tab instead of rendering a learner-only surface.
+const activeTab = computed<TabId>(() => {
+  const requested = route.query.tab as string | undefined
+  const match = visibleTabs.value.find(tab => tab.id === requested)
+  return match?.id ?? visibleTabs.value[0]!.id
 })
+
+const isOverviewTab = computed(() => activeTab.value === 'overview')
+
+// Overview carries no `?tab` so the canonical program URL stays clean.
+const tabs = computed<NavigationMenuItem[]>(() =>
+  visibleTabs.value.map(tab => ({
+    label: tab.label,
+    to: tab.id === 'overview'
+      ? { path: `/learn/${programId.value}` }
+      : { path: `/learn/${programId.value}`, query: { tab: tab.id } },
+    // NuxtLink's own active matching ignores the query string, so every tab
+    // would highlight at once — drive it off the resolved tab instead.
+    active: activeTab.value === tab.id
+  }))
+)
 </script>
 
 <template>
@@ -68,7 +97,7 @@ const tabs = computed<NavigationMenuItem[]>(() => {
 
         <template v-if="template">
           <ProgramHero
-            v-if="isOverviewRoute"
+            v-if="isOverviewTab"
             :template="template"
             :institution="instances[0]?.deliveringInstitution"
           />
@@ -86,9 +115,10 @@ const tabs = computed<NavigationMenuItem[]>(() => {
             />
           </div>
 
-          <!-- UNavigationMenu, not UTabs: UTabs switches content client-side and
-               its items take no `to`, so it can neither deep-link nor reflect the
-               active route. These tabs are real URLs. -->
+          <!-- UNavigationMenu, not UTabs: UTabs' items take no `to`, so its
+               triggers are buttons rather than links. These navigate via the
+               router, which keeps the back button and shareable links working
+               even though the content itself switches client-side. -->
           <UNavigationMenu
             :items="tabs"
             variant="link"
@@ -113,9 +143,13 @@ const tabs = computed<NavigationMenuItem[]>(() => {
       <!-- Outside the UContainer: each tab owns its own width and rail (the
            classroom is two-column, community is full-width), so the shell must
            not impose one. -->
-      <!-- Keyed on the program so a tab page can resolve its data once at
-           setup instead of tracking the route param (see classroom.vue). -->
-      <NuxtPage v-if="template" :page-key="tabRoute => tabRoute.params.programId as string" />
+      <!-- Keyed on the program so a tab can resolve its data once at setup
+           instead of tracking the route param (see ProgramTabClassroom.vue). -->
+      <component
+        :is="TAB_COMPONENTS[activeTab]"
+        v-if="template"
+        :key="programId"
+      />
     </template>
   </UDashboardPanel>
 
