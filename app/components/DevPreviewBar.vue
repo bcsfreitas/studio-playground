@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import * as locales from '@nuxt/ui/locale'
 import type { LearnerPhase } from '~/composables/useProgramMockData'
 
 defineProps<{
@@ -10,20 +9,19 @@ const emit = defineEmits<{
   'update:modelValue': [value: LearnerPhase]
 }>()
 
-const { locale, setLocale } = useI18n()
-
+// `onboarded` is a placeholder: nothing branches on it yet, so it currently
+// resolves the same as `enrolled`.
 const phases: { id: LearnerPhase, label: string }[] = [
   { id: 'interested', label: 'Interested' },
   { id: 'enrolled', label: 'Enrolled' },
-  { id: 'completed', label: 'Completed' },
-  { id: 'game-owner', label: 'Game Owner' }
+  { id: 'onboarded', label: 'Onboarded' }
 ]
 </script>
 
 <template>
-  <!-- Dev-only preview state + locale switcher (not part of the product's real UI) —
-       see DESIGN.md's "Don't" list: this stays scaffolding, not a pattern to replicate,
-       until real session state exists. -->
+  <!-- Dev-only preview state (not part of the product's real UI) — see
+       DESIGN.md's "Don't" list: this stays scaffolding, not a pattern to
+       replicate, until real session state exists. -->
   <div class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-2">
     <div
       class="flex items-center gap-1"
@@ -40,11 +38,5 @@ const phases: { id: LearnerPhase, label: string }[] = [
         {{ p.label }}
       </div>
     </div>
-    <ULocaleSelect
-      :model-value="locale"
-      :locales="Object.values(locales)"
-      size="sm"
-      @update:model-value="setLocale($event)"
-    />
   </div>
 </template>

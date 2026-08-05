@@ -18,10 +18,6 @@ export const Enrolled: Story = {
   args: { modelValue: 'enrolled' }
 }
 
-export const Completed: Story = {
-  args: { modelValue: 'completed' }
-}
-
-export const GameOwner: Story = {
-  args: { modelValue: 'game-owner' }
+export const Onboarded: Story = {
+  args: { modelValue: 'onboarded' }
 }

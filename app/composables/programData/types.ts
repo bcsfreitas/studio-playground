@@ -2,7 +2,7 @@ import type { PreviewState } from '~/composables/useHomeMockData'
 
 // Learner-facing lifecycle. Drives which tabs render and what the first tab
 // shows — see docs/superpowers/specs/2026-08-05-program-page-shell-design.md.
-export type LearnerPhase = 'interested' | 'enrolled' | 'completed' | 'game-owner'
+export type LearnerPhase = 'interested' | 'enrolled' | 'onboarded'
 
 // Explore: Threadbare is explicitly not a cohort — its curriculum.md:5 says to
 // present the 13 workshops as individually joinable sessions with their own
