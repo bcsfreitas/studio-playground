@@ -4,9 +4,15 @@ import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 import { useProgramProgress } from '~/composables/useProgramProgress'
 import { useProgramTabs } from '~/composables/useProgramTabs'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   template: ProgramTemplate
-}>()
+  // The classroom already shows which module and lesson you're on, and the
+  // lesson is open right beside this card — so there it renders as progress
+  // only, without the "where you are" block or the jump-to-lesson button.
+  showCurrentLesson?: boolean
+}>(), {
+  showCurrentLesson: true
+})
 
 const { t } = useI18n()
 
@@ -78,7 +84,7 @@ function goToCurrentLesson() {
       />
     </div>
 
-    <template v-if="currentItem">
+    <template v-if="currentItem && showCurrentLesson">
       <USeparator class="mt-4" />
 
       <div class="mt-4">
@@ -111,6 +117,7 @@ function goToCurrentLesson() {
     <template v-else-if="isComplete">
       <p class="text-sm text-muted mt-4">{{ t('program.home.completedBody') }}</p>
       <UButton
+        v-if="showCurrentLesson"
         :label="t('program.home.reviewClassroom')"
         icon="lucide:book-open"
         color="neutral"

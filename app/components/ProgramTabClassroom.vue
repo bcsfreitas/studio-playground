@@ -255,7 +255,7 @@ function isHttpLink(link: string) {
       </div>
 
       <div class="lg:sticky lg:top-6 lg:self-start flex flex-col gap-8">
-        <ProgramProgressCard :template="template" />
+        <ProgramProgressCard :template="template" :show-current-lesson="false" />
         <ProgramCourseMetrics :template="template" />
         <ProgramCourseBadges :template="template" />
       </div>
