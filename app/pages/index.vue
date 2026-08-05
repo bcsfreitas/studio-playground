@@ -81,10 +81,10 @@ const previewStates: { id: PreviewState, label: string }[] = [
         >
           <div class="flex flex-col items-start gap-3.5">
             <h1 class="font-heading font-bold text-5xl text-white" >
-              Press play. Then press make.
+              Come play. Then make your own.
             </h1>
             <p class="max-w-[440px] text-md text-white/85">
-              Every game in here was made by someone learning to make games. Play them, poke at them, break them a little — then open the toolbox and build the next one. No signup needed to start.
+              Every game here was made by a kid. Play as many as you like, then build one yourself. We'll show you every step. No account needed to start.
             </p>
           </div>
         </div>
