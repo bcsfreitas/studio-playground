@@ -1,5 +1,6 @@
 import type { ProgramTemplate } from '~/composables/useProgramMockData'
 import { flattenCurriculum } from '~/composables/useProgramCurriculum'
+import { seededItemIds, useProgramEnrollment } from '~/composables/useProgramEnrollment'
 
 export interface DeliverableSubmission {
   description: string
@@ -50,8 +51,18 @@ export function useProgramProgress(template: ProgramTemplate) {
     localStorage.setItem(storageKey(template.id), JSON.stringify(payload))
   }
 
+  // Where the learner already was when the preview state picked them up. It is
+  // derived, never stored: switching states re-derives it, and a reset drops
+  // back to whatever the new state implies rather than to an empty course.
+  const { enrollment } = useProgramEnrollment(template.id)
+  const seeded = computed(() => new Set(seededItemIds(template, enrollment.value?.progress ?? 0)))
+
+  // Ticked lessons layer on top of the seed, so both count as done while only
+  // the ticked ones are ever written to storage.
+  const effectiveCompleted = computed(() => new Set([...seeded.value, ...completedItemIds.value]))
+
   function isCompleted(itemId: string) {
-    return completedItemIds.value.has(itemId)
+    return effectiveCompleted.value.has(itemId)
   }
 
   function markComplete(itemId: string) {
@@ -75,10 +86,10 @@ export function useProgramProgress(template: ProgramTemplate) {
 
   const items = flattenCurriculum(template)
 
-  const completedCount = computed(() => items.filter(item => completedItemIds.value.has(item.id)).length)
+  const completedCount = computed(() => items.filter(item => effectiveCompleted.value.has(item.id)).length)
   const totalXpAvailable = computed(() => items.reduce((sum, item) => sum + item.xp, 0))
   const totalXpEarned = computed(() =>
-    items.filter(item => completedItemIds.value.has(item.id)).reduce((sum, item) => sum + item.xp, 0)
+    items.filter(item => effectiveCompleted.value.has(item.id)).reduce((sum, item) => sum + item.xp, 0)
   )
   const progressPercent = computed(() =>
     items.length === 0 ? 0 : Math.round((completedCount.value / items.length) * 100)
@@ -91,7 +102,7 @@ export function useProgramProgress(template: ProgramTemplate) {
     const moduleIndex = template.curriculum.findIndex(mod => mod.id === moduleId)
     if (moduleIndex <= 0) return false
     const previousModule = template.curriculum[moduleIndex - 1]!
-    return !previousModule.items.every(item => completedItemIds.value.has(item.id))
+    return !previousModule.items.every(item => effectiveCompleted.value.has(item.id))
   }
 
   return {

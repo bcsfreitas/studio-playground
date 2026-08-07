@@ -5,6 +5,12 @@ defineProps<{
   tool: ToolCardData
 }>()
 
+// The card stays presentational and hands the tool back up — the drawer is a
+// single instance owned by the page, not one per card.
+const emit = defineEmits<{
+  launch: [tool: ToolCardData]
+}>()
+
 // Typed lookup, not an inline ternary — see DESIGN.md's STATUS_COLOR convention (TaskTile.vue).
 const BADGE_COLOR: Record<ToolCardData['badge'], 'success' | 'warning'> = {
   Live: 'success',
@@ -42,14 +48,22 @@ const BADGE_COLOR: Record<ToolCardData['badge'], 'success' | 'warning'> = {
     <p class="text-sm text-muted flex-1">{{ tool.blurb }}</p>
 
     <template #footer>
+      <!-- One button, not a set: with no `to`, UButton already falls through to
+           a real `<button>`. Native tools navigate in-app, embeddable ones open
+           the drawer, everything else keeps its outward link. The label stays
+           the same throughout — all three launch the tool, and only the icon
+           marks which of them leaves the platform. -->
       <UButton
         block
         variant="soft"
         color="neutral"
-        :icon="tool.isDownload ? 'lucide:download' : 'lucide:maximize'"
-        :disabled="!tool.url"
-        :to="tool.url"
-        target="_blank"
+        :icon="tool.isDownload
+          ? 'lucide:download'
+          : tool.route ? 'lucide:arrow-right' : tool.embedUrl ? 'lucide:maximize' : 'lucide:external-link'"
+        :disabled="!tool.route && !tool.embedUrl && !tool.url"
+        :to="tool.route ?? (tool.embedUrl ? undefined : tool.url)"
+        :target="tool.route || tool.embedUrl ? undefined : '_blank'"
+        @click="!tool.route && tool.embedUrl && emit('launch', tool)"
       >
         {{ tool.isDownload ? 'Download' : 'Launch tool' }}
       </UButton>

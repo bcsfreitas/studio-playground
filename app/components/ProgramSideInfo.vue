@@ -16,9 +16,6 @@ const teachers = computed(() => {
   const fromInstances = [...new Set(props.instances.flatMap(instance => instance.mentors))]
   return fromInstances.length ? fromInstances : [props.template.facilitator]
 })
-
-const sessionCount = computed(() => props.instances[0]?.sessions.length ?? 0)
-const sessionMinutes = computed(() => props.instances[0]?.sessions[0]?.durationMinutes ?? 0)
 </script>
 
 <template>
@@ -28,18 +25,6 @@ const sessionMinutes = computed(() => props.instances[0]?.sessions[0]?.durationM
        content lines up with the card above it at every breakpoint rather than
        hanging out past its edge. -->
   <div class="flex flex-col gap-6 px-4 sm:px-6">
-    <section>
-      <h3 class="text-xs font-semibold text-dimmed uppercase tracking-wide">
-        {{ t('program.sideInfo.sessions') }}
-      </h3>
-      <p class="text-sm text-default mt-1.5">{{ template.durationLabel }}</p>
-      <p v-if="sessionCount" class="text-sm text-muted">
-        {{ t('program.sideInfo.sessionCount', { count: sessionCount, minutes: sessionMinutes }) }}
-      </p>
-    </section>
-
-    <USeparator />
-
     <section>
       <h3 class="text-xs font-semibold text-dimmed uppercase tracking-wide">
         {{ t('program.sideInfo.teachers', teachers.length) }}

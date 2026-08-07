@@ -1,61 +1,65 @@
-import type { EnrollmentRecord, LearnerPhase } from './types'
+import type { PreviewState } from '~/composables/usePreviewState'
+import type { EnrollmentRecord } from './types'
 
-// One fixture per LearnerPhase, each pointing at a real instance/cohort from
-// instances.ts, so the enrollment card and the tabbed shell have something
-// real to key off while previewing a phase. These are independent preview
-// scenarios, not one learner's history — the cohort a record points to won't
-// always line up with "today" the way instances.ts's own schedule data does.
-// Educator Training has no instances (see instances.ts) so it can't appear
-// here; every other program does.
-export const enrollmentsByPhase: Record<LearnerPhase, EnrollmentRecord[]> = {
-  interested: [
-    {
-      programId: 'explore-threadbare',
-      instanceId: 'instance-explore-threadbare-fall2026',
-      cohortId: 'cohort-explore-threadbare-loom-weavers',
-      phase: 'interested',
-      progress: 0,
-      enrolledAt: '2026-08-04'
-    }
-  ],
-  // Order matters: the home page's continue-learning card resumes the first
-  // record, so the flagship program leads.
-  enrolled: [
+// Keyed by the app-wide preview state, so the program shell answers to the same
+// switch every other page does. Which programs a state is enrolled in is what
+// decides whether the classroom or the pitch renders, and each record's
+// `progress` is what seeds how far in (see useProgramEnrollment.ts).
+//
+// The instances/cohorts pointed at are real ones from instances.ts, but these
+// are independent preview scenarios rather than one learner's history — the
+// cohort a record names won't always line up with "today" the way instances.ts's
+// own schedule data does. Educator Training has no instances (see instances.ts)
+// so it can't appear here; every other program does.
+export const enrollmentsByPhase: Record<PreviewState, EnrollmentRecord[]> = {
+  guest: [],
+  // A brand-new account: signed in, joined nothing. Same empty catalog and
+  // pitch-everywhere program pages a guest sees, but with an account behind it.
+  fresh: [],
+  // Joined one program and hasn't started it: the classroom opens on the first
+  // lesson, and every other program still shows its pitch. Matches the catalog,
+  // where Core: Threadbare is the one program a new learner is in.
+  new: [
     {
       programId: 'core-threadbare',
       instanceId: 'instance-core-threadbare-utp',
       cohortId: 'cohort-core-threadbare-night-owls',
-      phase: 'enrolled',
+      phase: 'new',
+      progress: 0,
+      enrolledAt: '2026-08-06'
+    }
+  ],
+  // Order matters: the home page's continue-learning card resumes the first
+  // record, so the flagship program leads.
+  onboarded: [
+    {
+      programId: 'core-threadbare',
+      instanceId: 'instance-core-threadbare-utp',
+      cohortId: 'cohort-core-threadbare-night-owls',
+      phase: 'onboarded',
       progress: 35,
       enrolledAt: '2026-07-02'
     },
-    // A second enrolled program, so this phase isn't a single-program fixture.
-    // Explore: Godot is the useful one to double up on: it's the only program
-    // with three instances, so it's what would exercise "already enrolled" in a
-    // multi-session enrollment card — though that card lives on the Overview
-    // tab, which only non-enrolled visitors see, so the branch is unreachable
-    // until an enrolled surface renders it.
+    // Explore: Godot is the only program with three instances, so it's what
+    // would exercise "already enrolled" in a multi-session enrollment card —
+    // though that card lives on the Overview tab, which only non-enrolled
+    // visitors see, so the branch is unreachable until an enrolled surface
+    // renders it.
     {
       programId: 'explore-godot',
       instanceId: 'instance-explore-godot-2026-08-am',
       cohortId: 'cohort-explore-godot-dawn-patrol',
-      phase: 'enrolled',
+      phase: 'onboarded',
       progress: 40,
       enrolledAt: '2026-07-15'
-    }
-  ],
-  // Onboarded is a placeholder phase: nothing branches on it yet, so it
-  // resolves exactly like `enrolled`. It points at the one instance with a
-  // real, already-finished date range (instances.ts's May 12 – June 11, 2026
-  // cohort) so it is at least distinguishable while previewing.
-  onboarded: [
+    },
     {
-      programId: 'explore-godot',
-      instanceId: 'instance-explore-godot-2026-05',
-      cohortId: 'cohort-explore-godot-pioneers',
+      programId: 'explore-threadbare',
+      instanceId: 'instance-explore-threadbare-self-paced',
+      cohortId: 'cohort-explore-threadbare-self-paced',
       phase: 'onboarded',
-      progress: 100,
-      enrolledAt: '2026-05-04'
+      progress: 15,
+      enrolledAt: '2026-08-04'
     }
   ]
 }

@@ -46,7 +46,7 @@ export const NoInstances: Story = {
   }
 }
 
-export const WorkshopSeries: Story = {
+export const SelfPacedOnly: Story = {
   args: {
     template: templateFor('explore-threadbare'),
     instances: instancesFor('explore-threadbare'),

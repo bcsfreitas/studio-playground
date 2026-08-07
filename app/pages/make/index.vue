@@ -1,25 +1,35 @@
 <script setup lang="ts">
-import { webTools, tailorApps, externalTools } from '~/composables/useMakeMockData'
-import { userName, streakDays, xpLabel, notificationCount, type PreviewState } from '~/composables/useHomeMockData'
+import { webTools, tailorApps, externalTools, type ToolCardData } from '~/composables/useMakeMockData'
+import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
+import { usePreviewState } from '~/composables/usePreviewState'
 
 definePageMeta({ layout: 'dashboard' })
 
-const state = ref<PreviewState>('active')
-const isActive = computed(() => state.value === 'active')
+// One drawer for the whole page rather than one per card — the cards only report
+// which tool was launched. Only tools carrying an `embedUrl` ever emit.
+const activeTool = ref<ToolCardData | null>(null)
+const toolDrawerOpen = ref(false)
 
-const previewStates: { id: PreviewState, label: string }[] = [
-  { id: 'new', label: 'New learner' },
-  { id: 'active', label: 'Active learner' },
-  { id: 'guest', label: 'Guest' }
-]
+function launchTool(tool: ToolCardData) {
+  activeTool.value = tool
+  toolDrawerOpen.value = true
+}
+
+const { isLoggedIn, isOnboarded } = usePreviewState()
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
 </script>
 
 <template>
-  <UDashboardPanel :ui="{ body: 'p-0 gap-0 overflow-x-auto' }">
+  <!-- `sm:p-0`/`sm:gap-0` as well as the bare ones — see index.vue for why. -->
+  <UDashboardPanel :ui="{ body: 'p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
     <template #body>
-      <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" :notification-count="notificationCount" />
+      <!-- Signed in, not just active: a new learner gets the same bar, with
+           counters that start at zero. Guests get the same band too, carrying
+           the sign-in pair instead of an account. -->
+      <AppTopbar v-if="isLoggedIn" v-bind="topbarStats" :user-name="userName" :user-avatar="userAvatar" />
+      <AppTopbar v-else guest />
 
-      <UContainer>
+      <UContainer class="mt-10">
 
         <h1 class="text-6xl font-heading font-semibold text-highlighted text-pretty">Maker Tools</h1>
         <h2 class="text-lg text-dimmed mt-2 max-w-2xl">
@@ -28,7 +38,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
 
         <section class="mt-10">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ToolCard v-for="tool in webTools" :key="tool.id" :tool="tool" />
+            <ToolCard v-for="tool in webTools" :key="tool.id" :tool="tool" @launch="launchTool" />
           </div>
         </section>
 
@@ -40,7 +50,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
             subtitle="A suite of creation apps for the Threadbare world — make assets and drop them straight into a quest."
           />
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            <ToolCard v-for="tool in tailorApps" :key="tool.id" :tool="tool" />
+            <ToolCard v-for="tool in tailorApps" :key="tool.id" :tool="tool" @launch="launchTool" />
           </div>
         </section>
 
@@ -74,20 +84,10 @@ const previewStates: { id: PreviewState, label: string }[] = [
     </template>
   </UDashboardPanel>
 
-  <!-- Dev-only preview state switcher (not part of the product's real UI) -->
-  <div
-    class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-1"
-    style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
-  >
-    <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>
-    <div
-      v-for="p in previewStates"
-      :key="p.id"
-      class="px-3 py-1.5 rounded-full text-[12.5px] font-semibold cursor-pointer select-none transition-all duration-150"
-      :class="state === p.id ? 'bg-white text-slate-900' : 'text-slate-300'"
-      @click="state = p.id"
-    >
-      {{ p.label }}
-    </div>
-  </div>
+  <!-- A page-level overlay, so it sits beside the panel rather than inside the
+       content container — it only renders correctly nested because the drawer
+       portals itself to <body>. -->
+  <ToolDrawer v-model:open="toolDrawerOpen" :tool="activeTool" />
+
+  <DevPreviewBar />
 </template>

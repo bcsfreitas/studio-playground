@@ -2,35 +2,38 @@
 import {
   feedPosts,
   programRecs,
-  continueLearning,
+  continueLearningFor,
   continueLearningTemplate,
   openTasks,
   bounties,
   upcomingEvents,
-  gettingStartedItems,
+  gettingStartedItemsFor,
+  pathChoices,
   weekCellsFor,
+  topbarStatsFor,
   userName,
-  streakDays,
-  xpLabel,
-  notificationCount,
-  type PreviewState
+  userAvatar,
+  streakDays
 } from '~/composables/useHomeMockData'
+import { usePreviewState } from '~/composables/usePreviewState'
 import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 import { useProgramProgress } from '~/composables/useProgramProgress'
 
 definePageMeta({ layout: 'dashboard' })
 
-const state = ref<PreviewState>('active')
+const { state, isGuest, isStarting, isOnboarded, isLoggedIn } = usePreviewState()
+const showRecs = computed(() => isStarting.value || isGuest.value)
+const gettingStartedItems = computed(() => gettingStartedItemsFor(state.value))
 
-const isActive = computed(() => state.value === 'active')
-const isNew = computed(() => state.value === 'new')
-const isGuest = computed(() => state.value === 'guest')
-const isLoggedIn = computed(() => !isGuest.value)
-const showRecs = computed(() => isNew.value || isGuest.value)
+// A new learner has joined one program without starting it, so they get the
+// same resume card an onboarded learner does — just at 0%, pointing at lesson
+// one. Guests aren't enrolled in anything, so they get nothing.
+const continueLearning = computed(() => continueLearningFor(state.value))
 
-const streakTitle = computed(() => (isActive.value ? `${streakDays}-day streak` : 'Start your streak'))
-const streakMeta = computed(() => (isActive.value ? 'Best: 14 days' : 'Best: 0 days'))
-const weekCells = computed(() => weekCellsFor(isActive.value))
+const streakTitle = computed(() => (isOnboarded.value ? `${streakDays}-day streak` : 'Start your streak'))
+const streakMeta = computed(() => (isOnboarded.value ? 'Best: 14 days' : 'Best: 0 days'))
+const weekCells = computed(() => weekCellsFor(isOnboarded.value))
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
 
 const tab = ref<'all' | 'announce' | 'game' | 'program'>('all')
 const tabs: { id: typeof tab.value, label: string }[] = [
@@ -54,29 +57,34 @@ const resumeItem = computed(() =>
 // `?item=` is what tells the program shell to open the classroom on that
 // lesson — tabs themselves carry no URL.
 const resumeTo = computed(() => {
-  if (!continueLearning) return '/learn'
-  const base = `/learn/${continueLearning.id}`
+  if (!continueLearning.value) return '/learn'
+  const base = `/learn/${continueLearning.value.id}`
   return resumeItem.value ? `${base}?item=${resumeItem.value.id}` : base
 })
 
-const previewStates: { id: PreviewState, label: string }[] = [
-  { id: 'new', label: 'New learner' },
-  { id: 'active', label: 'Active learner' },
-  { id: 'guest', label: 'Guest' }
-]
 </script>
 
 <template>
-  <UDashboardPanel :ui="{ root: 'bg-muted', body: 'p-0 gap-0 overflow-x-auto' }">
+  <!-- The body carries no padding or gap of its own: the topbar is a full-bleed
+       band and everything below it sits in a UContainer, which brings its own
+       responsive side padding. The `sm:` halves are needed because the theme's
+       defaults are `p-4 sm:p-6` / `gap-4 sm:gap-6`, and tailwind-merge only
+       treats same-variant classes as conflicting — a bare `p-0` leaves
+       `sm:p-6` live, which insets the topbar from `sm` up. -->
+  <UDashboardPanel :ui="{ root: 'bg-muted', body: 'p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
     <template #body>
-      <AppTopbar v-if="isActive" :xp-label="xpLabel" :streak-days="streakDays" :user-name="userName" :notification-count="notificationCount" />
+      <!-- Signed in, not just active: a new learner gets the same bar, with
+           counters that start at zero. Guests get the same band too, carrying
+           the sign-in pair instead of an account. -->
+      <AppTopbar v-if="isLoggedIn" v-bind="topbarStats" :user-name="userName" :user-avatar="userAvatar" />
+      <AppTopbar v-else guest />
 
       <UContainer>
 
         <!-- Top CTA banner -->
         <div
           v-if="isGuest"
-          class="flex flex-row items-center justify-between gap-3.5 rounded-2xl bg-cover bg-center h-[360px] p-12"
+          class="mt-10 flex flex-row items-center justify-between gap-3.5 rounded-2xl bg-cover bg-center h-[360px] p-12"
           style="background-image: url('/images/img/hero-banner.png')"
         >
           <div class="flex flex-col items-start gap-3.5">
@@ -86,8 +94,19 @@ const previewStates: { id: PreviewState, label: string }[] = [
             <p class="max-w-[440px] text-md text-white/85">
               Every game here was made by a kid. Play as many as you like, then build one yourself. We'll show you every step. No account needed to start.
             </p>
+            <!-- `color="neutral"` rather than primary: the banner art is already
+                 the brand orange, so an orange button on top of it disappears. -->
+            <UButton to="/auth/signup" label="Get started" color="neutral" size="lg" class="mt-1" />
           </div>
         </div>
+
+        <!-- Sits outside the two-column grid below, at the same level as the
+             hero, so the row spans the full container instead of being boxed
+             into the main column. -->
+        <section v-if="isGuest" class="mt-20">
+          <SectionTitle title="What brings you here?" />
+          <PathChoiceCards :choices="pathChoices" class="mt-6" />
+        </section>
 
         <div class="grid items-start gap-12" style="grid-template-columns: minmax(0,1fr) 324px; margin-top: 80px">
           <!-- ============ MAIN COLUMN ============ -->
@@ -95,7 +114,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
 
             <!-- Learning -->
             <section class="w-full self-auto">
-              <div v-if="isActive">
+              <div v-if="continueLearning">
                 <SectionTitle title="Continue learning">
                   <template #trailing>
                     <UButton color="secondary" variant="ghost" size="xs">
@@ -105,7 +124,6 @@ const previewStates: { id: PreviewState, label: string }[] = [
                 </SectionTitle>
 
                 <UPageCard
-                  v-if="continueLearning"
                   orientation="horizontal"
                   reverse
                   class="transition-shadow duration-250 hover:shadow-2xl"
@@ -167,7 +185,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
                   </UButton>
                 </template>
               </SectionTitle>
-              <div v-if="isActive" class="grid grid-cols-2 gap-6">
+              <div v-if="isOnboarded" class="grid grid-cols-2 gap-6">
                 <TaskTile
                   v-for="t in openTasks"
                   :key="t.name"
@@ -180,7 +198,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
                 />
               </div>
               <div
-                v-if="isNew"
+                v-if="isStarting"
                 class="border-[1.5px] border-dashed border-slate-300 flex flex-col items-center gap-2 text-center rounded-2xl"
                 style="padding: 32px 24px"
               >
@@ -214,6 +232,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
                 <PostCard
                   v-for="p in filteredPosts"
                   :key="p.id"
+                  :post-id="p.id"
                   :author="p.author"
                   :avatar="p.avatar"
                   :time="p.time"
@@ -231,7 +250,7 @@ const previewStates: { id: PreviewState, label: string }[] = [
 
           <!-- ============ RIGHT RAIL ============ -->
           <div class="flex flex-col gap-6 min-w-0 w-full">
-            <GettingStartedCard v-if="isNew" :items="gettingStartedItems" />
+            <GettingStartedCard v-if="isStarting" :items="gettingStartedItems" />
             <StreakCard v-if="isLoggedIn" :title="streakTitle" :meta="streakMeta" :days="weekCells" />
             <UpcomingEventsCard :events="upcomingEvents" />
             <BountiesCard :bounties="bounties" />
@@ -241,20 +260,5 @@ const previewStates: { id: PreviewState, label: string }[] = [
     </template>
   </UDashboardPanel>
 
-  <!-- Dev-only preview state switcher (not part of the product's real UI) -->
-  <div
-    class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-1"
-    style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
-  >
-    <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>
-    <div
-      v-for="p in previewStates"
-      :key="p.id"
-      class="px-3 py-1.5 rounded-full text-[12.5px] font-semibold cursor-pointer select-none transition-all duration-150"
-      :class="state === p.id ? 'bg-white text-slate-900' : 'text-slate-300'"
-      @click="state = p.id"
-    >
-      {{ p.label }}
-    </div>
-  </div>
+  <DevPreviewBar />
 </template>

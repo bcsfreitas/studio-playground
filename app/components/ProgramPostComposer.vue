@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { userName, userAvatar } from '~/composables/useHomeMockData'
+
 defineProps<{
   channelName: string
 }>()
@@ -19,7 +21,7 @@ function submit() {
 <template>
   <UPageCard variant="outline" class="rounded-2xl" :ui="{ wrapper: 'items-stretch w-full', body: 'w-full' }">
     <div class="flex items-start gap-2.5">
-      <UAvatar text="Y" size="2xl" />
+      <UAvatar :src="userAvatar" :alt="userName" :text="userName.charAt(0).toUpperCase()" size="2xl" />
       <UTextarea
         v-model="body"
         :rows="2"

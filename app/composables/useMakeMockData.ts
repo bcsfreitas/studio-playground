@@ -10,6 +10,17 @@ export interface ToolCardData {
   icon?: string
   url?: string
   isDownload?: boolean
+  // Present on tools confirmed to allow framing (no `X-Frame-Options`, no CSP
+  // `frame-ancestors`) — its presence is what makes a card open the in-platform
+  // drawer instead of a new tab. Kept separate from `url` because the two do
+  // diverge: the Swag Lab is listed as `http://` upstream, which an https page
+  // cannot frame at all, and a tool may later want a dedicated embed route with
+  // its own chrome stripped. Drop the field to send a tool back out to a tab.
+  embedUrl?: string
+  // An in-app route, for tools built natively on this stack rather than framed
+  // from somewhere else. Outranks both `embedUrl` and `url`: there is no reason
+  // to frame or leave the platform for a page the platform already renders.
+  route?: string
 }
 
 export interface ExternalTool {
@@ -61,7 +72,9 @@ export const tailorApps: ToolCardData[] = [
     blurb: 'Stitch together sprites and pixel art for your characters and props.',
     badge: 'Live',
     image: '/images/tools/pixel-stitch.jpeg',
-    url: 'https://threadbare-pixelstitch.lovable.app/'
+    // Rebuilt natively on this stack, so it opens as a page rather than as a
+    // frame of the original Lovable-hosted build.
+    route: '/make/pixel-stitch'
   },
   {
     id: 'patchworkshop',
@@ -70,7 +83,8 @@ export const tailorApps: ToolCardData[] = [
     blurb: 'Assemble pre-designed art assets, published as individual components, into unique game-ready structures and scenes.',
     badge: 'Live',
     image: '/images/tools/patchworkshop.jpeg',
-    url: 'https://threadbare-patchworkshop.lovable.app/'
+    url: 'https://threadbare-patchworkshop.lovable.app/',
+    embedUrl: 'https://threadbare-patchworkshop.lovable.app/'
   },
   {
     id: 'whispering-well',
@@ -79,7 +93,8 @@ export const tailorApps: ToolCardData[] = [
     blurb: 'Write branching dialogue and weave the stories characters tell.',
     badge: 'Live',
     image: '/images/tools/whispering-well.jpeg',
-    url: 'https://threadbare-whisperingwell.lovable.app/'
+    url: 'https://threadbare-whisperingwell.lovable.app/',
+    embedUrl: 'https://threadbare-whisperingwell.lovable.app/'
   },
   {
     id: 'melody-loom',
@@ -89,7 +104,8 @@ export const tailorApps: ToolCardData[] = [
     badge: 'Live',
     icon: 'lucide:music',
     logoBg: '#eab308',
-    url: 'https://threadbare-melodyloom.lovable.app'
+    url: 'https://threadbare-melodyloom.lovable.app',
+    embedUrl: 'https://threadbare-melodyloom.lovable.app'
   },
   {
     id: 'patches',
@@ -99,7 +115,8 @@ export const tailorApps: ToolCardData[] = [
     badge: 'Live',
     icon: 'lucide:user-round',
     logoBg: '#22c55e',
-    url: 'https://threadbare-patches.lovable.app'
+    url: 'https://threadbare-patches.lovable.app',
+    embedUrl: 'https://threadbare-patches.lovable.app'
   },
   {
     id: 'builders-bench',
@@ -109,7 +126,8 @@ export const tailorApps: ToolCardData[] = [
     badge: 'Live',
     icon: 'lucide:hammer',
     logoBg: '#6556f0',
-    url: 'https://threadbear-builders-bench.lovable.app'
+    url: 'https://threadbear-builders-bench.lovable.app',
+    embedUrl: 'https://threadbear-builders-bench.lovable.app'
   },
   {
     id: 'swag-lab',
@@ -119,7 +137,10 @@ export const tailorApps: ToolCardData[] = [
     badge: 'Live',
     icon: 'lucide:gift',
     logoBg: '#ff6900',
-    url: 'http://threadbare-swag-lab.lovable.app'
+    // The Essential Links doc lists this one as `http://`, which an https page
+    // cannot frame at all. The https host serves the same app, so use it.
+    url: 'https://threadbare-swag-lab.lovable.app',
+    embedUrl: 'https://threadbare-swag-lab.lovable.app'
   }
 ]
 

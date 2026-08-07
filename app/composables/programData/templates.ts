@@ -26,6 +26,7 @@ export const programTemplates: ProgramTemplate[] = [
     // Every extracted deck is explicitly the "(English)" source; 03-program-design-lessons.md:47-49
     // notes Spanish is a first-class community language, but no translated deck exists to source from.
     language: 'English',
+    audience: 'learner',
     // SYNTHESIZED: no difficulty label exists in source. Inferred from the program's
     // own shape — five milestones, Git/GitHub workflow, a full playable prototype —
     // set against Explore: Threadbare and Explore: Godot below.
@@ -37,10 +38,13 @@ export const programTemplates: ProgramTemplate[] = [
     minAge: 13,
     // Sum of this program's curriculum.ts item xp values — see that file's XP
     // constant for why the per-item numbers themselves are synthesized.
-    totalXp: 1350,
-    learningType: 'moderated',
+    totalXp: 1225,
+    // Facilitated cohorts at partner sites, plus a self-paced way in for a
+    // learner with no site behind them — see this program's instances.
     tier: 'Core',
-    durationLabel: '18 sessions across 5 milestones',
+    sessionCount: 18,
+    sessionUnit: 'session',
+    milestoneCount: 5,
     curriculum: curriculumByProgram['core-threadbare']!,
     toolsUsed: ['Discord', 'Git', 'GitHub', 'Godot'],
     // Source: Core-Threadbare/curriculum.md's "Before we start" and "Endless Studios
@@ -62,13 +66,14 @@ export const programTemplates: ProgramTemplate[] = [
   {
     id: 'explore-threadbare',
     title: 'Explore: Threadbare',
-    description: 'Thirteen standalone one-hour workshops across game design, art, engineering, and go-to-market. Join any combination, in any order — there’s no date range to wait for.',
+    description: 'Thirteen one-hour workshops across game design, art, engineering, and go-to-market. Self-paced: start the day you enroll and work through all thirteen at your own pace.',
     image: '/images/img/bg-threadbare.png',
     // SYNTHESIZED: no named facilitator in source — these workshops run through
     // many partner educators (Urban Arts, Glasswing, Wichita, etc.), not one person.
     facilitator: 'Theo Okonkwo',
     studioOwner: ENDLESS_STUDIOS,
     language: 'English',
+    audience: 'learner',
     // SYNTHESIZED: no difficulty label in source. Set below Core: Threadbare and
     // Explore: Godot since each workshop is a self-contained one-hour session with
     // no assumed prior game-making experience.
@@ -77,10 +82,14 @@ export const programTemplates: ProgramTemplate[] = [
     // for older learners" — implying the standard 13-workshop version targets a
     // younger band than that variant. No exact floor is stated.
     minAge: 10,
-    totalXp: 1370,
-    learningType: 'moderated',
+    totalXp: 2765,
+    // The one program with no cohort at all: no dates, no facilitated meetings
+    // (see its instance in instances.ts).
     tier: 'Explore',
-    durationLabel: '13 standalone one-hour workshops — join any combination, on your own schedule',
+    // Workshops, not sessions: each is a self-contained hour
+    // (Explore-Threadbare/curriculum.md:5). All thirteen make up the program.
+    sessionCount: 13,
+    sessionUnit: 'workshop',
     curriculum: curriculumByProgram['explore-threadbare']!,
     // Godot, Threadbare Pixel Stitch, and the Threadbare Melody Loom are the tools
     // named across the Engineering and Art workshop decks (sessions.md).
@@ -109,6 +118,7 @@ export const programTemplates: ProgramTemplate[] = [
     facilitator: 'Lena Fitzgerald',
     studioOwner: ENDLESS_STUDIOS,
     language: 'English',
+    audience: 'learner',
     // 02-programs-and-offerings.md:54 — "the 'no experience required' promise doesn't
     // match the current Explore: Godot reality -- it fits advanced beginners better
     // than absolute beginners." 'Beginner' is still the closest fit of the three
@@ -118,10 +128,11 @@ export const programTemplates: ProgramTemplate[] = [
     // reflecting the same "fits advanced beginners" caveat above.
     minAge: 12,
     totalXp: 1200,
-    learningType: 'moderated',
+    // Dated cohorts and a self-paced option — see this program's instances.
     tier: 'Explore',
     // Explore-Godot/curriculum.md:3 — "Ten sessions, 60 minutes each."
-    durationLabel: '10 sessions, 60 minutes each',
+    sessionCount: 10,
+    sessionUnit: 'session',
     curriculum: curriculumByProgram['explore-godot']!,
     toolsUsed: ['Godot'],
     // No prerequisite is stated in source; see the difficulty comment above for
@@ -148,19 +159,19 @@ export const programTemplates: ProgramTemplate[] = [
     facilitator: 'Justin Bourque',
     studioOwner: ENDLESS_STUDIOS,
     language: 'English',
+    audience: 'educator',
     // SYNTHESIZED: no difficulty label in source. This trains adults to facilitate
     // a five-milestone cohort program, so 'Intermediate' fits better than 'Beginner'.
     difficulty: 'Intermediate',
     // No minAge: this trains adult facilitators, not learners, so the platform's
     // learner age-gate framing doesn't apply here.
     totalXp: 1190,
-    learningType: 'moderated',
     tier: 'More',
-    // SYNTHESIZED: no total duration or session count is stated for the training
-    // itself (unlike the learner programs, which state their session counts).
-    // Estimated from the deck's own four-part structure (Overview, Structure &
-    // Tools, Walk the Walk, To Wrap Up).
-    durationLabel: 'A single facilitator training session covering pedagogy, tools, and a live walkthrough',
+    // SYNTHESIZED: no session count is stated for the training itself (unlike
+    // the learner programs, which state theirs). The deck runs as one sitting —
+    // Overview, Structure & Tools, Walk the Walk, To Wrap Up.
+    sessionCount: 1,
+    sessionUnit: 'session',
     curriculum: curriculumByProgram['educator-training']!,
     // Educator-Training-Program/sessions.md "Tools" slide names these three explicitly.
     toolsUsed: ['GitHub', 'Git', 'Godot'],

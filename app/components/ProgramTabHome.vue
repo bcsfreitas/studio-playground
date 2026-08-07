@@ -28,8 +28,10 @@ const channelName = computed(() => {
       <div class="flex flex-col gap-6 min-w-0">
         <!-- Mobile-only: the rail is sticky on lg+, but below that the progress
              card is the first thing the learner should see, not the last. -->
-        <div class="lg:hidden">
+        <div class="lg:hidden flex flex-col gap-8">
           <ProgramProgressCard :template="template" />
+          <ProgramCourseMetrics :template="template" />
+          <ProgramCourseBadges :template="template" />
         </div>
 
         <SectionTitle :title="t('program.home.latestActivity')" />
@@ -38,6 +40,7 @@ const channelName = computed(() => {
           <PostCard
             v-for="post in posts"
             :key="post.id"
+            :post-id="post.id"
             :author="post.author"
             :avatar="post.avatar ?? avatarForName(post.author)"
             :time="`${channelName(post.channelId)} · ${post.time}`"
@@ -62,8 +65,10 @@ const channelName = computed(() => {
       </div>
 
       <div class="hidden lg:block">
-        <div class="sticky top-6">
+        <div class="sticky top-6 flex flex-col gap-8">
           <ProgramProgressCard :template="template" />
+          <ProgramCourseMetrics :template="template" />
+          <ProgramCourseBadges :template="template" />
         </div>
       </div>
     </div>

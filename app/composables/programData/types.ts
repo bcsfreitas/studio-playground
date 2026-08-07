@@ -1,11 +1,15 @@
-// Learner-facing lifecycle. Drives which tabs render and what the first tab
-// shows — see docs/superpowers/specs/2026-08-05-program-page-shell-design.md.
-export type LearnerPhase = 'interested' | 'enrolled' | 'onboarded'
+// The learner-facing lifecycle is the app-wide preview state — see
+// docs/superpowers/specs/2026-08-05-program-page-shell-design.md for what it
+// drives here (which tabs render, and what the first tab shows).
+import type { PreviewState } from '~/composables/usePreviewState'
 
-// Explore: Threadbare is explicitly not a cohort — its curriculum.md:5 says to
-// present the 13 workshops as individually joinable sessions with their own
-// dates, not as one date range. The enrollment card branches on this.
-export type EnrollmentModel = 'cohort' | 'workshop-series'
+// Two ways into the same program, not two kinds of program: a cohort instance
+// runs to a schedule with a facilitator and a group, a self-paced one is open
+// every day and starts the moment a learner presses the button. A program can
+// carry both — one instance each — and the enrollment card lists them side by
+// side. Explore: Threadbare carries only the self-paced one, since its
+// curriculum.md:5 says never to present it as a date range.
+export type EnrollmentModel = 'cohort' | 'self-paced'
 
 export type InstanceVisibility = 'public' | 'private'
 
@@ -15,7 +19,8 @@ export interface ProgramSession {
   title: string
   drivingQuestion?: string
   // ISO 8601, always with an explicit UTC designator — see instances.ts.
-  startsAt: string
+  // Absent on a self-paced instance, which has no schedule to place it on.
+  startsAt?: string
   durationMinutes: number
 }
 
@@ -24,9 +29,18 @@ export interface MicrocredentialCriterion {
   label: string
 }
 
+// Who a program is for. Educator Training teaches adults to facilitate a
+// program rather than to make a game, which is why it stays out of a learner's
+// recommendations and can be filtered for on its own in the catalog.
+export type ProgramAudience = 'learner' | 'educator'
+
+// What a program calls its meetings. Explore: Threadbare's are workshops —
+// standalone and individually joinable — and calling them sessions would imply
+// a series you sign up to as a whole.
+export type ProgramSessionUnit = 'session' | 'workshop'
+
 export type ProgramTier = 'Explore' | 'Core' | 'More'
 export type ProgramDifficulty = 'Beginner' | 'Intermediate' | 'Advanced'
-export type LearningType = 'self-paced' | 'moderated'
 export type CurriculumItemType = 'topic' | 'survey' | 'task' | 'resource' | 'deliverable'
 export type CurriculumContentType = 'video' | 'slideshow' | 'text' | 'image' | 'gif'
 
@@ -47,6 +61,31 @@ export interface LinkedGame {
   to: string
 }
 
+export type CurriculumMediaKind = 'image' | 'slideshow' | 'video'
+
+// A session's page content, authored as blocks rather than one markdown string
+// so each piece maps onto a Nuxt UI component instead of needing a markdown
+// renderer inside the classroom.
+export type CurriculumBlock
+  = | { kind: 'heading', text: string }
+    | { kind: 'paragraph', text: string }
+    | { kind: 'list', items: string[], ordered?: boolean }
+    | { kind: 'note', text: string }
+    // The source page has these as buttons/links but never spells out a URL,
+    // so `href` is optional and the renderer disables the control without one.
+    | { kind: 'link', label: string, href?: string }
+    // A curated tool list: each entry is a named link with a line about what
+    // it is for. The Creator Tools sessions are built entirely out of these.
+    | { kind: 'linkList', items: { label: string, href?: string, description: string }[] }
+    // Slide decks, screenshots, and video embeds the source page carries but
+    // this app has no asset for yet — the scrape marks them `{{image}}`,
+    // `{{slideshow}}`, `{{video}}`.
+    | { kind: 'media', media: CurriculumMediaKind, caption?: string }
+    // One Project Board issue inside a milestone: what to build, and what
+    // "done" means for it. `hasTutorial` mirrors the source page's "[tutorial]"
+    // marker — the link target itself is not in the scraped content.
+    | { kind: 'task', title: string, text: string, acceptanceCriteria: string[], hasTutorial?: boolean }
+
 export interface CurriculumItem {
   id: string
   type: CurriculumItemType
@@ -55,6 +94,7 @@ export interface CurriculumItem {
   xp: number
   contentType: CurriculumContentType
   acceptanceCriteria?: string[]
+  body?: CurriculumBlock[]
 }
 
 export interface CurriculumModule {
@@ -93,13 +133,18 @@ export interface ProgramTemplate {
   facilitator: string
   studioOwner: StudioOwner
   language: string
+  audience: ProgramAudience
   difficulty: ProgramDifficulty
   minAge?: number
   totalXp: number
-  learningType: LearningType
   linkedGame?: LinkedGame
   tier: ProgramTier
-  durationLabel: string
+  // The program's own shape, not one instance's schedule: how many meetings it
+  // runs, what it calls them, and — where the program is organised around them
+  // — how many milestones those meetings are grouped into.
+  sessionCount: number
+  sessionUnit: ProgramSessionUnit
+  milestoneCount?: number
   curriculum: CurriculumModule[]
   toolsUsed: string[]
   prerequisites: string[]
@@ -137,7 +182,7 @@ export interface EnrollmentRecord {
   programId: string
   instanceId: string
   cohortId: string
-  phase: LearnerPhase
+  phase: PreviewState
   progress: number
   enrolledAt: string
 }

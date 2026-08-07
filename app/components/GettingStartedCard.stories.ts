@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@nuxtjs/storybook'
 import GettingStartedCard from './GettingStartedCard.vue'
-import { gettingStartedItems } from '../composables/useHomeMockData'
+import { gettingStartedItemsFor } from '../composables/useHomeMockData'
 
 const meta = {
   title: 'Components/GettingStartedCard',
@@ -11,20 +11,22 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+// A new learner has joined a program; a fresh account hasn't, which is the
+// checklist's own two states.
 export const InProgress: Story = {
   args: {
-    items: gettingStartedItems
+    items: gettingStartedItemsFor('new')
+  }
+}
+
+export const FreshAccount: Story = {
+  args: {
+    items: gettingStartedItemsFor('fresh')
   }
 }
 
 export const AllDone: Story = {
   args: {
-    items: gettingStartedItems.map(i => ({ ...i, done: true }))
-  }
-}
-
-export const NoneDone: Story = {
-  args: {
-    items: gettingStartedItems.map(i => ({ ...i, done: false }))
+    items: gettingStartedItemsFor('new').map(i => ({ ...i, done: true }))
   }
 }

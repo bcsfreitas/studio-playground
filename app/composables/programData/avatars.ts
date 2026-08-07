@@ -42,7 +42,15 @@ const AVATAR_BY_NAME: Record<string, number> = {
 
   // Program-level facilitators, used only where an instance names no mentor
   'Marisol Vega': 7,
-  'Theo Okonkwo': 8
+  'Theo Okonkwo': 8,
+
+  // The signed-in user. Listed here rather than left to the hash below so the
+  // face is chosen, not drawn — she is in the top bar on every page, so a hash
+  // collision would put her portrait next to itself somewhere. With only 14
+  // portraits she cannot be unique against everyone, so she takes one of the
+  // Explore: Godot members: those appear on a single tab, the furthest thing
+  // from a global top bar.
+  'Nova': 13
 }
 
 /**

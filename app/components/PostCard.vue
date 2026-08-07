@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import type { PostComment } from '~/composables/useHomeMockData'
+import { userName, userAvatar, type PostComment } from '~/composables/useHomeMockData'
 import { avatarForName } from '~/composables/useProgramMockData'
+import { signUpTo } from '~/composables/useAuthIntent'
 
 const props = withDefaults(defineProps<{
+  // Only needed to survive a sign-up: it names which post's box to reopen when
+  // the guest comes back. Cards without one still gate correctly.
+  postId?: string
   author?: string
   avatar?: string
   time?: string
@@ -52,6 +56,21 @@ const commentInput = ref()
 function focusComment() {
   commentInput.value?.textareaRef?.focus()
 }
+
+const route = useRoute()
+
+// Where sign-up should bring them back to: this page, with this post named, so
+// the box they were reaching for is the one that opens.
+const signUpToComment = computed(() => signUpTo(
+  props.postId ? `${route.path}?comment=${props.postId}` : route.fullPath
+))
+
+// The other half of that trip. `canComment` only turns true once the preview
+// state has been read from storage, which is after mount, so this watches
+// rather than firing in onMounted.
+watch(() => props.canComment && route.query.comment === props.postId, (isTheirs) => {
+  if (isTheirs) nextTick(focusComment)
+}, { immediate: true })
 </script>
 
 <template>
@@ -81,8 +100,8 @@ function focusComment() {
     </template>
 
     <template #footer>
-      <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-2">
+      <div class="flex flex-col gap-6">
+        <div class="flex items-center gap-2 -mx-2">
           <UButton
             :label="String(likeCount)"
             variant="ghost"
@@ -122,11 +141,11 @@ function focusComment() {
           </div>
         </div>
 
-        <USeparator class="-mx-4 sm:-mx-6" />
+        <USeparator  />
 
-        <div class="px-4 sm:px-6 pt-6">
+
           <div v-if="canComment" class="flex align-center gap-2.5">
-            <UAvatar text="Y" size="2xl" />
+            <UAvatar :src="userAvatar" :alt="userName" :text="userName.charAt(0).toUpperCase()" size="2xl" />
             <UTextarea
               ref="commentInput"
               v-model="newComment"
@@ -147,11 +166,8 @@ function focusComment() {
             />
           </div>
 
-          <div v-else class="flex items-center justify-between gap-3">
-            <p class="text-sm text-muted">Sign in to join the conversation.</p>
-            <UButton label="Sign in" color="primary" variant="soft" size="sm" />
-          </div>
-        </div>
+          <AuthGuestPrompt :message="$t('auth.wall.comment')" :to="signUpToComment" />
+
       </div>
     </template>
   </UPageCard>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
-import { programTemplates, programInstances, enrollmentsByPhase, type LearnerPhase } from '~/composables/useProgramMockData'
-import { provideProgramPhase } from '~/composables/useProgramPhase'
+import { programTemplates, programInstances } from '~/composables/useProgramMockData'
+import { usePreviewState } from '~/composables/usePreviewState'
+import { useProgramEnrollment } from '~/composables/useProgramEnrollment'
 import { provideProgramTabs } from '~/composables/useProgramTabs'
-import { userName, streakDays, xpLabel, notificationCount } from '~/composables/useHomeMockData'
+import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
 
 definePageMeta({ layout: 'dashboard' })
 
@@ -18,25 +19,16 @@ const template = computed(() => programTemplates.find(p => p.id === programId.va
 // gating on an instance too would 404 a program that exists.
 const instances = computed(() => programInstances.filter(i => i.programId === programId.value))
 
-// Read from the enrollment fixtures rather than assumed: a learner who is
-// enrolled in this program should land on the enrolled view, not the pitch.
-// DevPreviewBar still overrides it, which is the point of the preview bar.
-function phaseForProgram(id: string): LearnerPhase {
-  const found = (Object.keys(enrollmentsByPhase) as LearnerPhase[])
-    .find(key => enrollmentsByPhase[key].some(record => record.programId === id))
-  return found ?? 'interested'
-}
+// The preview state picks the enrollment set; this program's id picks the
+// record out of it. A new learner is in Core: Threadbare and nothing else, so
+// the classroom opens there and the pitch stays up on every other program.
+const { isLoggedIn, isOnboarded } = usePreviewState()
+const { isEnrolled } = useProgramEnrollment()
 
-const phase = ref<LearnerPhase>(phaseForProgram(programId.value))
-provideProgramPhase(phase)
-
-// The shell is not remounted when the route param changes, so a preview
-// override must not leak from one program onto the next.
-watch(programId, (id) => {
-  phase.value = phaseForProgram(id)
-})
-
-const isEnrolled = computed(() => phase.value !== 'interested')
+// Counters are earned across the platform rather than in this program, so they
+// follow the state, not this page's enrollment — a new learner enrolled here
+// still has nothing banked.
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
 
 // Each tab's component is loaded the first time that tab is opened, so a
 // visitor who never leaves the Overview never downloads the classroom.
@@ -72,23 +64,27 @@ const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
       ]
 )
 
-// Plain component state, not a route param: these behave like tabs, so
-// switching one leaves the URL and history alone.
+// Plain component state, not a route param: switching a tab leaves the URL and
+// history alone. The query only speaks on arrival, and only for a link that
+// means a particular place:
 //
-// `?item=` is the one exception, and it isn't a tab: it names a lesson, and a
-// lesson only exists in the classroom. Arriving with one — the home page's
-// "Resume learning" — opens there rather than on the default tab.
+// `?item=` names a lesson, and a lesson only exists in the classroom — the home
+// page's "Resume learning" arrives that way. `?tab=` names a tab outright,
+// which is how a guest sent to sign up from the Community tab gets back to it.
+// Both are checked against the tabs this learner actually has.
 function initialTab(): TabId {
-  const wantsLesson = Boolean(route.query.item)
-  const canOpenClassroom = visibleTabs.value.some(tab => tab.id === 'classroom')
-  return wantsLesson && canOpenClassroom ? 'classroom' : visibleTabs.value[0]!.id
+  const canOpen = (id: string) => visibleTabs.value.some(tab => tab.id === id)
+  if (route.query.item && canOpen('classroom')) return 'classroom'
+  const wantedTab = route.query.tab
+  if (typeof wantedTab === 'string' && canOpen(wantedTab)) return wantedTab as TabId
+  return visibleTabs.value[0]!.id
 }
 
 const activeTab = ref<TabId>(initialTab())
 
 // Changing phase changes which tabs exist, and can pull the open one out from
 // under the learner — fall back rather than rendering a tab that is no longer
-// listed. This also stands in for the validation the `?tab=` query needed.
+// listed.
 watch(visibleTabs, (list) => {
   if (!list.some(tab => tab.id === activeTab.value)) activeTab.value = list[0]!.id
 })
@@ -118,14 +114,14 @@ provideProgramTabs({
 </script>
 
 <template>
-  <UDashboardPanel :ui="{ body: 'p-0 gap-0 overflow-x-auto' }">
+  <!-- `sm:p-0`/`sm:gap-0` as well as the bare ones — see index.vue for why. -->
+  <UDashboardPanel :ui="{ body: 'p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
     <template #body>
-      <AppTopbar
-        :xp-label="xpLabel"
-        :streak-days="streakDays"
-        :user-name="userName"
-        :notification-count="notificationCount"
-      />
+      <!-- Signed in, not just enrolled: a new learner gets the same bar, with
+           counters that start at zero. Guests get the same band too, carrying
+           the sign-in pair instead of an account. -->
+      <AppTopbar v-if="isLoggedIn" v-bind="topbarStats" :user-name="userName" :user-avatar="userAvatar" />
+      <AppTopbar v-else guest />
 
       <UContainer>
         <template v-if="template">
@@ -183,5 +179,5 @@ provideProgramTabs({
     </template>
   </UDashboardPanel>
 
-  <DevPreviewBar v-model="phase" />
+  <DevPreviewBar />
 </template>

@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import type { ChannelPost } from '~/composables/useProgramMockData'
 import { channelsForProgram, postsForChannel, membersForProgram, avatarForName } from '~/composables/useProgramMockData'
-import { useProgramPhase } from '~/composables/useProgramPhase'
+import { useProgramEnrollment } from '~/composables/useProgramEnrollment'
+import { usePreviewState } from '~/composables/usePreviewState'
+import { signUpTo } from '~/composables/useAuthIntent'
 
 const route = useRoute()
 const { t } = useI18n()
 
 const programId = computed(() => route.params.programId as string)
-const phase = useProgramPhase()
-const isEnrolled = computed(() => phase.value !== 'interested')
+const { isEnrolled } = useProgramEnrollment()
+const { isLoggedIn } = usePreviewState()
+
+// Back to this tab, not just this program — the tabs carry no URL of their own
+// except through `?tab=`, which the shell reads on arrival.
+const signUpToPost = computed(() => signUpTo(`/learn/${programId.value}?tab=community`))
 
 // Announcements, Introductions and the per-group channels belong to people
 // actually in the program, so they are absent for everyone else rather than
@@ -71,14 +77,17 @@ function addPost(body: string) {
 
       <div class="flex flex-col gap-6 min-w-0">
         <ProgramPostComposer
+          v-if="isLoggedIn"
           :channel-name="selectedChannel?.name ?? ''"
           @post="addPost"
         />
+        <AuthGuestPrompt v-else :message="t('auth.wall.post')" :to="signUpToPost" />
 
         <template v-if="posts.length">
           <PostCard
             v-for="post in posts"
             :key="post.id"
+            :post-id="post.id"
             :author="post.author"
             :avatar="post.avatar ?? avatarForName(post.author)"
             :time="post.time"
@@ -86,6 +95,7 @@ function addPost(body: string) {
             :likes="post.likes"
             :comments="post.comments"
             :is-mentor="post.isMentor"
+            :can-comment="isLoggedIn"
           >
             {{ post.body }}
           </PostCard>

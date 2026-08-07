@@ -28,15 +28,10 @@
         "Explore": "Explore",
         "Core": "Core",
         "More": "More"
-      },
-      "learningType": {
-        "self-paced": "Self-paced",
-        "moderated": "Moderated"
       }
     },
     "facts": {
       "totalXp": "Total XP",
-      "learningType": "Class type",
       "difficulty": "Difficulty",
       "language": "Language"
     },
@@ -44,7 +39,6 @@
       "playLabel": "Play {name}"
     },
     "sections": {
-      "overview": "Overview",
       "curriculum": "Curriculum",
       "tools": "Tools you'll use",
       "prerequisites": "Prerequisites",
@@ -84,24 +78,20 @@
     },
     "enroll": {
       "sessionPickerLabel": "Choose a session",
-      "workshopPickerLabel": "Choose a workshop",
+      "yourSession": "Your session",
       "cta": {
         "resume": "Resume learning",
         "startsOn": "Starts {date}",
         "startLearning": "Start learning",
         "unlockSession": "Unlock session",
-        "enrollmentClosed": "Enrollment closed",
         "enroll": "Enroll in this session",
-        "joinWorkshop": "Join this workshop"
+        "startsIn": "Starts in {count} day | Starts in {count} days"
       },
       "accessCode": {
         "label": "Access code",
         "placeholder": "Enter access code",
         "helper": "This session requires an access code from your facilitator.",
         "error": "That code doesn't match. Check with your facilitator and try again."
-      },
-      "details": {
-        "schedule": "Schedule"
       },
       "notify": {
         "title": "No dates scheduled yet",
@@ -110,9 +100,12 @@
         "placeholder": "you{'@'}example.com",
         "cta": "Notify me"
       },
+      "selfPacedOption": {
+        "label": "Self-paced",
+        "description": "Online and at your own pace"
+      },
+      "spotsFilled": "{taken}/{max} Spots filled",
       "sessionDescription": {
-        "open": "{taken} of {max} seats - {range}",
-        "closed": "Closed - {range}",
         "requiresCode": "Requires an access code",
         "selfPaced": "Self-paced - start anytime",
         "alreadyEnrolled": "You're enrolled - {progress}% complete"
@@ -120,7 +113,6 @@
       "confirmModal": {
         "title": "Lock in your seat?",
         "body": "You're about to enroll in {program}, {range}.",
-        "workshopBody": "You're about to join {workshop}, part of {program}, on {date}.",
         "cancel": "Cancel",
         "confirm": "Yes, enroll me"
       },
@@ -130,7 +122,17 @@
         "emailNotice": "We've sent a confirmation to your email - keep an eye on your inbox for reminders as the session gets closer.",
         "done": "Got it"
       },
-      "enrolledCount": "No one has enrolled yet | {count} person enrolled | {count} people enrolled"
+      "waiting": {
+        "addToCalendar": "Add to calendar",
+        "cancel": "Cancel enrollment",
+        "helper": "You'll be able to open the classroom when the session starts."
+      },
+      "cancelModal": {
+        "title": "Give up your seat?",
+        "body": "This frees your spot in {program}, {range}. You can enroll again while seats last.",
+        "keep": "Keep my seat",
+        "confirm": "Yes, cancel it"
+      }
     },
     "viewer": {
       "sidebar": {
@@ -141,7 +143,8 @@
         "completed": "Completed"
       },
       "content": {
-        "placeholder": "{contentType} placeholder"
+        "placeholder": "{contentType} placeholder",
+        "tutorial": "Tutorial"
       },
       "notFound": "Program not found.",
       "deliverable": {
@@ -168,8 +171,9 @@
       "emptyBody": "Finished projects from this program will appear here."
     },
     "sideInfo": {
-      "sessions": "Sessions",
-      "sessionCount": "{count} sessions · {minutes} min each",
+      "sessionCount": "{count} session | {count} sessions",
+      "workshopCount": "{count} workshop | {count} workshops",
+      "milestoneCount": "{count} milestone | {count} milestones",
       "teachers": "Teacher | Teacher | Teachers",
       "tools": "Tools you'll use",
       "prerequisites": "Prerequisites"
@@ -235,6 +239,239 @@
           "requirement": "Complete every step in the program"
         }
       }
+    }
+  },
+  "pixelStitch": {
+    "title": "Threadbare Pixel Stitch",
+    "subtitle": "Weave pixel art and animations for your Threadbare characters and props.",
+    "backToTools": "Maker Tools",
+    "openProject": "Open",
+    "saveProject": "Save",
+    "exportingGif": "Exporting GIF…",
+    "canvasSize": {
+      "label": "Canvas",
+      "tooltip": "Set the canvas to {size} pixels"
+    },
+    "tools": {
+      "pencil": "Pencil",
+      "pencilTooltip": "Draw pixels one at a time",
+      "eraser": "Eraser",
+      "eraserTooltip": "Remove pixels from the canvas",
+      "fill": "Fill",
+      "fillTooltip": "Fill the connected area with the current colour",
+      "replace": "Replace colour",
+      "replaceTooltip": "Replace every pixel of the clicked colour across the canvas",
+      "eyedropper": "Eyedropper",
+      "eyedropperTooltip": "Pick a colour from any pixel on the canvas",
+      "select": "Select",
+      "selectTooltip": "Select an area to copy (Ctrl+C) or cut (Ctrl+X), then paste (Ctrl+V)"
+    },
+    "toolbar": {
+      "removeBackground": "Remove the background from the current layer",
+      "flipHorizontal": "Flip horizontally",
+      "flipVertical": "Flip vertically",
+      "decreaseSize": "Smaller brush",
+      "increaseSize": "Bigger brush",
+      "undo": "Undo the last action",
+      "redo": "Redo the last action",
+      "toggleGrid": "Toggle the grid overlay",
+      "importImage": "Import an image onto the canvas",
+      "exportPng": "Export the current frame as a PNG",
+      "exportGif": "Export the animation as a GIF",
+      "clearOptions": "Clear the canvas",
+      "clearCurrentLayer": "Clear current layer",
+      "clearAllLayers": "Clear all layers",
+      "exportSpriteSheet": "Export every frame as a sprite sheet",
+      "importSpriteSheet": "Import a sprite sheet as frames",
+      "submit": "Save & submit",
+      "submitTooltip": "Download the current frame as a PNG"
+    },
+    "canvas": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "zoomReset": "Reset the zoom to 100%",
+      "hintIdle": "Drag to select an area, then press Ctrl+C to copy and Ctrl+V to paste.",
+      "hintSelecting": "Drag to select an area.",
+      "hintSelected": "Press Ctrl+C to copy or Ctrl+X to cut, then Ctrl+V to paste.",
+      "hintPasting": "Move the pointer to position it, click to paste, or press Esc to cancel."
+    },
+    "color": {
+      "title": "Colour",
+      "dragToSave": "Drag onto a palette slot to save this colour",
+      "pickerTooltip": "Pick a colour",
+      "hexTooltip": "Enter a hex colour code",
+      "brushOpacity": "Brush opacity",
+      "dragToCustomize": "Drag colours onto slots to customise the palette.",
+      "swatchTooltip": "{color} — click to select, drop a colour to replace",
+      "row": {
+        "base": "Colour",
+        "shade1": "Shade 1",
+        "shade2": "Shade 2",
+        "highlight": "Highlight"
+      }
+    },
+    "layers": {
+      "title": "Layers",
+      "add": "Add",
+      "addTooltip": "Create a new layer",
+      "hide": "Hide this layer",
+      "show": "Show this layer",
+      "rename": "Rename this layer",
+      "moveUp": "Move this layer up",
+      "moveDown": "Move this layer down",
+      "delete": "Delete this layer",
+      "opacity": "Opacity"
+    },
+    "frames": {
+      "title": "Animation frames",
+      "frame": "Frame",
+      "add": "Add",
+      "addTooltip": "Create a new animation frame",
+      "play": "Play the animation",
+      "pause": "Pause the animation",
+      "duplicate": "Duplicate this frame",
+      "delete": "Delete this frame"
+    },
+    "preview": {
+      "title": "Animation preview",
+      "fps": "FPS",
+      "fpsTooltip": "Adjust the playback speed in frames per second"
+    },
+    "onion": {
+      "title": "Onion skinning",
+      "tooltip": "Show ghosts of the neighbouring frames while you draw",
+      "previousFrames": "Previous frames",
+      "nextFrames": "Next frames",
+      "opacity": "Ghost opacity",
+      "legendPrevious": "Previous",
+      "legendNext": "Next"
+    },
+    "sheet": {
+      "exportTitle": "Export sprite sheet",
+      "importTitle": "Import sprite sheet",
+      "imageFile": "Image file",
+      "columns": "Columns",
+      "rows": "Rows",
+      "summary": "{count} frames will be arranged in a {columns} × {rows} grid.",
+      "cancel": "Cancel",
+      "export": "Export",
+      "import": "Import"
+    },
+    "toast": {
+      "layerAdded": "Layer added",
+      "cannotDeleteLastLayer": "You can't delete the last layer",
+      "layerDeleted": "Layer deleted",
+      "layerCleared": "Layer cleared",
+      "allLayersCleared": "All layers cleared",
+      "frameAdded": "Frame added",
+      "cannotDeleteLastFrame": "You can't delete the last frame",
+      "frameDeleted": "Frame deleted",
+      "frameDuplicated": "Frame duplicated",
+      "canvasSizeChanged": "Canvas size changed to {size}",
+      "backgroundRemoved": "Background removed",
+      "nothingToRemove": "No background detected",
+      "flippedHorizontal": "Flipped horizontally",
+      "flippedVertical": "Flipped vertically",
+      "colorAddedToPalette": "Colour added to the palette",
+      "imageImported": "Image imported",
+      "failedToImport": "Couldn't import that image",
+      "frameExported": "Frame exported",
+      "addMoreFrames": "Add more frames to make an animation",
+      "gifExported": "GIF exported",
+      "failedToExportGif": "Couldn't export the GIF",
+      "spriteSheetExported": "Sprite sheet exported",
+      "failedToExportSpriteSheet": "Couldn't export the sprite sheet",
+      "importedFrames": "Imported {count} frames from the sprite sheet",
+      "failedToImportSpriteSheet": "Couldn't import that sprite sheet",
+      "projectSaved": "Project saved",
+      "projectLoaded": "Project loaded",
+      "selectionCancelled": "Selection cancelled",
+      "selectionMade": "Selection made — press Ctrl+C to copy",
+      "copiedMoveToPos": "Copied. Move the pointer and click to paste",
+      "cutMoveToPos": "Cut. Move the pointer and click to paste",
+      "moveMouseToPaste": "Move the pointer into position and click to paste"
+    }
+  },
+  "auth": {
+    "or": "or",
+    "terms": "By continuing, you agree to the Endless Studios Terms of Service and Privacy Policy.",
+    "returnTo": "We'll bring you back to {destination} when you're done.",
+    "wall": {
+      "cta": "Sign up",
+      "comment": "Create an account to join the conversation.",
+      "post": "Create an account to post in this channel."
+    },
+    "showcase": {
+      "headline": "Come play.",
+      "playFree": "Play games made by kids like you, free",
+      "learnByMaking": "Learn to build your own, step by step",
+      "shareWork": "Share what you make with the community"
+    },
+    "social": {
+      "google": "Continue with Google",
+      "microsoft": "Continue with Microsoft",
+      "apple": "Continue with Apple"
+    },
+    "fields": {
+      "name": "What should we call you?",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least {count} characters",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "birthday": "Date of birth",
+      "birthdayHelp": "We ask so we know how to look after your account."
+    },
+    "errors": {
+      "nameRequired": "Tell us what to call you",
+      "emailRequired": "Enter your email",
+      "emailInvalid": "That doesn't look like an email address",
+      "passwordRequired": "Enter your password",
+      "passwordShort": "Use at least {count} characters",
+      "birthdayRequired": "Enter your date of birth"
+    },
+    "signIn": {
+      "title": "Welcome back",
+      "noAccount": "New here?",
+      "createOne": "Create an account",
+      "forgot": "Forgot password?",
+      "submit": "Sign in"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "Everything on Endless Studios, in one account.",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "submit": "Create account",
+      "guardianTitle": "We'll ask a grown-up first",
+      "guardianBody": "Because you're under 13, we'll email a parent or guardian to approve your account before you can post or join a program. You can still play and explore right away.",
+      "path": {
+        "learn": "Let's get you into a program.",
+        "teach": "Let's get you set up to teach.",
+        "build": "Let's get you onto a game team."
+      }
+    },
+    "verify": {
+      "title": "Check your email",
+      "subtitle": "We sent a 6-digit code to {email}. Enter it below to finish setting up your account.",
+      "yourEmail": "your email",
+      "codeLabel": "Verification code",
+      "submit": "Verify email",
+      "noCode": "Didn't get a code?",
+      "resend": "Resend it",
+      "resent": "We sent a new code to {email}",
+      "wrongEmail": "Wrong email address?",
+      "goBack": "Go back"
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter the email you signed up with and we'll send you a link to set a new password.",
+      "submit": "Send reset link",
+      "backToSignIn": "Back to sign in",
+      "sentTitle": "Check your inbox",
+      "sentBody": "We sent a password reset link to {email}. The link works for the next hour.",
+      "noEmail": "Nothing turned up?",
+      "tryAgain": "Try another email"
     }
   }
 }

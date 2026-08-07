@@ -48,12 +48,18 @@ export function cohortHasStarted(cohort: Cohort, today = new Date()): boolean {
   return startsAt <= todayUtcMidnight
 }
 
+// A cohort a new learner can still get into. Full and already-ended groups both
+// fail this: neither is bookable, and there's no waitlist flow to offer.
+export function isBookableStatus(status: EnrollmentStatus): boolean {
+  return status !== 'full' && status !== 'closed'
+}
+
 // Whether a new learner could book into this program at all — used to keep
-// fully-booked programs (every cohort full) out of the /learn catalog.
+// fully-booked and finished programs out of the /learn catalog.
 // Programs with no matching instance (catalog-only mock entries) are treated
 // as available, since there's no cohort data to say otherwise.
 export function hasAvailableCohort(programId: string): boolean {
   const cohorts = programInstances.filter(i => i.programId === programId).flatMap(i => i.cohorts)
   if (!cohorts.length) return true
-  return cohorts.some(c => cohortStatusFor(c, undefined, false) !== 'full')
+  return cohorts.some(c => isBookableStatus(cohortStatusFor(c, undefined, false)))
 }

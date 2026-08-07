@@ -200,6 +200,13 @@
   --duration-base: 0.25s;
 }
 
+html {
+  /* Auth pages scroll the document — they have no dashboard shell. Same reason
+     as the dashboardPanel body override in app.config.ts: reserve the gutter so
+     a short page and a tall one lay out at the same width. */
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   margin: 0;
@@ -229,4 +236,56 @@ body {
   --ui-border: var(--color-midnight-700);
   --ui-border-muted: var(--color-midnight-800);
   --ui-border-accented: var(--color-midnight-600);
+}
+
+/* Tailwind v4 dropped Preflight's `cursor: pointer` on buttons, and Nuxt UI's
+   themes only set `disabled:cursor-not-allowed` — so without this, every
+   UButton, dropdown trigger and menu item keeps the default arrow. In the base
+   layer so a component's own `cursor-*` utility still wins, and so
+   `disabled:`/`aria-disabled:` variants can override it. */
+@layer base {
+  button:not(:disabled):not([aria-disabled='true']),
+  summary,
+  label[for],
+  [role='button']:not([aria-disabled='true']),
+  [role='menuitem']:not([aria-disabled='true']),
+  [role='menuitemcheckbox'],
+  [role='menuitemradio'],
+  [role='option']:not([aria-disabled='true']),
+  [role='tab']:not([aria-disabled='true']),
+  [role='switch']:not([aria-disabled='true']),
+  [role='checkbox']:not([aria-disabled='true']),
+  [role='radio']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+}
+
+/* docs/animation.md makes this mandatory on anything animated, but the tokens
+   file it points at (tokens/motion.css) was never created, so nothing enforced
+   it. Global rather than per-component: the rule is a promise to the reader,
+   not to one card row. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The transparency checkerboard behind Pixel Stitch's colour swatch. A CSS
+   gradient rather than the canvas helper in `pixelStitch/render.ts`, because
+   this one sits behind a plain <div> — but the two greys are deliberately the
+   same pair, so the swatch and the canvas read as one surface. */
+@utility pixel-checker {
+  background-color: #f8fafc;
+  background-image:
+    linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+    linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+    linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
 }

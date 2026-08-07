@@ -7,9 +7,8 @@ import type { ProgramInstance, ProgramSession } from './types'
 // (02-programs-and-offerings.md:12: May 12 - June 11 2026, Tue/Thu). Every
 // other schedule below is generated from each program's own stated cadence
 // (Core: Threadbare's two-sessions-a-week pattern mirrors Explore: Godot's,
-// since no cadence is stated for Core: Threadbare itself; Explore: Threadbare
-// uses its one-per-week "join any workshop" framing) so the schedule UI has
-// something real to render.
+// since no cadence is stated for Core: Threadbare itself) so the schedule UI
+// has something real to render. Self-paced instances have no dates at all.
 // ---------------------------------------------------------------------------
 
 function addDays(dateOnly: string, days: number): string {
@@ -22,12 +21,6 @@ function addDays(dateOnly: string, days: number): string {
 // first session date.
 function twiceWeeklyOffsets(count: number): number[] {
   return Array.from({ length: count }, (_, i) => Math.floor(i / 2) * 7 + (i % 2 === 0 ? 0 : 2))
-}
-
-// One session a week — Explore: Threadbare's workshops aren't a cohort, but
-// the schedule UI still needs one upcoming date per workshop to show.
-function weeklyOffsets(count: number): number[] {
-  return Array.from({ length: count }, (_, i) => i * 7)
 }
 
 interface SessionSeed {
@@ -56,6 +49,58 @@ function buildSessions(
     startsAt: `${addDays(startDate, offsets[i]!)}T${time}:00Z`,
     durationMinutes
   }))
+}
+
+// A self-paced instance has no calendar: its sessions are an ordered path the
+// learner walks whenever they like, so they carry a length but no date.
+function buildUndatedSessions(
+  instanceId: string,
+  durationMinutes: number,
+  seeds: SessionSeed[]
+): ProgramSession[] {
+  return seeds.map((seed, i) => ({
+    id: `${instanceId}-s${i + 1}`,
+    index: i + 1,
+    title: seed.title,
+    drivingQuestion: seed.drivingQuestion,
+    durationMinutes
+  }))
+}
+
+// Every learner program has a self-paced way in alongside whatever cohorts it
+// runs: same curriculum and same session order, no schedule, open every day.
+// One such instance per program. The Cohort it carries exists only because
+// ProgramInstance requires one — its null startDate is what makes
+// cohortStatusFor report the option always open.
+function selfPacedInstance(
+  programId: string,
+  durationMinutes: number,
+  seeds: SessionSeed[],
+  // Empty for a program whose facilitators run its cohorts: nobody is teaching
+  // the self-paced path, so it shouldn't add names to the program's teacher list.
+  mentors: string[] = []
+): ProgramInstance {
+  const id = `instance-${programId}-self-paced`
+  return {
+    id,
+    programId,
+    enrollmentModel: 'self-paced',
+    visibility: 'public',
+    scheduleLabel: 'Self-paced — start anytime, finish at your own pace',
+    mentors,
+    sessions: buildUndatedSessions(id, durationMinutes, seeds),
+    cohorts: [
+      {
+        id: `cohort-${programId}-self-paced`,
+        instanceId: id,
+        name: 'Self-paced',
+        startDate: null,
+        endDate: null,
+        maxLearners: null,
+        seatsTaken: 0
+      }
+    ]
+  }
 }
 
 // Explore-Godot/sessions.md session map, in delivery order. Sessions 5-8 share
@@ -161,45 +206,23 @@ export const programInstances: ProgramInstance[] = [
     ]
   },
 
-  // Explore: Threadbare — one workshop-series instance, 13 sessions. Exercises
-  // the per-workshop-dates card path instead of a cohort date range, per
-  // curriculum.md:5 ("this is NOT a cohort").
-  {
-    id: 'instance-explore-threadbare-fall2026',
-    programId: 'explore-threadbare',
-    enrollmentModel: 'workshop-series',
-    visibility: 'public',
-    scheduleLabel: 'Wednesdays, Aug 12 – Nov 4, 2026 — join any single workshop',
-    // SYNTHESIZED: no facilitator names exist in source for this program.
-    mentors: ['Grace Halloran'],
-    sessions: buildSessions(
-      'instance-explore-threadbare-fall2026',
-      '2026-08-12',
-      weeklyOffsets(13),
-      '16:00',
-      // Explore-Threadbare/curriculum.md:1 and every workshop's own "Session length: 60 minutes".
-      60,
-      EXPLORE_THREADBARE_SESSIONS
-    ),
-    cohorts: [
-      {
-        id: 'cohort-explore-threadbare-loom-weavers',
-        instanceId: 'instance-explore-threadbare-fall2026',
-        // Not a real cohort (see enrollmentModel above) — this exists only
-        // because ProgramInstance requires at least one Cohort. A null
-        // startDate reads as "always open," which matches the program's shape.
-        name: 'The Loom Weavers',
-        startDate: null,
-        endDate: null,
-        maxLearners: null,
-        seatsTaken: 0
-      }
-    ]
-  },
+  // Core: Threadbare's self-paced door. The cohort above stays private and
+  // access-coded — this is how a learner with no partner site behind them gets
+  // the same 18 sessions.
+  selfPacedInstance('core-threadbare', 90, CORE_THREADBARE_SESSIONS),
 
-  // Explore: Godot — three public cohort instances. Exercises the many-
-  // instances dropdown picker. The first is the one real dated cohort in
-  // source; the other two continue the program forward in time past it.
+  // Explore: Threadbare — self-paced only, no cohort at all. Per
+  // curriculum.md:5 ("this is NOT a cohort"): the 13 workshops are never to be
+  // presented as one date range. SYNTHESIZED mentor: no facilitator names exist
+  // in source for this program.
+  // Explore-Threadbare/curriculum.md:1 and every workshop's own "Session
+  // length: 60 minutes".
+  selfPacedInstance('explore-threadbare', 60, EXPLORE_THREADBARE_SESSIONS, ['Grace Halloran']),
+
+  // Explore: Godot — three public cohort instances plus the self-paced one
+  // below them. Exercises the full picker: several dated runs to choose
+  // between, and the always-open option alongside. The first is the one real
+  // dated cohort in source; the other two continue it forward in time.
   {
     id: 'instance-explore-godot-2026-05',
     programId: 'explore-godot',
@@ -291,7 +314,10 @@ export const programInstances: ProgramInstance[] = [
         seatsTaken: 11
       }
     ]
-  }
+  },
+
+  // 60 min per session, same as the dated Godot runs above.
+  selfPacedInstance('explore-godot', 60, EXPLORE_GODOT_SESSIONS),
 
   // Educator Training Program has zero instances, deliberately: it's
   // facilitator-facing with no open learner enrollment (02-programs-and-offerings.md's

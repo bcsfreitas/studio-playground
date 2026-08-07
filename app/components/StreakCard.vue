@@ -14,20 +14,29 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <UPageCard variant="soft" :ui="{ footer: 'flex flex-col gap-3.5 mt-4' }">
+  <UPageCard variant="soft" :ui="{ footer: 'flex flex-col gap-3.5 mt-4', body: 'flex justify-between' }">
     <template #header>
       <div class="flex items-center justify-between">
-        <div>
+        <div class="flex items-center gap-1">
           <h3 class="m-0 font-heading font-bold tracking-[-0.5px] text-highlighted text-lg h-7">
             {{ title }}
           </h3>
-          <p class="text-sm text-dimmed mt-[3px]">Mon–Fri only · weekends are free</p>
+          <UTooltip text="Mon–Fri only · weekends are free">
+            <UButton
+              icon="lucide:info"
+              color="neutral"
+              variant="link"
+              size="sm"
+              aria-label="Streak schedule"
+              :ui="{ base: 'p-0' }"
+            />
+          </UTooltip>
         </div>
-        <img src="/images/icons/streak-flame.png" alt="" class="size-[37px] shrink-0" />
+        <StreakIcon class="size-[37px]" />
       </div>
     </template>
 
-    <div class="flex justify-between">
+    <template #body>
       <div v-for="(d, i) in days" :key="i" class="flex flex-col items-center gap-[5px] rounded p-1">
         <span
           class="inline-flex size-[30px] rounded-full items-center justify-center text-[11px] font-bold box-border"
@@ -43,7 +52,7 @@ withDefaults(defineProps<{
         </span>
         <span class="text-[10px] font-semibold text-dimmed">{{ d.letter }}</span>
       </div>
-    </div>
+    </template>
 
     <template #footer>
       <USeparator color="neutral" :ui="{ border: 'border-muted' }" />

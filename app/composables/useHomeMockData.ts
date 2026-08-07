@@ -1,12 +1,34 @@
 import { programTemplates } from '~/composables/programData/templates'
 import { enrollmentsByPhase } from '~/composables/programData/enrollments'
-
-export type PreviewState = 'active' | 'new' | 'guest'
+import { enrollmentPercent } from '~/composables/useProgramEnrollment'
+import type { PreviewState } from '~/composables/usePreviewState'
+// Straight from the module, not the useProgramMockData barrel, which re-exports
+// this file's own consumers.
+import { avatarForName } from '~/composables/programData/avatars'
 
 export const userName = 'Nova'
+// Resolved through the same registry every other face on the platform uses, so
+// the signed-in user looks like herself wherever she turns up.
+export const userAvatar = avatarForName(userName)
 export const streakDays = 6
 export const xpLabel = '2,450 XP'
 export const notificationCount = 13
+
+export interface TopbarStats {
+  xpLabel: string
+  streakDays: number
+  notificationCount: number
+}
+
+// The bare consts above are the onboarded learner's numbers. A new learner is
+// signed in and gets the same bar, but has not earned any of it yet — so the
+// counters start at zero rather than inheriting someone else's streak. Same
+// split `weekCellsFor` makes for the streak card.
+export function topbarStatsFor(isOnboarded: boolean): TopbarStats {
+  return isOnboarded
+    ? { xpLabel, streakDays, notificationCount }
+    : { xpLabel: '0 XP', streakDays: 0, notificationCount: 0 }
+}
 
 export interface PostComment {
   id: string
@@ -93,32 +115,37 @@ export const feedPosts: FeedPost[] = [
   }
 ]
 
-// The in-progress program shown at the top of home for an active learner,
-// read from the same enrollment fixture the program page uses so the two can't
-// disagree about which program they're in or how far along they are.
+// The program home resumes into. Both signed-in states are in Core: Threadbare,
+// so the template is fixed and only how far along they are differs — which is
+// what lets the page call useProgramProgress on it unconditionally.
 // First record wins — see the ordering note in programData/enrollments.ts.
-const activeEnrollment = enrollmentsByPhase.enrolled[0]
-
 export const continueLearningTemplate = programTemplates.find(
-  t => t.id === activeEnrollment?.programId
+  t => t.id === enrollmentsByPhase.onboarded[0]?.programId
 )
 
-export const continueLearning = (() => {
-  if (!continueLearningTemplate || !activeEnrollment) return undefined
+/**
+ * The resume card for a preview state, or nothing when that state isn't
+ * enrolled anywhere. Read from the same enrollment fixture the program page
+ * uses, so home can't disagree about which program they're in or how far along.
+ */
+export function continueLearningFor(state: PreviewState) {
+  const enrollment = enrollmentsByPhase[state][0]
+  const template = programTemplates.find(t => t.id === enrollment?.programId)
+  if (!template || !enrollment) return undefined
   return {
-    id: continueLearningTemplate.id,
-    name: continueLearningTemplate.title,
-    image: continueLearningTemplate.image,
-    progress: activeEnrollment.progress
+    id: template.id,
+    name: template.title,
+    image: template.image,
+    progress: enrollmentPercent(template, enrollment.progress)
   }
-})()
+}
 
 // Derived from the real catalog rather than restated, so the home page can
-// never drift from what /learn and the program pages show. Educator Training
-// is excluded: it trains facilitators to run programs, so it has no place in a
-// learner's recommendations.
+// never drift from what /learn and the program pages show. Educator programs
+// are excluded: they train facilitators to run programs, so they have no place
+// in a learner's recommendations.
 export const programRecs = programTemplates
-  .filter(template => template.id !== 'educator-training')
+  .filter(template => template.audience !== 'educator')
   .map(template => ({
     id: template.id,
     name: template.title,
@@ -168,12 +195,71 @@ export interface GettingStartedItem {
   done: boolean
 }
 
-export const gettingStartedItems: GettingStartedItem[] = [
-  { label: 'Create your account', done: true },
-  { label: 'Complete your profile', done: true },
-  { label: 'Join your first program', done: false },
-  { label: 'Play a community game', done: false },
-  { label: 'Say hi in the community feed', done: false }
+/**
+ * The checklist reads back what the state has actually done. A fresh account
+ * has only the account itself; a new learner has filled in a profile and joined
+ * a program, which is exactly what makes them a new learner rather than a fresh
+ * account.
+ */
+export function gettingStartedItemsFor(state: PreviewState): GettingStartedItem[] {
+  const joinedAProgram = enrollmentsByPhase[state].length > 0
+  return [
+    { label: 'Create your account', done: true },
+    { label: 'Complete your profile', done: joinedAProgram },
+    { label: 'Join your first program', done: joinedAProgram },
+    { label: 'Play a community game', done: false },
+    { label: 'Say hi in the community feed', done: false }
+  ]
+}
+
+export interface PathChoice {
+  id: string
+  // Split from `title` rather than baked into it: the card sets the shared
+  // "I want to" on its own line, smaller and lighter, so the part that differs
+  // between the three carries the weight.
+  lead: string
+  title: string
+  description: string
+  image: string
+  // Overlay colour as a literal hex, not a platform token: these are the
+  // Endless Studios marketing site's art-directed pairings for these exact
+  // paintings, so they answer to the artwork rather than to a brand role.
+  tint: string
+  // A choice with `to` renders as a link; without one it renders as a plain
+  // block, so nothing claims to navigate when it doesn't.
+  to?: string
+}
+
+// The signed-out "What brings you here?" row. Three reasons someone arrives at
+// Endless Studios, each pointing at a different part of the platform.
+export const pathChoices: PathChoice[] = [
+  {
+    id: 'learn',
+    lead: 'I want to',
+    to: '/auth/signup?path=learn',
+    title: 'Learn to make games',
+    description: 'Join a program or workshop and learn alongside other creators',
+    image: '/images/img/paths/path-learn.jpg',
+    tint: '#BA3852'
+  },
+  {
+    id: 'teach',
+    lead: 'I want to',
+    to: '/auth/signup?path=teach',
+    title: 'Teach game making',
+    description: 'Bring game making to your learners with training, materials, and fellow educators',
+    image: '/images/img/paths/path-teach.jpg',
+    tint: '#7857E4'
+  },
+  {
+    id: 'build',
+    lead: 'I want to',
+    to: '/auth/signup?path=build',
+    title: 'Help make the games',
+    description: 'Contribute to real games alongside the makers behind them',
+    image: '/images/img/paths/path-build.jpg',
+    tint: '#5AAEE8'
+  }
 ]
 
 export interface WeekCell {
@@ -183,8 +269,8 @@ export interface WeekCell {
 
 const WEEKDAY_LETTERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-export function weekCellsFor(isActive: boolean): WeekCell[] {
-  const kinds: WeekCell['kind'][] = isActive
+export function weekCellsFor(isOnboarded: boolean): WeekCell[] {
+  const kinds: WeekCell['kind'][] = isOnboarded
     ? ['done', 'today', 'up', 'up', 'up', 'off', 'off']
     : ['today', 'up', 'up', 'up', 'up', 'off', 'off']
   return WEEKDAY_LETTERS.map((letter, i) => ({ letter, kind: kinds[i] }))
