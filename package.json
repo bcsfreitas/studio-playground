@@ -31,6 +31,8 @@
     "storybook": "^10.0.8"
   },
   "overrides": {
-    "vite": "8.1.5"
+    "vite": "8.1.5",
+    "@unhead/vue": "3.2.3",
+    "unhead": "3.2.3"
   }
 }
