@@ -63,8 +63,8 @@ const CONTRIBUTE_TASKS = [
               v-if="contributeGate.gated"
               :body="t('games.contribute.gateBody')"
               :exits="[
-                { label: t('onboarding.vpcGate.exits.play'), to: `/games/${game.id}` },
-                { label: t('onboarding.vpcGate.exits.comment'), to: `/games/${game.id}#comments` },
+                { label: t('onboarding.vpcGate.exits.play'), to: `/play/${game.id}` },
+                { label: t('onboarding.vpcGate.exits.comment'), to: `/play/${game.id}#comments` },
                 { label: t('onboarding.vpcGate.exits.waitlist'), to: '/learn' }
               ]"
             />

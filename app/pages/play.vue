@@ -26,7 +26,7 @@ const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
           <GameTile
             v-for="g in games"
             :key="g.id"
-            :to="`/games/${g.id}`"
+            :to="`/play/${g.id}`"
             :image="g.image"
             :name="g.name"
             :description="g.description"

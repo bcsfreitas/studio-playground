@@ -12,7 +12,7 @@ const whatsNext = useWhatsNext()
 const vacuumAnswer = ref<'no' | 'a-little' | 'yes' | null>(null)
 function answerVacuum(answer: 'no' | 'a-little' | 'yes') {
   vacuumAnswer.value = answer
-  navigateTo(answer === 'yes' ? '/games/threadbare#contribute' : '/learn')
+  navigateTo(answer === 'yes' ? '/play/threadbare#contribute' : '/learn')
 }
 </script>
 

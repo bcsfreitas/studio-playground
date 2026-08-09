@@ -11,7 +11,7 @@ type SignUpPath = 'learn' | 'teach' | 'build'
 const PATH_DESTINATIONS: Partial<Record<SignUpPath, string>> = {
   learn: '/learn?audience=learner',
   teach: '/learn?audience=educator',
-  build: '/games/threadbare#contribute'
+  build: '/play/threadbare#contribute'
 }
 
 const HOME = '/'
