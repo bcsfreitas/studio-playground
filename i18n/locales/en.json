@@ -473,5 +473,49 @@
       "noEmail": "Nothing turned up?",
       "tryAgain": "Try another email"
     }
+  },
+  "onboarding": {
+    "checklist": {
+      "title": "Getting started",
+      "xpReward": "Finish all {count} to earn {xp} XP",
+      "mirror": "{context} — {completed} of {total} done, next: {next}",
+      "complete": "All done — nice work!",
+      "items": {
+        "accountCreated": "Account created",
+        "codeOfConduct": "Agree to the code of conduct",
+        "introduceYourself": "Introduce yourself to your group",
+        "submitFirstTask": "Submit your first task to the group feed",
+        "postFirstComment": "Post your first comment"
+      }
+    },
+    "whatsNext": {
+      "vacuum": {
+        "question": "Have you made a game before?",
+        "no": "No",
+        "aLittle": "A little",
+        "yes": "Yes"
+      },
+      "nextStep": "Next: {label}"
+    },
+    "vpcGate": {
+      "title": "A grown-up needs to say yes first",
+      "body": "{body}",
+      "exitsLabel": "In the meantime, you can still:",
+      "exits": {
+        "play": "Play games",
+        "comment": "Comment on a game",
+        "waitlist": "Join a waitlist"
+      }
+    }
+  },
+  "games": {
+    "play": "Play",
+    "comments": "Comments",
+    "contribute": {
+      "title": "Contribute",
+      "tasksTitle": "Open tasks",
+      "claimTask": "Claim task",
+      "connectGithub": "Connect GitHub"
+    }
   }
 }

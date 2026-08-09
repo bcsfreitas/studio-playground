@@ -473,5 +473,49 @@
       "noEmail": "¿No llegó nada?",
       "tryAgain": "Prueba con otro correo"
     }
+  },
+  "onboarding": {
+    "checklist": {
+      "title": "Primeros pasos",
+      "xpReward": "Completa las {count} para ganar {xp} XP",
+      "mirror": "{context} — {completed} de {total} completadas, sigue: {next}",
+      "complete": "¡Todo listo, buen trabajo!",
+      "items": {
+        "accountCreated": "Cuenta creada",
+        "codeOfConduct": "Acepta el código de conducta",
+        "introduceYourself": "Preséntate a tu grupo",
+        "submitFirstTask": "Envía tu primera tarea al feed del grupo",
+        "postFirstComment": "Publica tu primer comentario"
+      }
+    },
+    "whatsNext": {
+      "vacuum": {
+        "question": "¿Ya has hecho un videojuego antes?",
+        "no": "No",
+        "aLittle": "Un poco",
+        "yes": "Sí"
+      },
+      "nextStep": "Sigue: {label}"
+    },
+    "vpcGate": {
+      "title": "Primero necesitamos el sí de un adulto",
+      "body": "{body}",
+      "exitsLabel": "Mientras tanto, puedes:",
+      "exits": {
+        "play": "Jugar juegos",
+        "comment": "Comentar en un juego",
+        "waitlist": "Unirte a una lista de espera"
+      }
+    }
+  },
+  "games": {
+    "play": "Jugar",
+    "comments": "Comentarios",
+    "contribute": {
+      "title": "Contribuir",
+      "tasksTitle": "Tareas abiertas",
+      "claimTask": "Reclamar tarea",
+      "connectGithub": "Conectar GitHub"
+    }
   }
 }
