@@ -499,7 +499,6 @@
     },
     "vpcGate": {
       "title": "Primero necesitamos el sí de un adulto",
-      "body": "{body}",
       "exitsLabel": "Mientras tanto, puedes:",
       "exits": {
         "play": "Jugar juegos",

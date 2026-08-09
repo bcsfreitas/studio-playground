@@ -499,7 +499,6 @@
     },
     "vpcGate": {
       "title": "A grown-up needs to say yes first",
-      "body": "{body}",
       "exitsLabel": "In the meantime, you can still:",
       "exits": {
         "play": "Play games",
