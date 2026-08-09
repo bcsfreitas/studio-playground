@@ -514,7 +514,13 @@
       "title": "Contribute",
       "tasksTitle": "Open tasks",
       "claimTask": "Claim task",
-      "connectGithub": "Connect GitHub"
+      "connectGithub": "Connect GitHub",
+      "gateBody": "Contribution tasks happen on GitHub, outside the platform. A parent or guardian needs to approve that before you connect."
+    },
+    "notFound": {
+      "title": "Game not found",
+      "body": "We couldn't find a game at this address. It may have moved or the link may be out of date.",
+      "back": "Back to home"
     }
   }
 }

@@ -514,7 +514,13 @@
       "title": "Contribuir",
       "tasksTitle": "Tareas abiertas",
       "claimTask": "Reclamar tarea",
-      "connectGithub": "Conectar GitHub"
+      "connectGithub": "Conectar GitHub",
+      "gateBody": "Las tareas de contribución ocurren en GitHub, fuera de la plataforma. Un padre, madre o tutor debe aprobarlo antes de que te conectes."
+    },
+    "notFound": {
+      "title": "Juego no encontrado",
+      "body": "No encontramos un juego en esta dirección. Puede que se haya movido o que el enlace esté desactualizado.",
+      "back": "Volver al inicio"
     }
   }
 }
