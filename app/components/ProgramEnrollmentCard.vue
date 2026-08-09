@@ -245,8 +245,16 @@ const { isLoggedIn, accountStatus } = usePreviewState()
 // Flow 2a's join screen: an unconsented young learner joining an open cohort
 // is exactly the doc's "VPC at join" case (M2a) — the one boundary action
 // that reads cohort type, not just account status. See consent.ts.
+//
+// Self-paced cohorts (startDate === null) are excluded on purpose: the
+// consent matrix is about a *group's* visibility, and a self-paced instance
+// has no roster to be seen with — starting one alone crosses no boundary,
+// so it's never gated regardless of its `type`.
 const { check } = useConsentBoundary()
-const joinGate = computed(() => selectedCohort.value ? check(accountStatus.value, selectedCohort.value.type, 'join-open-cohort') : { gated: false, reason: 'not-required' as const })
+const joinGate = computed(() => {
+  if (!selectedCohort.value || selectedCohort.value.startDate === null) return { gated: false, reason: 'not-required' as const }
+  return check(accountStatus.value, selectedCohort.value.type, 'join-open-cohort')
+})
 
 // A guest pressing Enroll is a guest telling us what they want. Sign-up carries
 // the program and the session they picked, and the query it comes back with is
