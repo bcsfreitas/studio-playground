@@ -11,7 +11,7 @@ const adminItems = ['Games', 'Programs', 'Resources', 'Intake Form', 'Feed Conso
 
 const mainItems = computed<NavigationMenuItem[]>(() => [
   { label: 'Home', icon: 'lucide:home', to: '/', color: 'primary' },
-  { label: 'Play', icon: 'lucide:gamepad-2', to: '/games', color: 'purple' },
+  { label: 'Play', icon: 'lucide:gamepad-2', to: '/play', color: 'purple' },
   { label: 'Learn', icon: 'lucide:brain', to: '/learn', color: 'blue' },
   { label: 'Make', icon: 'lucide:wrench', to: '/make', color: 'warning' },
   {
