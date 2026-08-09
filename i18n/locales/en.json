@@ -132,6 +132,9 @@
         "body": "This frees your spot in {program}, {range}. You can enroll again while seats last.",
         "keep": "Keep my seat",
         "confirm": "Yes, cancel it"
+      },
+      "vpcGate": {
+        "body": "{program} is an open group — joining makes your work and profile visible outside it. A parent or guardian needs to approve that first."
       }
     },
     "viewer": {

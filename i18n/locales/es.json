@@ -132,6 +132,9 @@
         "body": "Esto libera tu plaza en {program}, {range}. Puedes volver a inscribirte mientras queden plazas.",
         "keep": "Quedarme con la plaza",
         "confirm": "Sí, cancelar"
+      },
+      "vpcGate": {
+        "body": "{program} es un grupo abierto — unirte hace visible tu trabajo y tu perfil fuera de él. Un padre, madre o tutor debe aprobarlo primero."
       }
     },
     "viewer": {

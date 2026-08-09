@@ -6,12 +6,12 @@ type SignUpPath = 'learn' | 'teach' | 'build'
 /**
  * Where the three "What brings you here?" cards land once the account exists.
  * They carry `?path=` for the sign-up copy; this turns that choice into a
- * destination. `build` is deliberately absent — that path isn't designed yet,
- * so it falls through to the home page.
+ * destination.
  */
 const PATH_DESTINATIONS: Partial<Record<SignUpPath, string>> = {
   learn: '/learn?audience=learner',
-  teach: '/learn?audience=educator'
+  teach: '/learn?audience=educator',
+  build: '/games/threadbare#contribute'
 }
 
 const HOME = '/'

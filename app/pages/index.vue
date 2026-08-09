@@ -2,13 +2,9 @@
 import {
   feedPosts,
   programRecs,
-  continueLearningFor,
-  continueLearningTemplate,
   openTasks,
   bounties,
   upcomingEvents,
-  gettingStartedItemsFor,
-  pathChoices,
   weekCellsFor,
   topbarStatsFor,
   userName,
@@ -16,19 +12,11 @@ import {
   streakDays
 } from '~/composables/useHomeMockData'
 import { usePreviewState } from '~/composables/usePreviewState'
-import { flattenCurriculum } from '~/composables/useProgramCurriculum'
-import { useProgramProgress } from '~/composables/useProgramProgress'
 
 definePageMeta({ layout: 'dashboard' })
 
-const { state, isGuest, isStarting, isOnboarded, isLoggedIn } = usePreviewState()
+const { isGuest, isStarting, isOnboarded, isLoggedIn } = usePreviewState()
 const showRecs = computed(() => isStarting.value || isGuest.value)
-const gettingStartedItems = computed(() => gettingStartedItemsFor(state.value))
-
-// A new learner has joined one program without starting it, so they get the
-// same resume card an onboarded learner does — just at 0%, pointing at lesson
-// one. Guests aren't enrolled in anything, so they get nothing.
-const continueLearning = computed(() => continueLearningFor(state.value))
 
 const streakTitle = computed(() => (isOnboarded.value ? `${streakDays}-day streak` : 'Start your streak'))
 const streakMeta = computed(() => (isOnboarded.value ? 'Best: 14 days' : 'Best: 0 days'))
@@ -43,25 +31,6 @@ const tabs: { id: typeof tab.value, label: string }[] = [
   { id: 'program', label: 'Program boards' }
 ]
 const filteredPosts = computed(() => feedPosts.filter(p => tab.value === 'all' || p.cat === tab.value))
-
-// The lesson to resume is whichever one isn't finished yet, which lives in
-// localStorage — so this resolves to the first lesson during SSR and settles
-// once useProgramProgress has read storage on mount.
-const resumeProgress = continueLearningTemplate ? useProgramProgress(continueLearningTemplate) : null
-const resumeItems = continueLearningTemplate ? flattenCurriculum(continueLearningTemplate) : []
-
-const resumeItem = computed(() =>
-  resumeItems.find(item => !resumeProgress?.isCompleted(item.id)) ?? resumeItems[0]
-)
-
-// `?item=` is what tells the program shell to open the classroom on that
-// lesson — tabs themselves carry no URL.
-const resumeTo = computed(() => {
-  if (!continueLearning.value) return '/learn'
-  const base = `/learn/${continueLearning.value.id}`
-  return resumeItem.value ? `${base}?item=${resumeItem.value.id}` : base
-})
-
 </script>
 
 <template>
@@ -102,10 +71,12 @@ const resumeTo = computed(() => {
 
         <!-- Sits outside the two-column grid below, at the same level as the
              hero, so the row spans the full container instead of being boxed
-             into the main column. -->
-        <section v-if="isGuest" class="mt-20">
-          <SectionTitle title="What brings you here?" />
-          <PathChoiceCards :choices="pathChoices" class="mt-6" />
+             into the main column. One persistent slot, one job: see
+             WhatsNextSlot's own doc comment for the state machine this
+             replaces (guest cards, checklist card, and the resume card all
+             used to live here separately). -->
+        <section :class="isGuest ? 'mt-20' : 'mt-10'">
+          <WhatsNextSlot />
         </section>
 
         <div class="grid items-start gap-12" style="grid-template-columns: minmax(0,1fr) 324px; margin-top: 80px">
@@ -114,42 +85,6 @@ const resumeTo = computed(() => {
 
             <!-- Learning -->
             <section class="w-full self-auto">
-              <div v-if="continueLearning">
-                <SectionTitle title="Continue learning">
-                  <template #trailing>
-                    <UButton color="secondary" variant="ghost" size="xs">
-                      View all programs
-                    </UButton>
-                  </template>
-                </SectionTitle>
-
-                <UPageCard
-                  orientation="horizontal"
-                  reverse
-                  class="transition-shadow duration-250 hover:shadow-2xl"
-                >
-                  <img :src="continueLearning.image" :alt="continueLearning.name" class="h-full object-cover rounded-2xl">
-
-                  <template #body>
-                    <div class="text-xs font-semibold uppercase text-dimmed w-full">Program</div>
-                    <div class="mt-1 font-heading font-bold text-highlighted text-2xl">{{ continueLearning.name }}</div>
-                    <div class="text-sm text-muted">Current task: {{ resumeItem?.title }}</div>
-                    <div class="flex items-center gap-3 mt-4">
-                      <UProgress :model-value="continueLearning.progress" color="primary"/>
-                      <span class="text-xs text-default">{{ continueLearning.progress }}%</span>
-                    </div>
-                    <div class="mt-3">
-                      <UButton
-                        color="primary"
-                        size="xl"
-                        icon="lucide:play"
-                        :to="resumeTo"
-                      >Resume learning</UButton>
-                    </div>
-                  </template>
-                </UPageCard>
-              </div>
-
               <div v-if="showRecs">
                 <SectionTitle
                   title="Start learning"
@@ -250,7 +185,6 @@ const resumeTo = computed(() => {
 
           <!-- ============ RIGHT RAIL ============ -->
           <div class="flex flex-col gap-6 min-w-0 w-full">
-            <GettingStartedCard v-if="isStarting" :items="gettingStartedItems" />
             <StreakCard v-if="isLoggedIn" :title="streakTitle" :meta="streakMeta" :days="weekCells" />
             <UpcomingEventsCard :events="upcomingEvents" />
             <BountiesCard :bounties="bounties" />

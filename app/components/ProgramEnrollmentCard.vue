@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ProgramTemplate, ProgramInstance, EnrollmentRecord, Cohort, EnrollmentStatus } from '~/composables/useProgramMockData'
-import { cohortStatusFor, cohortHasStarted, isBookableStatus } from '~/composables/useProgramMockData'
+import { cohortStatusFor, cohortHasStarted, isBookableStatus, useConsentBoundary } from '~/composables/useProgramMockData'
 import { formatCohortRange } from '~/composables/useLearnMockData'
 import { useProgramTabs } from '~/composables/useProgramTabs'
 import { usePreviewState } from '~/composables/usePreviewState'
@@ -211,7 +211,7 @@ function submitCode() {
 }
 
 const enrollModalOpen = ref(false)
-const enrollModalStep = ref<'confirm' | 'success' | 'cancel'>('confirm')
+const enrollModalStep = ref<'confirm' | 'success' | 'cancel' | 'vpc-gate'>('confirm')
 
 function openEnrollModal() {
   enrollModalStep.value = 'confirm'
@@ -223,6 +223,7 @@ function openEnrollModal() {
 const modalTitle = computed(() => {
   if (enrollModalStep.value === 'cancel') return t('program.enroll.cancelModal.title')
   if (enrollModalStep.value === 'confirm') return t('program.enroll.confirmModal.title')
+  if (enrollModalStep.value === 'vpc-gate') return t('onboarding.vpcGate.title')
   return t('program.enroll.successModal.title')
 })
 
@@ -239,7 +240,13 @@ function confirmCancellation() {
 }
 
 const route = useRoute()
-const { isLoggedIn } = usePreviewState()
+const { isLoggedIn, accountStatus } = usePreviewState()
+
+// Flow 2a's join screen: an unconsented young learner joining an open cohort
+// is exactly the doc's "VPC at join" case (M2a) — the one boundary action
+// that reads cohort type, not just account status. See consent.ts.
+const { check } = useConsentBoundary()
+const joinGate = computed(() => selectedCohort.value ? check(accountStatus.value, selectedCohort.value.type, 'join-open-cohort') : { gated: false, reason: 'not-required' as const })
 
 // A guest pressing Enroll is a guest telling us what they want. Sign-up carries
 // the program and the session they picked, and the query it comes back with is
@@ -250,7 +257,13 @@ const signUpToEnroll = computed(() => signUpTo(
 
 function onEnrollClick() {
   // Guests follow the `to` link instead; nothing to do here for them.
-  if (isLoggedIn.value) openEnrollModal()
+  if (!isLoggedIn.value) return
+  if (joinGate.value.gated) {
+    enrollModalStep.value = 'vpc-gate'
+    enrollModalOpen.value = true
+    return
+  }
+  openEnrollModal()
 }
 
 function onStartLearningClick() {
@@ -525,6 +538,18 @@ function addToCalendar() {
           </p>
         </div>
 
+        <div v-else-if="enrollModalStep === 'vpc-gate'" class="flex flex-col items-center text-center gap-3">
+          <div class="flex items-center justify-center size-12 rounded-full bg-kids-50 text-kids">
+            <UIcon name="lucide:shield-check" class="size-6" />
+          </div>
+          <div class="font-heading font-bold text-lg text-highlighted">
+            {{ t('onboarding.vpcGate.title') }}
+          </div>
+          <p class="text-sm text-muted">
+            {{ t('program.enroll.vpcGate.body', { program: template.title }) }}
+          </p>
+        </div>
+
         <div v-else class="flex flex-col items-center text-center gap-3">
           <div class="flex items-center justify-center size-12 rounded-full bg-success/10 text-success">
             <UIcon name="lucide:check" class="size-6" />
@@ -552,6 +577,10 @@ function addToCalendar() {
         <template v-else-if="enrollModalStep === 'confirm'">
           <UButton :label="t('program.enroll.confirmModal.cancel')" color="neutral" variant="outline" @click="enrollModalOpen = false" />
           <UButton :label="t('program.enroll.confirmModal.confirm')" color="primary" @click="confirmEnrollment" />
+        </template>
+        <template v-else-if="enrollModalStep === 'vpc-gate'">
+          <UButton :label="t('onboarding.vpcGate.exits.play')" color="neutral" variant="outline" to="/" @click="enrollModalOpen = false" />
+          <UButton :label="t('onboarding.vpcGate.exits.waitlist')" color="neutral" variant="outline" to="/learn" @click="enrollModalOpen = false" />
         </template>
         <UButton
           v-else
