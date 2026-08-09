@@ -94,6 +94,8 @@ function selfPacedInstance(
         id: `cohort-${programId}-self-paced`,
         instanceId: id,
         name: 'Self-paced',
+        // A solo, always-open path has no roster to hide — open by definition.
+        type: 'open',
         startDate: null,
         endDate: null,
         maxLearners: null,
@@ -194,6 +196,9 @@ export const programInstances: ProgramInstance[] = [
         id: 'cohort-core-threadbare-night-owls',
         instanceId: 'instance-core-threadbare-utp',
         name: 'Night Owls',
+        // A partner-commissioned, access-coded group — invisible outside UTP's
+        // own roster, the closed case the consent matrix describes.
+        type: 'closed',
         startDate: '2026-09-01',
         endDate: '2026-10-29',
         // SYNTHESIZED: seat figures for this specific run. The access code name
@@ -249,6 +254,10 @@ export const programInstances: ProgramInstance[] = [
         id: 'cohort-explore-godot-pioneers',
         instanceId: 'instance-explore-godot-2026-05',
         name: 'Godot Pioneers',
+        // Endless-run, publicly scheduled — Flow 2a's target case: a cold
+        // arrival can join, and an unconsented young learner hits the VPC
+        // gate at join per the consent matrix.
+        type: 'open',
         startDate: '2026-05-12',
         endDate: '2026-06-11',
         // 02-programs-and-offerings.md:12 — "68 enrolled / 30 participated". The
@@ -280,6 +289,7 @@ export const programInstances: ProgramInstance[] = [
         id: 'cohort-explore-godot-dawn-patrol',
         instanceId: 'instance-explore-godot-2026-08-am',
         name: 'Dawn Patrol',
+        type: 'open',
         startDate: '2026-08-11',
         endDate: '2026-09-10',
         maxLearners: 20,
@@ -308,6 +318,7 @@ export const programInstances: ProgramInstance[] = [
         id: 'cohort-explore-godot-studio-b',
         instanceId: 'instance-explore-godot-2026-08-pm',
         name: 'Studio B',
+        type: 'open',
         startDate: '2026-08-17',
         endDate: '2026-09-16',
         maxLearners: 18,

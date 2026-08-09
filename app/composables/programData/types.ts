@@ -153,12 +153,20 @@ export interface ProgramTemplate {
   certificate: ProgramCertificate
 }
 
+// Whether the group itself is discoverable to the wider community — separate
+// axis from ProgramInstance.visibility, which governs whether the instance is
+// listed in the catalog at all. A closed cohort can be a public instance (any
+// guest can see "Join — starts Sept 1") while the joined group's roster/feed
+// stays invisible outside it once they're in.
+export type CohortType = 'closed' | 'open'
+
 export interface Cohort {
   id: string
   instanceId: string
   // A human group name ("Night Owls"), never "Cohort 3" — the word "cohort" is
   // a data-model term and must not reach learner-facing copy.
   name: string
+  type: CohortType
   startDate: string | null
   endDate: string | null
   maxLearners: number | null
