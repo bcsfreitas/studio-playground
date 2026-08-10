@@ -231,12 +231,16 @@ export interface PathChoice {
 }
 
 // The signed-out "What brings you here?" row. Three reasons someone arrives at
-// Endless Studios, each pointing at a different part of the platform.
+// Endless Studios, each pointing at a different part of the platform — the
+// real content, not a signup wall. Guests browse freely; the wall (via
+// signUpTo/PATH_DESTINATIONS in useAuthIntent.ts, which encodes these exact
+// same destinations) only shows up once they try to commit to something
+// inside — enrolling, commenting, joining Threadbare's build effort.
 export const pathChoices: PathChoice[] = [
   {
     id: 'learn',
     lead: 'I want to',
-    to: '/auth/signup?path=learn',
+    to: '/learn?audience=learner',
     title: 'Learn to make games',
     description: 'Join a program or workshop and learn alongside other creators',
     image: '/images/img/paths/path-learn.jpg',
@@ -245,7 +249,7 @@ export const pathChoices: PathChoice[] = [
   {
     id: 'teach',
     lead: 'I want to',
-    to: '/auth/signup?path=teach',
+    to: '/learn?audience=educator',
     title: 'Teach game making',
     description: 'Bring game making to your learners with training, materials, and fellow educators',
     image: '/images/img/paths/path-teach.jpg',
@@ -254,7 +258,7 @@ export const pathChoices: PathChoice[] = [
   {
     id: 'build',
     lead: 'I want to',
-    to: '/auth/signup?path=build',
+    to: '/play/threadbare#contribute',
     title: 'Help make the games',
     description: 'Contribute to real games alongside the makers behind them',
     image: '/images/img/paths/path-build.jpg',
