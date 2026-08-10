@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@nuxtjs/storybook'
 import AppTopbar from './AppTopbar.vue'
+import { userAvatar } from '../composables/useHomeMockData'
 
 const meta = {
   title: 'Components/AppTopbar',
@@ -19,7 +20,14 @@ export const ActiveLearner: Story = {
     xpLabel: '2,450 XP',
     streakDays: 6,
     userName: 'Nova',
+    userAvatar,
     notificationCount: 13
+  }
+}
+
+export const Guest: Story = {
+  args: {
+    guest: true
   }
 }
 
@@ -27,6 +35,7 @@ export const NoStreak: Story = {
   args: {
     xpLabel: '150 XP',
     streakDays: 0,
-    userName: 'Nova'
+    userName: 'Nova',
+    userAvatar
   }
 }

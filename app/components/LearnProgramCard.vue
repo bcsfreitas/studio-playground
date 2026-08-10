@@ -18,13 +18,17 @@ const TIMING_COLOR: Record<string, BadgeProps['color']> = {
 }
 
 const timing = computed(() => cohortTimingOf(props.program))
-const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, props.program.cohortEnd))
+
+// A program with no cohort has no range to print — what a learner needs to know
+// is that there's nothing to wait for.
+const scheduleLabel = computed(() => props.program.cohortStart && props.program.cohortEnd
+  ? formatCohortRange(props.program.cohortStart, props.program.cohortEnd)
+  : 'Self-paced')
 </script>
 
 <template>
   <UPageCard
-    :to="program.enrolled ? `/learn/${program.id}/program` : `/learn/${program.id}`"
-    :target="program.enrolled ? '_blank' : undefined"
+    :to="`/learn/${program.id}`"
     :title="program.template.title"
     :description="program.template.description"
     reverse
@@ -59,7 +63,7 @@ const cohortRange = computed(() => formatCohortRange(props.program.cohortStart, 
 
         <div v-else class="flex flex-col gap-2">
           <div class="flex items-center gap-2">
-            <UBadge :label="cohortRange" color="neutral" variant="outline" size="sm" />
+            <UBadge :label="scheduleLabel" color="neutral" variant="outline" size="sm" />
             <UBadge :label="TIMING_LABEL[timing]" :color="TIMING_COLOR[timing]" variant="soft" size="sm" />
           </div>
         </div>

@@ -15,7 +15,13 @@ export default defineAppConfig({
         // Pages set their own `bg-slate-50` via the `ui` prop; that's a
         // background-color utility so it merges alongside this background-image
         // class rather than replacing it.
-        root: 'page-glow'
+        root: 'page-glow',
+        // This body is the app's only vertical scroller (UDashboardGroup is
+        // `fixed inset-0 overflow-hidden`). Reserve the scrollbar gutter
+        // whether or not a scrollbar shows, so a short page and a long one lay
+        // out at the same width instead of nudging centred content sideways.
+        // Arbitrary property: Tailwind v4 has no scrollbar-gutter utility.
+        body: '[scrollbar-gutter:stable]'
       }
     },
     pageCard: {

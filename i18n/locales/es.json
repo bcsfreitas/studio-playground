@@ -5,6 +5,15 @@
       "body": "No pudimos encontrar un programa en esta dirección. Puede que se haya movido o que el enlace esté desactualizado.",
       "backToLearn": "Volver a Learn"
     },
+    "tabs": {
+      "overview": "Resumen",
+      "home": "Inicio",
+      "community": "Comunidad",
+      "classroom": "Aula",
+      "projects": "Proyectos",
+      "resources": "Recursos",
+      "notBuiltYet": "Esta pestaña aún no está lista. Vuelve pronto."
+    },
     "hero": {
       "deliveredWith": "Impartido con {institution}",
       "facilitatedBy": "Facilitado por {facilitator}"
@@ -19,15 +28,10 @@
         "Explore": "Explorar",
         "Core": "Esencial",
         "More": "Más"
-      },
-      "learningType": {
-        "self-paced": "A tu propio ritmo",
-        "moderated": "Con calendario"
       }
     },
     "facts": {
       "totalXp": "XP total",
-      "learningType": "Tipo de clase",
       "difficulty": "Dificultad",
       "language": "Idioma"
     },
@@ -35,12 +39,12 @@
       "playLabel": "Jugar a {name}"
     },
     "sections": {
-      "overview": "Resumen",
       "curriculum": "Plan de estudios",
       "tools": "Herramientas que usarás",
       "prerequisites": "Requisitos previos",
       "testimonials": "Lo que dicen los estudiantes",
-      "certificate": "Lo que obtendrás"
+      "certificate": "Lo que obtendrás",
+      "projects": "Proyectos creados por otras personas"
     },
     "curriculum": {
       "xpBadge": "+{xp} XP"
@@ -72,27 +76,36 @@
         }
       }
     },
-    "enrollment": {
+    "enroll": {
       "sessionPickerLabel": "Elige una sesión",
+      "yourSession": "Tu sesión",
       "cta": {
         "resume": "Continuar aprendiendo",
         "startsOn": "Comienza el {date}",
         "startLearning": "Comenzar a aprender",
-        "unlockCohort": "Desbloquear sesión",
-        "enrollmentClosed": "Inscripción cerrada",
-        "enroll": "Inscribirte en esta sesión"
+        "unlockSession": "Desbloquear sesión",
+        "enroll": "Inscribirte en esta sesión",
+        "startsIn": "Empieza en {count} día | Empieza en {count} días"
       },
       "accessCode": {
+        "label": "Código de acceso",
         "placeholder": "Ingresa el código de acceso",
         "helper": "Esta sesión requiere un código de acceso de tu facilitador.",
         "error": "Ese código no coincide. Consulta con tu facilitador e intenta de nuevo."
       },
-      "seats": {
-        "filled": "{taken} de {max} cupos ocupados"
+      "notify": {
+        "title": "Todavía no hay fechas programadas",
+        "body": "Déjanos tu correo y te avisaremos en cuanto se abra la próxima edición.",
+        "label": "Correo electrónico",
+        "placeholder": "tu{'@'}ejemplo.com",
+        "cta": "Avísame"
       },
-      "cohortDescription": {
-        "open": "{taken} de {max} cupos - {range}",
-        "closed": "Cerrado - {range}",
+      "selfPacedOption": {
+        "label": "A tu propio ritmo",
+        "description": "Online y a tu ritmo"
+      },
+      "spotsFilled": "{taken}/{max} cupos ocupados",
+      "sessionDescription": {
         "requiresCode": "Requiere un código de acceso",
         "selfPaced": "A tu propio ritmo - comienza cuando quieras",
         "alreadyEnrolled": "Ya estás inscrito - {progress}% completado"
@@ -108,43 +121,357 @@
         "starts": "Comienza el {date}",
         "emailNotice": "Enviamos una confirmación a tu correo - revisa tu bandeja de entrada para recordatorios a medida que se acerque la sesión.",
         "done": "Entendido"
+      },
+      "waiting": {
+        "addToCalendar": "Añadir al calendario",
+        "cancel": "Cancelar inscripción",
+        "helper": "Podrás abrir el aula cuando empiece la sesión."
+      },
+      "cancelModal": {
+        "title": "¿Dejar tu plaza?",
+        "body": "Esto libera tu plaza en {program}, {range}. Puedes volver a inscribirte mientras queden plazas.",
+        "keep": "Quedarme con la plaza",
+        "confirm": "Sí, cancelar"
       }
     },
     "viewer": {
-      "exit": {
-        "label": "Salir"
-      },
       "sidebar": {
         "xpProgress": "{earned} / {available} XP"
       },
       "actions": {
         "markComplete": "Marcar como completado",
-        "completed": "Completado",
-        "nextItem": "Ir al siguiente elemento"
+        "completed": "Completado"
       },
       "content": {
-        "placeholder": "Marcador de posición de {contentType}"
+        "placeholder": "Marcador de posición de {contentType}",
+        "tutorial": "Tutorial"
       },
       "notFound": "Programa no encontrado.",
       "deliverable": {
         "startTask": "Iniciar esta tarea",
-        "descriptionHeading": "Descripción",
         "introBody": "Comparte evidencia de lo que construiste para este módulo: un enlace a capturas de pantalla, un video corto o una versión jugable si la tienes.",
         "shareIntro": "Puedes compartir:",
         "shareScreenshots": "Un enlace a capturas de pantalla",
         "shareVideo": "Un enlace a un video corto",
         "shareBuild": "Un enlace a una versión jugable (como un export comprimido de tu juego)",
-        "submitStepsHeading": "Para enviar tu trabajo:",
-        "submitStep1": "Haz clic en Iniciar esta tarea para abrir el formulario de envío.",
-        "submitStep2": "Agrega uno o más enlaces a lo que construiste.",
-        "submitStep3": "En el campo de descripción, explica qué cambiaste y por qué.",
-        "milestone": "Hito {number} de {total}: {title}",
         "acceptanceCriteria": "Criterios de aceptación:",
         "descriptionPlaceholder": "Describe qué cambiaste y cómo afectó la experiencia del jugador...",
         "linksPlaceholder": "Pega un enlace y presiona Enter",
         "submit": "Enviar para completar",
         "yourSubmission": "Tu envío"
+      },
+      "yourPath": "Tu recorrido",
+      "moduleHeading": "Módulo {number} — {title}"
+    },
+    "projects": {
+      "seeAll": "Ver los {count} proyectos",
+      "empty": "Todavía no se han compartido proyectos de este programa.",
+      "by": "por {author}",
+      "libraryTitle": "Todavía no hay proyectos | 1 proyecto terminado | {count} proyectos terminados",
+      "emptyBody": "Aquí aparecerán los proyectos terminados de este programa."
+    },
+    "sideInfo": {
+      "sessionCount": "{count} sesión | {count} sesiones",
+      "workshopCount": "{count} taller | {count} talleres",
+      "milestoneCount": "{count} hito | {count} hitos",
+      "teachers": "Docente | Docente | Docentes",
+      "tools": "Herramientas que usarás",
+      "prerequisites": "Requisitos previos"
+    },
+    "community": {
+      "channels": "Canales",
+      "restricted": "Solo para personas inscritas en este programa",
+      "members": "Miembros",
+      "memberXp": "{xp} XP",
+      "seeAllMembers": "Ver los {count} miembros",
+      "composerPlaceholder": "Inicia un tema en {channel}…",
+      "postingTo": "Publicando en {channel}",
+      "post": "Publicar",
+      "justNow": "ahora mismo",
+      "emptyChannel": "Todavía no hay nada en {channel}",
+      "emptyChannelBody": "Sé la primera persona en iniciar un tema aquí."
+    },
+    "home": {
+      "latestActivity": "Actividad reciente",
+      "noActivity": "Todavía no hay actividad",
+      "noActivityBody": "Aquí aparecerán las publicaciones de los canales de este programa.",
+      "yourProgress": "Tu progreso",
+      "completed": "Completado",
+      "completedBody": "Has terminado todas las lecciones de este programa. Buen trabajo.",
+      "xpEarned": "{earned} / {available} XP",
+      "moduleLabel": "Módulo {number} de {total}",
+      "lessonLabel": "Lección {number} de {total}",
+      "continue": "Seguir aprendiendo",
+      "reviewClassroom": "Repasar el aula"
+    },
+    "metrics": {
+      "title": "Progreso del curso",
+      "lessonsCompleted": "Lecciones completadas",
+      "tasksDelivered": "Tareas entregadas",
+      "xpEarned": "XP ganados"
+    },
+    "courseBadges": {
+      "title": "Insignias del curso",
+      "earned": "Conseguida",
+      "list": {
+        "first-lesson": {
+          "name": "Primeros pasos",
+          "requirement": "Completa tu primera lección"
+        },
+        "first-delivery": {
+          "name": "Primera entrega",
+          "requirement": "Entrega tu primera tarea"
+        },
+        "module-cleared": {
+          "name": "Módulo superado",
+          "requirement": "Termina todos los pasos de un módulo"
+        },
+        "halfway": {
+          "name": "A mitad de camino",
+          "requirement": "Llega al 50% del programa"
+        },
+        "xp-collector": {
+          "name": "Coleccionista de XP",
+          "requirement": "Gana 500 XP"
+        },
+        "finisher": {
+          "name": "Finalista",
+          "requirement": "Completa todos los pasos del programa"
+        }
       }
+    }
+  },
+  "pixelStitch": {
+    "title": "Threadbare Pixel Stitch",
+    "subtitle": "Teje arte pixel y animaciones para tus personajes y objetos de Threadbare.",
+    "backToTools": "Herramientas",
+    "openProject": "Abrir",
+    "saveProject": "Guardar",
+    "exportingGif": "Exportando GIF…",
+    "canvasSize": {
+      "label": "Lienzo",
+      "tooltip": "Establecer el lienzo en {size} píxeles"
+    },
+    "tools": {
+      "pencil": "Lápiz",
+      "pencilTooltip": "Dibujar píxeles uno a uno",
+      "eraser": "Borrador",
+      "eraserTooltip": "Eliminar píxeles del lienzo",
+      "fill": "Rellenar",
+      "fillTooltip": "Rellenar el área conectada con el color actual",
+      "replace": "Reemplazar color",
+      "replaceTooltip": "Reemplazar todos los píxeles del color seleccionado en todo el lienzo",
+      "eyedropper": "Cuentagotas",
+      "eyedropperTooltip": "Tomar un color de cualquier píxel del lienzo",
+      "select": "Seleccionar",
+      "selectTooltip": "Selecciona un área para copiar (Ctrl+C) o cortar (Ctrl+X), y luego pegar (Ctrl+V)"
+    },
+    "toolbar": {
+      "removeBackground": "Eliminar el fondo de la capa actual",
+      "flipHorizontal": "Voltear horizontalmente",
+      "flipVertical": "Voltear verticalmente",
+      "decreaseSize": "Pincel más pequeño",
+      "increaseSize": "Pincel más grande",
+      "undo": "Deshacer la última acción",
+      "redo": "Rehacer la última acción",
+      "toggleGrid": "Alternar la cuadrícula",
+      "importImage": "Importar una imagen al lienzo",
+      "exportPng": "Exportar el fotograma actual como PNG",
+      "exportGif": "Exportar la animación como GIF",
+      "clearOptions": "Borrar el lienzo",
+      "clearCurrentLayer": "Borrar la capa actual",
+      "clearAllLayers": "Borrar todas las capas",
+      "exportSpriteSheet": "Exportar todos los fotogramas como hoja de sprites",
+      "importSpriteSheet": "Importar una hoja de sprites como fotogramas",
+      "submit": "Guardar y enviar",
+      "submitTooltip": "Descargar el fotograma actual como PNG"
+    },
+    "canvas": {
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar",
+      "zoomReset": "Restablecer el zoom al 100%",
+      "hintIdle": "Arrastra para seleccionar un área, luego pulsa Ctrl+C para copiar y Ctrl+V para pegar.",
+      "hintSelecting": "Arrastra para seleccionar un área.",
+      "hintSelected": "Pulsa Ctrl+C para copiar o Ctrl+X para cortar, y luego Ctrl+V para pegar.",
+      "hintPasting": "Mueve el puntero para colocarlo, haz clic para pegar o pulsa Esc para cancelar."
+    },
+    "color": {
+      "title": "Color",
+      "dragToSave": "Arrastra a un espacio de la paleta para guardar este color",
+      "pickerTooltip": "Elegir un color",
+      "hexTooltip": "Introduce un código de color hexadecimal",
+      "brushOpacity": "Opacidad del pincel",
+      "dragToCustomize": "Arrastra colores a los espacios para personalizar la paleta.",
+      "swatchTooltip": "{color} — haz clic para seleccionar, suelta un color para reemplazarlo",
+      "row": {
+        "base": "Color",
+        "shade1": "Tono 1",
+        "shade2": "Tono 2",
+        "highlight": "Resaltado"
+      }
+    },
+    "layers": {
+      "title": "Capas",
+      "add": "Añadir",
+      "addTooltip": "Crear una capa nueva",
+      "hide": "Ocultar esta capa",
+      "show": "Mostrar esta capa",
+      "rename": "Renombrar esta capa",
+      "moveUp": "Subir esta capa",
+      "moveDown": "Bajar esta capa",
+      "delete": "Eliminar esta capa",
+      "opacity": "Opacidad"
+    },
+    "frames": {
+      "title": "Fotogramas de animación",
+      "frame": "Fotograma",
+      "add": "Añadir",
+      "addTooltip": "Crear un fotograma nuevo",
+      "play": "Reproducir la animación",
+      "pause": "Pausar la animación",
+      "duplicate": "Duplicar este fotograma",
+      "delete": "Eliminar este fotograma"
+    },
+    "preview": {
+      "title": "Vista previa de la animación",
+      "fps": "FPS",
+      "fpsTooltip": "Ajustar la velocidad de reproducción en fotogramas por segundo"
+    },
+    "onion": {
+      "title": "Piel de cebolla",
+      "tooltip": "Mostrar fantasmas de los fotogramas vecinos mientras dibujas",
+      "previousFrames": "Fotogramas anteriores",
+      "nextFrames": "Fotogramas siguientes",
+      "opacity": "Opacidad del fantasma",
+      "legendPrevious": "Anterior",
+      "legendNext": "Siguiente"
+    },
+    "sheet": {
+      "exportTitle": "Exportar hoja de sprites",
+      "importTitle": "Importar hoja de sprites",
+      "imageFile": "Archivo de imagen",
+      "columns": "Columnas",
+      "rows": "Filas",
+      "summary": "{count} fotogramas se organizarán en una cuadrícula de {columns} × {rows}.",
+      "cancel": "Cancelar",
+      "export": "Exportar",
+      "import": "Importar"
+    },
+    "toast": {
+      "layerAdded": "Capa añadida",
+      "cannotDeleteLastLayer": "No puedes eliminar la última capa",
+      "layerDeleted": "Capa eliminada",
+      "layerCleared": "Capa borrada",
+      "allLayersCleared": "Todas las capas borradas",
+      "frameAdded": "Fotograma añadido",
+      "cannotDeleteLastFrame": "No puedes eliminar el último fotograma",
+      "frameDeleted": "Fotograma eliminado",
+      "frameDuplicated": "Fotograma duplicado",
+      "canvasSizeChanged": "Tamaño del lienzo cambiado a {size}",
+      "backgroundRemoved": "Fondo eliminado",
+      "nothingToRemove": "No se detectó ningún fondo",
+      "flippedHorizontal": "Volteado horizontalmente",
+      "flippedVertical": "Volteado verticalmente",
+      "colorAddedToPalette": "Color añadido a la paleta",
+      "imageImported": "Imagen importada",
+      "failedToImport": "No se pudo importar esa imagen",
+      "frameExported": "Fotograma exportado",
+      "addMoreFrames": "Añade más fotogramas para crear una animación",
+      "gifExported": "GIF exportado",
+      "failedToExportGif": "No se pudo exportar el GIF",
+      "spriteSheetExported": "Hoja de sprites exportada",
+      "failedToExportSpriteSheet": "No se pudo exportar la hoja de sprites",
+      "importedFrames": "Se importaron {count} fotogramas de la hoja de sprites",
+      "failedToImportSpriteSheet": "No se pudo importar esa hoja de sprites",
+      "projectSaved": "Proyecto guardado",
+      "projectLoaded": "Proyecto cargado",
+      "selectionCancelled": "Selección cancelada",
+      "selectionMade": "Selección hecha — pulsa Ctrl+C para copiar",
+      "copiedMoveToPos": "Copiado. Mueve el puntero y haz clic para pegar",
+      "cutMoveToPos": "Cortado. Mueve el puntero y haz clic para pegar",
+      "moveMouseToPaste": "Mueve el puntero a su posición y haz clic para pegar"
+    }
+  },
+  "auth": {
+    "or": "o",
+    "terms": "Al continuar, aceptas los Términos del Servicio y la Política de Privacidad de Endless Studios.",
+    "returnTo": "Te llevaremos de vuelta a {destination} cuando termines.",
+    "wall": {
+      "cta": "Crear cuenta",
+      "comment": "Crea una cuenta para unirte a la conversación.",
+      "post": "Crea una cuenta para publicar en este canal."
+    },
+    "showcase": {
+      "headline": "Ven a jugar.",
+      "playFree": "Juega gratis a juegos hechos por chicos como tú",
+      "learnByMaking": "Aprende a crear el tuyo, paso a paso",
+      "shareWork": "Comparte lo que creas con la comunidad"
+    },
+    "social": {
+      "google": "Continuar con Google",
+      "microsoft": "Continuar con Microsoft",
+      "apple": "Continuar con Apple"
+    },
+    "fields": {
+      "name": "¿Cómo te llamamos?",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "passwordHint": "Al menos {count} caracteres",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "birthday": "Fecha de nacimiento",
+      "birthdayHelp": "Te la pedimos para saber cómo cuidar tu cuenta."
+    },
+    "errors": {
+      "nameRequired": "Dinos cómo llamarte",
+      "emailRequired": "Escribe tu correo electrónico",
+      "emailInvalid": "Eso no parece un correo electrónico",
+      "passwordRequired": "Escribe tu contraseña",
+      "passwordShort": "Usa al menos {count} caracteres",
+      "birthdayRequired": "Escribe tu fecha de nacimiento"
+    },
+    "signIn": {
+      "title": "Hola de nuevo",
+      "noAccount": "¿Eres nuevo por aquí?",
+      "createOne": "Crea una cuenta",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar sesión"
+    },
+    "signUp": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Todo Endless Studios, en una sola cuenta.",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Inicia sesión",
+      "submit": "Crear cuenta",
+      "guardianTitle": "Primero le preguntamos a un adulto",
+      "guardianBody": "Como tienes menos de 13 años, enviaremos un correo a tu madre, padre o tutor para aprobar tu cuenta antes de que puedas publicar o unirte a un programa. Mientras tanto ya puedes jugar y explorar.",
+      "path": {
+        "learn": "Vamos a inscribirte en un programa.",
+        "teach": "Vamos a prepararte para enseñar.",
+        "build": "Vamos a llevarte a un equipo de juego."
+      }
+    },
+    "verify": {
+      "title": "Revisa tu correo",
+      "subtitle": "Enviamos un código de 6 dígitos a {email}. Escríbelo abajo para terminar de configurar tu cuenta.",
+      "yourEmail": "tu correo",
+      "codeLabel": "Código de verificación",
+      "submit": "Verificar correo",
+      "noCode": "¿No llegó el código?",
+      "resend": "Reenviarlo",
+      "resent": "Enviamos un código nuevo a {email}",
+      "wrongEmail": "¿Te equivocaste de correo?",
+      "goBack": "Volver"
+    },
+    "forgot": {
+      "title": "Restablece tu contraseña",
+      "subtitle": "Escribe el correo con el que te registraste y te enviaremos un enlace para crear una contraseña nueva.",
+      "submit": "Enviar enlace",
+      "backToSignIn": "Volver a iniciar sesión",
+      "sentTitle": "Revisa tu bandeja de entrada",
+      "sentBody": "Enviamos un enlace para restablecer tu contraseña a {email}. El enlace sirve durante la próxima hora.",
+      "noEmail": "¿No llegó nada?",
+      "tryAgain": "Prueba con otro correo"
     }
   }
 }

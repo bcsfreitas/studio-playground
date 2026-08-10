@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Testimonial } from '~/composables/useProgramMockData'
+import { avatarForName } from '~/composables/useProgramMockData'
 
 const props = defineProps<{
   studentsCompletedCount: number
@@ -31,7 +32,7 @@ const completedCountLabel = computed(() =>
       <template #default="{ item }">
         <UPageCard variant="soft" class="h-full mx-1">
           <div class="flex items-center gap-2.5">
-            <UAvatar :text="item.author.charAt(0)" size="sm" />
+            <UAvatar :src="item.avatar ?? avatarForName(item.author)" :alt="item.author" :text="item.author.charAt(0)" size="sm" />
             <div>
               <div class="text-sm font-semibold text-default">{{ item.author }}</div>
               <div v-if="item.role" class="text-xs text-dimmed">{{ item.role }}</div>

@@ -29,7 +29,10 @@ const items = computed(() => props.modules.map(m => ({
     type="multiple"
     :ui="{
       root: 'flex flex-col gap-3',
-      item: 'rounded-2xl border border-default px-5',
+      // bg-default, not transparent: these sit on the page canvas, which is
+      // tinted, so without it the cards read as part of the background rather
+      // than as cards. Matches the classroom's step cards.
+      item: 'rounded-2xl border border-default bg-default px-5',
       trigger: 'py-4'
     }"
   >

@@ -1,103 +1,158 @@
 <script setup lang="ts">
-import * as locales from '@nuxt/ui/locale'
-import { programTemplates, programInstances, enrollmentsByPreviewState } from '~/composables/useProgramMockData'
-import { userName, streakDays, xpLabel, notificationCount, type PreviewState } from '~/composables/useHomeMockData'
+import type { TabsItem } from '@nuxt/ui'
+import { programTemplates, programInstances } from '~/composables/useProgramMockData'
+import { usePreviewState } from '~/composables/usePreviewState'
+import { useProgramEnrollment } from '~/composables/useProgramEnrollment'
+import { provideProgramTabs } from '~/composables/useProgramTabs'
+import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
 
 definePageMeta({ layout: 'dashboard' })
 
 const route = useRoute()
-const { t, locale, setLocale } = useI18n()
+const { t } = useI18n()
 
 const programId = computed(() => route.params.programId as string)
 const template = computed(() => programTemplates.find(p => p.id === programId.value))
-const instance = computed(() => programInstances.find(i => i.programId === programId.value))
 
-const state = ref<PreviewState>('active')
-const isActive = computed(() => state.value === 'active')
+// Educator Training has zero instances by design (facilitator-facing, no open
+// learner enrollment), so the page must render off the template alone —
+// gating on an instance too would 404 a program that exists.
+const instances = computed(() => programInstances.filter(i => i.programId === programId.value))
 
-const enrollment = computed(() =>
-  enrollmentsByPreviewState[state.value].find(e => e.programId === programId.value)
+// The preview state picks the enrollment set; this program's id picks the
+// record out of it. A new learner is in Core: Threadbare and nothing else, so
+// the classroom opens there and the pitch stays up on every other program.
+const { isLoggedIn, isOnboarded } = usePreviewState()
+const { isEnrolled } = useProgramEnrollment()
+
+// Counters are earned across the platform rather than in this program, so they
+// follow the state, not this page's enrollment — a new learner enrolled here
+// still has nothing banked.
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+
+// Each tab's component is loaded the first time that tab is opened, so a
+// visitor who never leaves the Overview never downloads the classroom.
+const TAB_COMPONENTS = {
+  overview: defineAsyncComponent(() => import('~/components/ProgramTabOverview.vue')),
+  home: defineAsyncComponent(() => import('~/components/ProgramTabHome.vue')),
+  community: defineAsyncComponent(() => import('~/components/ProgramTabCommunity.vue')),
+  classroom: defineAsyncComponent(() => import('~/components/ProgramTabClassroom.vue')),
+  projects: defineAsyncComponent(() => import('~/components/ProgramTabProjects.vue')),
+  resources: defineAsyncComponent(() => import('~/components/ProgramTabResources.vue'))
+} as const
+
+type TabId = keyof typeof TAB_COMPONENTS
+
+// Learner-only tabs are absent for people who haven't enrolled, not disabled —
+// a locked tab you cannot open is noise. The first entry is the default.
+//
+// Overview and Home swap rather than coexist: Overview is the pitch, Home is
+// the dashboard, and a learner is only ever in one of those situations.
+const visibleTabs = computed<{ id: TabId, label: string }[]>(() =>
+  isEnrolled.value
+    ? [
+        { id: 'home', label: t('program.tabs.home') },
+        { id: 'community', label: t('program.tabs.community') },
+        { id: 'classroom', label: t('program.tabs.classroom') },
+        { id: 'projects', label: t('program.tabs.projects') },
+        { id: 'resources', label: t('program.tabs.resources') }
+      ]
+    : [
+        { id: 'overview', label: t('program.tabs.overview') },
+        { id: 'community', label: t('program.tabs.community') },
+        { id: 'projects', label: t('program.tabs.projects') }
+      ]
 )
 
-const previewStates: { id: PreviewState, label: string }[] = [
-  { id: 'new', label: 'New learner' },
-  { id: 'active', label: 'Active learner' },
-  { id: 'guest', label: 'Guest' }
-]
+// Plain component state, not a route param: switching a tab leaves the URL and
+// history alone. The query only speaks on arrival, and only for a link that
+// means a particular place:
+//
+// `?item=` names a lesson, and a lesson only exists in the classroom — the home
+// page's "Resume learning" arrives that way. `?tab=` names a tab outright,
+// which is how a guest sent to sign up from the Community tab gets back to it.
+// Both are checked against the tabs this learner actually has.
+function initialTab(): TabId {
+  const canOpen = (id: string) => visibleTabs.value.some(tab => tab.id === id)
+  if (route.query.item && canOpen('classroom')) return 'classroom'
+  const wantedTab = route.query.tab
+  if (typeof wantedTab === 'string' && canOpen(wantedTab)) return wantedTab as TabId
+  return visibleTabs.value[0]!.id
+}
+
+const activeTab = ref<TabId>(initialTab())
+
+// Changing phase changes which tabs exist, and can pull the open one out from
+// under the learner — fall back rather than rendering a tab that is no longer
+// listed.
+watch(visibleTabs, (list) => {
+  if (!list.some(tab => tab.id === activeTab.value)) activeTab.value = list[0]!.id
+})
+
+watch(programId, () => {
+  activeTab.value = initialTab()
+})
+
+const tabItems = computed<TabsItem[]>(() =>
+  visibleTabs.value.map(tab => ({ label: tab.label, value: tab.id }))
+)
+
+function setTab(tabId: string) {
+  if (visibleTabs.value.some(tab => tab.id === tabId)) activeTab.value = tabId as TabId
+}
+
+// A tab's content can't link to another tab any more, so the shell hands
+// children these instead. The lesson id still travels in `?item=` because the
+// classroom reads it from the route.
+provideProgramTabs({
+  setTab,
+  openLesson: (itemId: string) => {
+    setTab('classroom')
+    navigateTo({ path: route.path, query: { ...route.query, item: itemId } }, { replace: true })
+  }
+})
 </script>
 
 <template>
-  <UDashboardPanel :ui="{ body: 'p-0 gap-0 overflow-x-auto' }">
+  <!-- `sm:p-0`/`sm:gap-0` as well as the bare ones — see index.vue for why. -->
+  <UDashboardPanel :ui="{ body: 'p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
     <template #body>
-      <AppTopbar
-        v-if="isActive"
-        :xp-label="xpLabel"
-        :streak-days="streakDays"
-        :user-name="userName"
-        :notification-count="notificationCount"
-      />
+      <!-- Signed in, not just enrolled: a new learner gets the same bar, with
+           counters that start at zero. Guests get the same band too, carrying
+           the sign-in pair instead of an account. -->
+      <AppTopbar v-if="isLoggedIn" v-bind="topbarStats" :user-name="userName" :user-avatar="userAvatar" />
+      <AppTopbar v-else guest />
 
       <UContainer>
-        <div style="height: 40px; width: 100%" />
+        <template v-if="template">
+          <!-- The title is the page header and stays across tab switches. The
+               program image and description belong to the Overview tab, which
+               renders them itself. -->
+          <h1 class="text-5xl font-heading font-bold text-highlighted text-pretty">
+            {{ template.title }}
+          </h1>
 
-        <div v-if="template && instance" class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_324px] gap-8 lg:gap-12 pb-16">
-          <div class="flex flex-col gap-15 min-w-0">
-            <ProgramHero :template="template" :institution="instance.deliveringInstitution" />
-
-            <ProgramFactsStrip :template="template" />
-
-            <!-- Mobile-only: right rail is sticky on lg+, but below that the
-                 enrollment CTA needs to sit right after the hero, not after
-                 the entire scroll of curriculum/testimonials/certificate. -->
-            <USeparator class="lg:hidden" />
-            <ProgramEnrollmentCard
-              class="lg:hidden"
-              :template="template"
-              :instance="instance"
-              :enrollment="enrollment"
-            />
-
-            <USeparator />
-            <section>
-              <SectionTitle :title="t('program.sections.curriculum')" />
-              <ProgramCurriculumAccordion :modules="template.curriculum" />
-            </section>
-
-            <USeparator />
-            <section>
-              <SectionTitle :title="t('program.sections.tools')" />
-              <ProgramToolsList :tools="template.toolsUsed" />
-            </section>
-
-            <USeparator />
-            <section>
-              <SectionTitle :title="t('program.sections.prerequisites')" />
-              <ProgramPrerequisites :prerequisites="template.prerequisites" />
-            </section>
-
-            <USeparator />
-            <section>
-              <SectionTitle :title="t('program.sections.testimonials')" />
-              <ProgramSocialProof
-                :students-completed-count="template.studentsCompletedCount"
-                :testimonials="template.testimonials"
-              />
-            </section>
-
-            <USeparator />
-            <section>
-              <SectionTitle :title="t('program.sections.certificate')" />
-              <ProgramCertificateShowcase :certificate="template.certificate" />
-            </section>
-
-          </div>
-
-          <div class="hidden lg:block">
-            <div class="sticky top-6">
-              <ProgramEnrollmentCard :template="template" :instance="instance" :enrollment="enrollment" />
-            </div>
-          </div>
-        </div>
+          <!-- `content: false` — UTabs renders only the strip here. Each tab's
+               panel is a separate async component below, outside the container,
+               so tabs can own their own width and rail. -->
+          <UTabs
+            :items="tabItems"
+            color="primary"
+            variant="pill"
+            size="xl"
+            :content="false"
+            class="mt-8"
+            :ui="{
+              // UTabs stretches by default: the list is `w-full` and every
+              // trigger is `grow`. Sized to its labels instead, and the root
+              // left-aligned since it centres its children.
+              root: 'items-start',
+              list: 'w-fit',
+              trigger: 'grow-0'
+            }"
+            v-model="activeTab"
+          />
+        </template>
 
         <div
           v-else
@@ -110,31 +165,19 @@ const previewStates: { id: PreviewState, label: string }[] = [
           <UButton :label="t('program.notFound.backToLearn')" to="/learn" color="neutral" variant="outline" class="mt-2" />
         </div>
       </UContainer>
+
+      <!-- Outside the UContainer: each tab owns its own width and rail (the
+           classroom is two-column, community is full-width), so the shell must
+           not impose one. -->
+      <!-- Keyed on the program so a tab can resolve its data once at setup
+           instead of tracking the route param (see ProgramTabClassroom.vue). -->
+      <component
+        :is="TAB_COMPONENTS[activeTab]"
+        v-if="template"
+        :key="programId"
+      />
     </template>
   </UDashboardPanel>
 
-  <!-- Dev-only preview state + locale switcher (not part of the product's real UI) -->
-  <div class="fixed right-[18px] bottom-[18px] z-[200] flex items-center gap-2">
-    <div
-      class="flex items-center gap-1"
-      style="background: rgba(2,6,24,0.92); border-radius: 100px; padding: 5px 6px 5px 14px; box-shadow: var(--shadow-menu)"
-    >
-      <span class="text-[10px] font-bold tracking-[0.08em] text-slate-400 mr-1.5">PREVIEW AS</span>
-      <div
-        v-for="p in previewStates"
-        :key="p.id"
-        class="px-3 py-1.5 rounded-full text-[12.5px] font-semibold cursor-pointer select-none transition-all duration-150"
-        :class="state === p.id ? 'bg-white text-slate-900' : 'text-slate-300'"
-        @click="state = p.id"
-      >
-        {{ p.label }}
-      </div>
-    </div>
-    <ULocaleSelect
-      :model-value="locale"
-      :locales="Object.values(locales)"
-      size="sm"
-      @update:model-value="setLocale($event)"
-    />
-  </div>
+  <DevPreviewBar />
 </template>

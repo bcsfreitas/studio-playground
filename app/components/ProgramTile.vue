@@ -5,6 +5,8 @@ withDefaults(defineProps<{
   description?: string
   tasksCount?: number
   status?: string
+  // The card has always styled itself as clickable; without this it wasn't.
+  to?: string
 }>(), {
   name: 'Program',
   description: ''
@@ -13,6 +15,7 @@ withDefaults(defineProps<{
 
 <template>
   <UPageCard
+    :to="to"
     :title="name"
     :description="description"
     reverse

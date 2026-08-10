@@ -21,7 +21,8 @@ Nuxt 3-style app (Nuxt 4) implementing the Endless Studios "Studio Home" page, b
 - Icons: `@nuxt/icon` with the `lucide` collection (server-bundled), used via `<Icon name="lucide:xxx" />`.
 - `app/components/{ProgramTile,TaskTile,PostCard}.vue` — brand components ported from the design system's React source (`_ds_bundle.js`) into Vue SFCs.
 - `app/components/{AppSidebar,AppTopbar}.vue` — the fixed left nav and top bar.
-- `app/pages/index.vue` — the Studio Home page. Renders 3 states (Active learner / New learner / Guest) driven by mock data in `app/composables/useHomeMockData.ts`, matching the original prototype's `sc-if` branches. A "PREVIEW AS" pill (bottom of screen) lets you switch states for manual QA — kept intentionally, since there's no real auth/backend yet; the original design source explicitly marks the equivalent control as preview-only, so revisit whether to keep it once real session state exists.
+- `app/composables/usePreviewState.ts` — the app-wide preview state: `guest`, `new`, `onboarded`. One `useState` shared by every page, persisted to localStorage, plus a `reset()` that wipes the mock session. There's no real auth/backend yet, so this one switch stands in for the session — who is signed in, what they've earned, whether they're enrolled. Any new page that varies by signed-in state reads it from here rather than declaring its own; the `DevPreviewBar.vue` "PREVIEW AS" pill (bottom right, on every page) is how you switch it for manual QA. Kept intentionally, but the original design source marks the equivalent control as preview-only, so revisit whether to keep it once real session state exists.
+- `app/pages/index.vue` — the Studio Home page. Renders one branch per preview state, off mock data in `app/composables/useHomeMockData.ts`, matching the original prototype's `sc-if` branches.
 - `project/` — the original Claude Design handoff (raw `.dc.html` prototype + design system bundle + source images), kept for reference. Not part of the app build.
 
 ## Building UI — mandatory tool use
@@ -32,6 +33,12 @@ Before writing any markup for a new component or page section, check for a Nuxt 
 - Use the `nuxt-ui-remote` MCP server (`https://ui.nuxt.com/mcp`) for anything the skill doesn't cover, or to confirm current behavior straight from the live docs.
 - Only fall back to raw HTML when no Nuxt UI component/slot combination fits — and say so explicitly rather than silently hand-rolling.
 - See `DESIGN.md` for this app's semantic color roles, spacing/radius/typography tokens, and which Nuxt UI variants are actually adopted vs. legacy — component color/shape choices should follow that, not ad hoc values.
+
+### Interaction affordances
+
+Anything clickable must show `cursor: pointer` on hover. Nothing gives it for free: Tailwind v4 dropped Preflight's pointer cursor on `<button>`, and Nuxt UI v4's themes only set `disabled:cursor-not-allowed`. `app/assets/css/main.css` has a base-layer rule that covers `button`, `summary`, `label[for]`, and the ARIA roles Nuxt UI emits (`button`, `menuitem`, `option`, `tab`, `switch`, `checkbox`, `radio`) — so plain Nuxt UI components are already handled.
+
+When you add a clickable that isn't one of those — a `div`/`span`/`li` with `@click`, a card wrapper, a custom pill — add `cursor-pointer` on it yourself. Prefer making it a real `<button>` (or the matching Nuxt UI component) so it gets keyboard focus and the cursor at the same time.
 
 ## Writing style
 

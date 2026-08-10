@@ -33,7 +33,7 @@ export const Done: Story = {
   args: {
     name: 'Publish devlog #4',
     status: 'Done',
-    project: 'Intro to Game Design',
+    project: 'Core: Threadbare',
     due: 'Last week'
   }
 }
