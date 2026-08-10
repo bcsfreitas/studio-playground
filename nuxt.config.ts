@@ -21,6 +21,11 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'light'
   },
+  vite: {
+    server: {
+      allowedHosts: ['debian.home']
+    }
+  },
   i18n: {
     defaultLocale: 'en',
     // Keeps existing routes (/, /learn, /learn/[programId]) unprefixed — only
