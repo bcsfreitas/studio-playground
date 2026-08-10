@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { programTemplates } from '~/composables/useProgramMockData'
-import { flattenCurriculum, type FlatCurriculumItem } from '~/composables/useProgramCurriculum'
+import { flattenCurriculum, type CurriculumModuleSummary, type FlatCurriculumItem } from '~/composables/useProgramCurriculum'
 import { useProgramProgress, type DeliverableSubmission } from '~/composables/useProgramProgress'
 
 const route = useRoute()
@@ -29,11 +29,22 @@ const currentItemId = computed(() =>
   flatItems.find(item => !progress?.isCompleted(item.id))?.id ?? flatItems[0]?.id
 )
 
+// `?item=` should only auto-open the drawer the first time this session lands
+// on the classroom — a "Resume learning" link, a refresh, or a shared URL.
+// There's no <KeepAlive> around the tab components, so switching to another
+// tab and back remounts this one from scratch, and `?item=` is still in the
+// URL (see the watcher below, which keeps it there on purpose). Without this
+// guard, every trip back to Classroom would reopen whatever step was last
+// read, even after the learner closed it deliberately.
+const hasOpenedThisSession = useState(`classroom-opened:${programId}`, () => false)
+
 // Two refs rather than one derived from the other: the drawer animates out on
 // close, and clearing the item at the same moment would blank its content
 // mid-slide. Same split as the Make page's tool drawer.
 const queryItem = route.query.item as string | undefined
-const activeItem = ref<FlatCurriculumItem | null>(queryItem ? openableItem(queryItem) ?? null : null)
+const shouldAutoOpen = Boolean(queryItem) && !hasOpenedThisSession.value
+hasOpenedThisSession.value = true
+const activeItem = ref<FlatCurriculumItem | null>(shouldAutoOpen ? openableItem(queryItem!) ?? null : null)
 const drawerOpen = ref(Boolean(activeItem.value))
 
 function openStep(itemId: string) {
@@ -76,7 +87,7 @@ function submitDeliverable(itemId: string, submission: DeliverableSubmission) {
   advanceFrom(itemId)
 }
 
-const modules = computed(() => (template?.curriculum ?? []).map((mod, index) => ({
+const modules = computed<CurriculumModuleSummary[]>(() => (template?.curriculum ?? []).map((mod, index) => ({
   id: mod.id,
   number: index + 1,
   title: mod.title,
@@ -150,6 +161,8 @@ const modules = computed(() => (template?.curriculum ?? []).map((mod, index) => 
     v-model:open="drawerOpen"
     :item="activeItem"
     :progress="progress"
+    :modules="modules"
+    @select="openStep"
     @complete="completeAndAdvance"
     @submit="submitDeliverable"
   />
