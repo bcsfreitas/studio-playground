@@ -4,6 +4,7 @@ import { cohortStatusFor, cohortHasStarted, isBookableStatus, useConsentBoundary
 import { formatCohortRange } from '~/composables/useLearnMockData'
 import { useProgramTabs } from '~/composables/useProgramTabs'
 import { usePreviewState } from '~/composables/usePreviewState'
+import { useProgramEnrollment } from '~/composables/useProgramEnrollment'
 import { signUpTo } from '~/composables/useAuthIntent'
 
 const props = defineProps<{
@@ -69,6 +70,7 @@ const facts = computed(() => {
 
 // Tabs are front-end state, so resuming switches tab rather than navigating.
 const { setTab } = useProgramTabs()
+const { startSelfPaced } = useProgramEnrollment(computed(() => props.template.id))
 
 // Cohorts gated by an access code stay locked client-side until the right
 // code is entered — there's no backend, so "unlocked" just means "the code
@@ -275,7 +277,9 @@ function onEnrollClick() {
 }
 
 function onStartLearningClick() {
-  if (isLoggedIn.value) setTab('classroom')
+  if (!isLoggedIn.value) return
+  startSelfPaced()
+  setTab('classroom')
 }
 
 // Resuming the intent, once. Waits for a signed-in state rather than firing on
