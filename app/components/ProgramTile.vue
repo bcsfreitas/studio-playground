@@ -1,9 +1,12 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
+import type { ProgramSessionUnit } from '~/composables/programData/types'
+
+const props = withDefaults(defineProps<{
   image?: string
   name?: string
   description?: string
-  tasksCount?: number
+  sessionCount?: number
+  sessionUnit?: ProgramSessionUnit
   status?: string
   // The card has always styled itself as clickable; without this it wasn't.
   to?: string
@@ -11,6 +14,12 @@ withDefaults(defineProps<{
   name: 'Program',
   description: ''
 })
+
+const { t } = useI18n()
+
+const sessionsLabel = computed(() => props.sessionCount == null || !props.sessionUnit
+  ? undefined
+  : t(`program.sideInfo.${props.sessionUnit}Count`, props.sessionCount, { count: props.sessionCount }))
 </script>
 
 <template>
@@ -32,9 +41,9 @@ withDefaults(defineProps<{
     <template #footer>
       <div class="flex items-center gap-3">
         <UBadge v-if="status" :label="status" color="neutral" size="md" variant="soft" />
-        <span v-if="tasksCount != null" class="inline-flex items-center gap-1.5 text-xs text-dimmed">
-          <UIcon name="lucide:layers" class="size-4" />
-          {{ tasksCount }} Modules
+        <span v-if="sessionsLabel" class="inline-flex items-center gap-1.5 text-xs text-dimmed">
+          <UIcon name="lucide:calendar-days" class="size-4" />
+          {{ sessionsLabel }}
         </span>
       </div>
     </template>

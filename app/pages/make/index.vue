@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { webTools, tailorApps, externalTools, type ToolCardData } from '~/composables/useMakeMockData'
 import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
+import { useXpBalance } from '~/composables/useXpBalance'
 import { usePreviewState } from '~/composables/usePreviewState'
 
 definePageMeta({ layout: 'dashboard' })
@@ -16,7 +17,8 @@ function launchTool(tool: ToolCardData) {
 }
 
 const { isLoggedIn, isOnboarded } = usePreviewState()
-const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+const { total: xpTotal } = useXpBalance()
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value, xpTotal.value))
 </script>
 
 <template>

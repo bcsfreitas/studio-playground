@@ -54,7 +54,7 @@ const projects = computed(() => projectsForProgram(programId.value))
         <USeparator />
         <section>
           <SectionTitle :title="t('program.sections.curriculum')" />
-          <ProgramCurriculumAccordion :modules="template.curriculum" />
+          <ProgramCurriculumTimeline :modules="template.curriculum" />
         </section>
 
         <USeparator />

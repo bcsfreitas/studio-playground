@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: ['debian.home']
+      allowedHosts: ['dev.home']
     }
   },
   i18n: {

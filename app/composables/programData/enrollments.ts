@@ -18,12 +18,12 @@ export const enrollmentsByPhase: Record<PreviewState, EnrollmentRecord[]> = {
   fresh: [],
   // Joined one program and hasn't started it: the classroom opens on the first
   // lesson, and every other program still shows its pitch. Matches the catalog,
-  // where Core: Threadbare is the one program a new learner is in.
+  // where Explore: Godot is the one program a new learner is in.
   new: [
     {
-      programId: 'core-threadbare',
-      instanceId: 'instance-core-threadbare-utp',
-      cohortId: 'cohort-core-threadbare-night-owls',
+      programId: 'explore-godot',
+      instanceId: 'instance-explore-godot-2026-08-am',
+      cohortId: 'cohort-explore-godot-dawn-patrol',
       phase: 'new',
       progress: 0,
       enrolledAt: '2026-08-06'

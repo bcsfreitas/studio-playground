@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
+import { useXpBalance } from '~/composables/useXpBalance'
 import { usePixelStitch } from '~/composables/usePixelStitch'
 import { providePixelStitch } from '~/composables/usePixelStitchContext'
 import { emptyGrid } from '~/composables/pixelStitch/project'
@@ -12,7 +13,8 @@ import { exportSpriteSheet, importSpriteSheet } from '~/composables/pixelStitch/
 definePageMeta({ layout: 'dashboard' })
 
 const { t } = useI18n()
-const topbarStats = computed(() => topbarStatsFor(true))
+const { total: xpTotal } = useXpBalance()
+const topbarStats = computed(() => topbarStatsFor(true, xpTotal.value))
 
 const editor = usePixelStitch()
 providePixelStitch(editor)

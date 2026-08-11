@@ -30,7 +30,7 @@ The three-step join -- platform account, program enrollment, pre-survey -- creat
 - **Terminology:** avoid "cohort" in learner-facing language; use "live session" or "your group."
 - **Enrollment model:** MVP is URL-embedded access codes; target state is cohort invite tokens.
 - **Ownership boundary:** sign-up/onboarding UX and safety/compliance definitions are deliberately separate workstreams -- don't conflate them.
-- **Age gate first:** age is self-declared before any personal data is collected and can't be changed later; K-id handles regional thresholds. Under-13s cannot sign up (BGC workaround: teachers submit work on their behalf).
+- **Age gate first:** age is self-declared before any personal data is collected and can't be changed later; K-id handles regional thresholds. Under-13s cannot sign up (BGC workaround: teachers submit work on their behalf). Superseded by `onboarding-flows-boundary-consent.md`: kids sign up without a hard block; consent is deferred to the moment their work or identity crosses the cohort boundary.
 
 ## Gaps on the service blueprint (learner enrollment scenario)
 

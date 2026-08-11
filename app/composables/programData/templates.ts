@@ -1,5 +1,6 @@
 import type { ProgramTemplate, StudioOwner } from './types'
 import { curriculumByProgram } from './curriculum'
+import { resourcesByProgram } from './resources'
 import { microcredentials } from './credentials'
 
 // Copied rather than imported from useProgramMockData.ts: that file is the
@@ -134,6 +135,7 @@ export const programTemplates: ProgramTemplate[] = [
     sessionCount: 10,
     sessionUnit: 'session',
     curriculum: curriculumByProgram['explore-godot']!,
+    resources: resourcesByProgram['explore-godot']!,
     toolsUsed: ['Godot'],
     // No prerequisite is stated in source; see the difficulty comment above for
     // the one real caveat about who this program actually suits.
@@ -168,9 +170,10 @@ export const programTemplates: ProgramTemplate[] = [
     totalXp: 1190,
     tier: 'More',
     // SYNTHESIZED: no session count is stated for the training itself (unlike
-    // the learner programs, which state theirs). The deck runs as one sitting —
-    // Overview, Structure & Tools, Walk the Walk, To Wrap Up.
-    sessionCount: 1,
+    // the learner programs, which state theirs). Counted as its four curriculum
+    // modules — Overview, Structure & Tools, Walk the Walk, To Wrap Up — even
+    // though the deck runs as one sitting.
+    sessionCount: 4,
     sessionUnit: 'session',
     curriculum: curriculumByProgram['educator-training']!,
     // Educator-Training-Program/sessions.md "Tools" slide names these three explicitly.
