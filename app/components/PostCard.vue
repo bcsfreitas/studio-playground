@@ -166,7 +166,7 @@ watch(() => props.canComment && route.query.comment === props.postId, (isTheirs)
             />
           </div>
 
-          <AuthGuestPrompt :message="$t('auth.wall.comment')" :to="signUpToComment" />
+          <AuthGuestPrompt v-else :message="$t('auth.wall.comment')" :to="signUpToComment" />
 
       </div>
     </template>

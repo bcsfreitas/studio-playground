@@ -7,6 +7,8 @@ const props = defineProps<{
   program: LearnProgram & { template: ProgramTemplate }
 }>()
 
+const { t } = useI18n()
+
 const TIMING_LABEL: Record<string, string> = {
   'starting-soon': 'Starting Soon',
   'open-enrollment': 'Open Enrollment'
@@ -28,7 +30,7 @@ const scheduleLabel = computed(() => props.program.cohortStart && props.program.
 
 <template>
   <UPageCard
-    :to="`/learn/${program.id}`"
+    :to="program.id === 'explore-godot' ? `/learn/${program.id}` : undefined"
     :title="program.template.title"
     :description="program.template.description"
     reverse
@@ -47,8 +49,8 @@ const scheduleLabel = computed(() => props.program.cohortStart && props.program.
         <div class="flex items-center gap-3">
           <UBadge :label="program.template.difficulty" color="neutral" size="md" variant="soft" />
           <span class="inline-flex items-center gap-1.5 text-xs text-dimmed">
-            <UIcon name="lucide:layers" class="size-4" />
-            {{ program.template.curriculum.length }} Modules
+            <UIcon name="lucide:calendar-days" class="size-4" />
+            {{ t(`program.sideInfo.${program.template.sessionUnit}Count`, program.template.sessionCount, { count: program.template.sessionCount }) }}
           </span>
         </div>
 

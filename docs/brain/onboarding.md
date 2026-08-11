@@ -1,5 +1,7 @@
 # Product UX & Client-Side Logic Specification: Educational Game Dev Platform
 
+> Superseded by `onboarding-flows-boundary-consent.md` wherever the two disagree — notably the age gate: that doc's premise is kids join *without* consent and the gate fires later, at the boundary, not at signup.
+
 ## 1. Core Onboarding "Spine" & Intent Capture
 * **Frictionless Entry:** Do not block guest users with upfront signup walls [22]. Let unauthenticated users browse and play games without signing up [22, 34].
 * **Commitment Triggers:** Only trigger account creation when a guest attempts a high-commitment action (e.g., commenting on a game, enrolling in a program, or claiming a contributor task) [22].

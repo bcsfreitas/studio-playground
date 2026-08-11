@@ -11,7 +11,6 @@ export const userName = 'Nova'
 // the signed-in user looks like herself wherever she turns up.
 export const userAvatar = avatarForName(userName)
 export const streakDays = 6
-export const xpLabel = '2,450 XP'
 export const notificationCount = 13
 
 export interface TopbarStats {
@@ -24,9 +23,14 @@ export interface TopbarStats {
 // signed in and gets the same bar, but has not earned any of it yet — so the
 // counters start at zero rather than inheriting someone else's streak. Same
 // split `weekCellsFor` makes for the streak card.
-export function topbarStatsFor(isOnboarded: boolean): TopbarStats {
+//
+// `xpTotal` comes from the caller's own useXpBalance() call (see
+// useXpBalance.ts) rather than being read in here, so this stays a plain
+// function safely callable from inside a computed rather than a composable
+// that needs its own onMounted hydration.
+export function topbarStatsFor(isOnboarded: boolean, xpTotal: number): TopbarStats {
   return isOnboarded
-    ? { xpLabel, streakDays, notificationCount }
+    ? { xpLabel: `${xpTotal.toLocaleString()} XP`, streakDays, notificationCount }
     : { xpLabel: '0 XP', streakDays: 0, notificationCount: 0 }
 }
 
@@ -115,14 +119,6 @@ export const feedPosts: FeedPost[] = [
   }
 ]
 
-// The program home resumes into. Both signed-in states are in Core: Threadbare,
-// so the template is fixed and only how far along they are differs — which is
-// what lets the page call useProgramProgress on it unconditionally.
-// First record wins — see the ordering note in programData/enrollments.ts.
-export const continueLearningTemplate = programTemplates.find(
-  t => t.id === enrollmentsByPhase.onboarded[0]?.programId
-)
-
 /**
  * The resume card for a preview state, or nothing when that state isn't
  * enrolled anywhere. Read from the same enrollment fixture the program page
@@ -150,7 +146,8 @@ export const programRecs = programTemplates
     id: template.id,
     name: template.title,
     description: template.description,
-    tasksCount: template.curriculum.reduce((sum, mod) => sum + mod.items.length, 0),
+    sessionCount: template.sessionCount,
+    sessionUnit: template.sessionUnit,
     status: template.difficulty,
     image: template.image
   }))

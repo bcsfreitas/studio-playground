@@ -1,6 +1,6 @@
 import type { MaybeRefOrGetter } from 'vue'
 import type { EnrollmentRecord, ProgramTemplate } from '~/composables/useProgramMockData'
-import { enrollmentsByPhase, programTemplates } from '~/composables/useProgramMockData'
+import { enrollmentsByPhase, programInstances, programTemplates } from '~/composables/useProgramMockData'
 import { flattenCurriculum } from '~/composables/useProgramCurriculum'
 import { usePreviewState, type PreviewState } from '~/composables/usePreviewState'
 
@@ -41,6 +41,55 @@ export function enrollmentPercent(template: ProgramTemplate, percent: number): n
   return Math.round((seededItemIds(template, percent).length / total) * 100)
 }
 
+const SELF_PACED_STORAGE_KEY = 'self-paced-started'
+
+// One hydration per page load, same reasoning as usePreviewState's `hydrated`
+// flag: every program-shell component calls this composable, and only the
+// first needs to touch localStorage.
+let selfPacedHydrated = false
+
+/**
+ * A self-paced instance has no seat or roster, so pressing "Start Learning" is
+ * its only enrollment event. There's no backend to record it, so — like
+ * useProgramProgress's completed-item set — it's a client-only fake, shared
+ * across the page via `useState` and persisted so a reload doesn't undo it.
+ */
+function useSelfPacedStarted() {
+  const startedProgramIds = useState<Set<string>>(SELF_PACED_STORAGE_KEY, () => new Set())
+
+  onMounted(() => {
+    if (selfPacedHydrated || !import.meta.client) return
+    selfPacedHydrated = true
+    const raw = localStorage.getItem(SELF_PACED_STORAGE_KEY)
+    if (!raw) return
+    try {
+      startedProgramIds.value = new Set(JSON.parse(raw))
+    } catch {
+      // Corrupt/old localStorage value — ignore and start fresh.
+    }
+  })
+
+  function start(programId: string) {
+    if (startedProgramIds.value.has(programId)) return
+    startedProgramIds.value = new Set(startedProgramIds.value).add(programId)
+    if (import.meta.client) {
+      localStorage.setItem(SELF_PACED_STORAGE_KEY, JSON.stringify([...startedProgramIds.value]))
+    }
+  }
+
+  return { startedProgramIds, start }
+}
+
+// The self-paced cohort a program offers, if any — a program can carry both a
+// cohort and a self-paced instance side by side, so this picks the one with no
+// start date rather than assuming the program's only instance is self-paced.
+function selfPacedCohortFor(programId: string) {
+  return programInstances
+    .filter(i => i.programId === programId)
+    .flatMap(i => i.cohorts)
+    .find(c => c.startDate === null)
+}
+
 /**
  * Reactive form for components. Defaults to the program in the current route,
  * which is what every caller inside the program shell wants.
@@ -48,10 +97,37 @@ export function enrollmentPercent(template: ProgramTemplate, percent: number): n
 export function useProgramEnrollment(programId?: MaybeRefOrGetter<string>) {
   const route = useRoute()
   const { state } = usePreviewState()
+  const { startedProgramIds, start } = useSelfPacedStarted()
 
   const id = computed(() => toValue(programId) ?? (route.params.programId as string))
-  const enrollment = computed(() => enrollmentFor(state.value, id.value))
+
+  // The fixture covers cohort enrollment; a self-paced start is layered on top
+  // as a synthesized record so every reader of `enrollment` — the tab gate
+  // here, the enrollment card's "Resume" state, the progress card — agrees
+  // it happened, without either one overwriting a real fixture record.
+  const enrollment = computed<EnrollmentRecord | undefined>(() => {
+    const seeded = enrollmentFor(state.value, id.value)
+    if (seeded) return seeded
+
+    const cohort = selfPacedCohortFor(id.value)
+    if (!cohort || !startedProgramIds.value.has(id.value)) return undefined
+
+    return {
+      programId: id.value,
+      instanceId: cohort.instanceId,
+      cohortId: cohort.id,
+      phase: state.value,
+      progress: 0,
+      enrolledAt: new Date().toISOString()
+    }
+  })
   const isEnrolled = computed(() => Boolean(enrollment.value))
+
+  // Only meaningful for a self-paced program — call it once the learner
+  // presses "Start Learning" and every reader above updates immediately.
+  function startSelfPaced() {
+    start(id.value)
+  }
 
   const percent = computed(() => {
     const template = programTemplates.find(candidate => candidate.id === id.value)
@@ -59,5 +135,5 @@ export function useProgramEnrollment(programId?: MaybeRefOrGetter<string>) {
     return enrollmentPercent(template, enrollment.value.progress)
   })
 
-  return { enrollment, isEnrolled, percent }
+  return { enrollment, isEnrolled, percent, startSelfPaced }
 }

@@ -19,19 +19,19 @@ const MEDIA_ICON: Record<CurriculumMediaKind, string> = {
     <template v-for="(block, index) in blocks" :key="index">
       <h4
         v-if="block.kind === 'heading'"
-        class="font-heading font-bold text-base text-highlighted mt-3 first:mt-0"
+        class="font-heading font-bold text-lg text-highlighted mt-3 first:mt-0"
       >
         {{ block.text }}
       </h4>
 
-      <p v-else-if="block.kind === 'paragraph'" class="text-sm text-default">
+      <p v-else-if="block.kind === 'paragraph'" class="text-base text-default">
         {{ block.text }}
       </p>
 
       <component
         :is="block.ordered ? 'ol' : 'ul'"
         v-else-if="block.kind === 'list'"
-        class="flex flex-col gap-1.5 pl-5 text-sm text-default"
+        class="flex flex-col gap-1.5 pl-5 text-base text-default"
         :class="block.ordered ? 'list-decimal' : 'list-disc'"
       >
         <li v-for="entry in block.items" :key="entry">{{ entry }}</li>
@@ -65,10 +65,10 @@ const MEDIA_ICON: Record<CurriculumMediaKind, string> = {
             v-if="entry.href"
             :to="entry.href"
             target="_blank"
-            class="font-heading font-bold text-sm text-primary-600"
+            class="font-heading font-bold text-base text-primary-600"
           >{{ entry.label }}</ULink>
-          <span v-else class="font-heading font-bold text-sm text-highlighted">{{ entry.label }}</span>
-          <p class="text-sm text-default">{{ entry.description }}</p>
+          <span v-else class="font-heading font-bold text-base text-highlighted">{{ entry.label }}</span>
+          <p class="text-base text-default">{{ entry.description }}</p>
         </li>
       </ul>
 
@@ -87,7 +87,7 @@ const MEDIA_ICON: Record<CurriculumMediaKind, string> = {
         :ui="{ root: 'rounded-xl', body: 'p-4 sm:p-4' }"
       >
         <div class="flex items-start gap-3">
-          <h5 class="flex-1 font-heading font-bold text-sm text-highlighted">{{ block.title }}</h5>
+          <h5 class="flex-1 font-heading font-bold text-base text-highlighted">{{ block.title }}</h5>
           <UButton
             v-if="block.hasTutorial"
             :label="t('program.viewer.content.tutorial')"
@@ -100,12 +100,12 @@ const MEDIA_ICON: Record<CurriculumMediaKind, string> = {
           />
         </div>
 
-        <p class="mt-2 text-sm text-default">{{ block.text }}</p>
+        <p class="mt-2 text-base text-default">{{ block.text }}</p>
 
-        <h6 class="mt-3 text-sm font-bold text-default">
+        <h6 class="mt-3 text-base font-bold text-default">
           {{ t('program.viewer.deliverable.acceptanceCriteria') }}
         </h6>
-        <ul class="mt-1 flex flex-col gap-1.5 list-disc pl-5 text-sm text-default">
+        <ul class="mt-1 flex flex-col gap-1.5 list-disc pl-5 text-base text-default">
           <li v-for="criterion in block.acceptanceCriteria" :key="criterion">{{ criterion }}</li>
         </ul>
       </UCard>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
+import { useXpBalance } from '~/composables/useXpBalance'
 import { usePreviewState } from '~/composables/usePreviewState'
 import { learnProgramsFor, cohortTimingOf, type CohortTiming } from '~/composables/useLearnMockData'
 import { programTemplates, hasAvailableCohort, type ProgramAudience } from '~/composables/useProgramMockData'
@@ -16,7 +17,8 @@ const catalogPrograms = computed(() => learnProgramsFor(state.value).map(p => ({
   template: programTemplates.find(t => t.id === p.id)!
 })))
 
-const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+const { total: xpTotal } = useXpBalance()
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value, xpTotal.value))
 
 const search = ref('')
 
