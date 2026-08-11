@@ -5,6 +5,7 @@ import { usePreviewState } from '~/composables/usePreviewState'
 import { useProgramEnrollment } from '~/composables/useProgramEnrollment'
 import { provideProgramTabs } from '~/composables/useProgramTabs'
 import { userName, userAvatar, topbarStatsFor } from '~/composables/useHomeMockData'
+import { useXpBalance } from '~/composables/useXpBalance'
 
 definePageMeta({ layout: 'dashboard' })
 
@@ -28,7 +29,8 @@ const { isEnrolled } = useProgramEnrollment()
 // Counters are earned across the platform rather than in this program, so they
 // follow the state, not this page's enrollment — a new learner enrolled here
 // still has nothing banked.
-const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+const { total: xpTotal } = useXpBalance()
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value, xpTotal.value))
 
 // Each tab's component is loaded the first time that tab is opened, so a
 // visitor who never leaves the Overview never downloads the classroom.

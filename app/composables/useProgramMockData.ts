@@ -4,6 +4,8 @@ import { programInstances } from './programData/instances'
 export * from './programData/types'
 export * from './programData/credentials'
 export * from './programData/curriculum'
+export * from './programData/preSurvey'
+export * from './programData/resources'
 export * from './programData/templates'
 export * from './programData/instances'
 export * from './programData/enrollments'
@@ -11,6 +13,7 @@ export * from './programData/projects'
 export * from './programData/community'
 export * from './programData/avatars'
 export * from './programData/badges'
+export * from './programData/consent'
 
 /**
  * Precedence order matters: already-enrolled and self-paced both bypass the

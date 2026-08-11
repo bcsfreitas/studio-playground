@@ -132,15 +132,23 @@
         "body": "Esto libera tu plaza en {program}, {range}. Puedes volver a inscribirte mientras queden plazas.",
         "keep": "Quedarme con la plaza",
         "confirm": "Sí, cancelar"
+      },
+      "vpcGate": {
+        "body": "{program} es un grupo abierto — unirte hace visible tu trabajo y tu perfil fuera de él. Un padre, madre o tutor debe aprobarlo primero."
+      },
+      "selfPacedConfirmModal": {
+        "title": "¿Comenzar a aprender ahora?",
+        "body": "Estás a punto de comenzar {program} a tu propio ritmo. Puedes pausar y retomarlo donde lo dejaste cuando quieras.",
+        "cancel": "Todavía no",
+        "confirm": "Sí, comenzar a aprender"
       }
     },
     "viewer": {
-      "sidebar": {
-        "xpProgress": "{earned} / {available} XP"
-      },
       "actions": {
         "markComplete": "Marcar como completado",
-        "completed": "Completado"
+        "nextItem": "Ir al siguiente elemento",
+        "xpAvailable": "+{xp} XP",
+        "xpEarned": "+{xp} XP obtenidos"
       },
       "content": {
         "placeholder": "Marcador de posición de {contentType}",
@@ -149,7 +157,7 @@
       "notFound": "Programa no encontrado.",
       "deliverable": {
         "startTask": "Iniciar esta tarea",
-        "introBody": "Comparte evidencia de lo que construiste para este módulo: un enlace a capturas de pantalla, un video corto o una versión jugable si la tienes.",
+        "introBody": "Comparte evidencia de lo que construiste para esta tarea: un enlace a capturas de pantalla, un video corto o una versión jugable si la tienes.",
         "shareIntro": "Puedes compartir:",
         "shareScreenshots": "Un enlace a capturas de pantalla",
         "shareVideo": "Un enlace a un video corto",
@@ -160,8 +168,27 @@
         "submit": "Enviar para completar",
         "yourSubmission": "Tu envío"
       },
-      "yourPath": "Tu recorrido",
-      "moduleHeading": "Módulo {number} — {title}"
+      "yourPath": "Tu recorrido"
+    },
+    "preSurvey": {
+      "gate": {
+        "title": "Antes de comenzar",
+        "body": "Antes de empezar {program}, una breve encuesta nos ayuda a entender tu punto de partida. Solo toma unos minutos.",
+        "cta": "Iniciar la encuesta previa"
+      },
+      "wizard": {
+        "back": "Atrás",
+        "continue": "Continuar",
+        "finish": "Finalizar",
+        "exit": "Salir",
+        "textPlaceholder": "Escribe tu respuesta…",
+        "otherPlaceholder": "Por favor especifica",
+        "sections": {
+          "whoYouAre": "Quién eres",
+          "programContext": "Contexto del programa",
+          "selfAssessment": "Autoevaluación de competencias"
+        }
+      }
     },
     "projects": {
       "seeAll": "Ver los {count} proyectos",
@@ -199,8 +226,8 @@
       "completed": "Completado",
       "completedBody": "Has terminado todas las lecciones de este programa. Buen trabajo.",
       "xpEarned": "{earned} / {available} XP",
-      "moduleLabel": "Módulo {number} de {total}",
-      "lessonLabel": "Lección {number} de {total}",
+      "upNext": "A continuación",
+      "currentStep": "{module}: {step}",
       "continue": "Seguir aprendiendo",
       "reviewClassroom": "Repasar el aula"
     },
@@ -223,8 +250,8 @@
           "requirement": "Entrega tu primera tarea"
         },
         "module-cleared": {
-          "name": "Módulo superado",
-          "requirement": "Termina todos los pasos de un módulo"
+          "name": "Sección superada",
+          "requirement": "Termina todos los pasos de una sección"
         },
         "halfway": {
           "name": "A mitad de camino",
@@ -472,6 +499,61 @@
       "sentBody": "Enviamos un enlace para restablecer tu contraseña a {email}. El enlace sirve durante la próxima hora.",
       "noEmail": "¿No llegó nada?",
       "tryAgain": "Prueba con otro correo"
+    }
+  },
+  "onboarding": {
+    "checklist": {
+      "title": "Primeros pasos",
+      "xpReward": "Completa las {count} para ganar {xp} XP",
+      "complete": "¡Todo listo, buen trabajo!",
+      "claimButton": "Reclamar {xp} XP",
+      "claimModal": {
+        "title": "¡XP reclamado!",
+        "body": "Acabas de ganar {xp} XP.",
+        "confirm": "¡Genial!"
+      },
+      "items": {
+        "accountCreated": "Cuenta creada",
+        "codeOfConduct": "Acepta el código de conducta",
+        "introduceYourself": "Preséntate a tu grupo",
+        "submitFirstTask": "Envía tu primera tarea al feed del grupo",
+        "postFirstComment": "Publica tu primer comentario",
+        "joinEducatorProgram": "Únete al programa de formación para educadores",
+        "connectGithub": "Conecta tu cuenta de GitHub",
+        "claimFirstTask": "Reclama tu primera tarea de contribución"
+      }
+    },
+    "intent": {
+      "title": "¿Qué te trae por aquí?",
+      "tailoring": {
+        "title": "Preparando tu experiencia…",
+        "body": "Un momento mientras lo ajustamos todo para ti."
+      }
+    },
+    "vpcGate": {
+      "title": "Primero necesitamos el sí de un adulto",
+      "exitsLabel": "Mientras tanto, puedes:",
+      "exits": {
+        "play": "Jugar juegos",
+        "comment": "Comentar en un juego",
+        "waitlist": "Unirte a una lista de espera"
+      }
+    }
+  },
+  "games": {
+    "play": "Jugar",
+    "comments": "Comentarios",
+    "contribute": {
+      "title": "Contribuir",
+      "tasksTitle": "Tareas abiertas",
+      "claimTask": "Reclamar tarea",
+      "connectGithub": "Conectar GitHub",
+      "gateBody": "Las tareas de contribución ocurren en GitHub, fuera de la plataforma. Un padre, madre o tutor debe aprobarlo antes de que te conectes."
+    },
+    "notFound": {
+      "title": "Juego no encontrado",
+      "body": "No encontramos un juego en esta dirección. Puede que se haya movido o que el enlace esté desactualizado.",
+      "back": "Volver al inicio"
     }
   }
 }

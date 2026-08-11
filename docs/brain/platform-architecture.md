@@ -1,5 +1,7 @@
 # System Architecture & Logic Prompt: Educational Game Dev Platform
 
+> Superseded by `onboarding-flows-boundary-consent.md` wherever the two disagree — notably the age gate: that doc's premise is kids join *without* consent and the gate fires later, at the boundary, not at signup.
+
 ## 1. Core Onboarding Architecture (The Spine)
 *   **Rule:** No upfront signup walls. Allow unauthenticated guest exploration [1].
 *   **Trigger:** Account creation is only triggered by a "Commitment Action" (e.g., commenting on a game, applying for a program, claiming a contributor task) [1].

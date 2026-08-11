@@ -2,9 +2,19 @@
 import { NuxtLink } from '#components'
 import type { PathChoice } from '~/composables/useHomeMockData'
 
-defineProps<{
+const props = defineProps<{
   choices: PathChoice[]
+  /** Signed-in intent capture (Fresh Account) reacts to the pick instead of
+   * navigating away — the guest cards below still just link out. */
+  interceptSelect?: boolean
 }>()
+
+const emit = defineEmits<{ select: [choice: PathChoice] }>()
+
+function tag(choice: PathChoice) {
+  if (props.interceptSelect) return 'button'
+  return choice.to ? NuxtLink : 'div'
+}
 </script>
 
 <template>
@@ -14,13 +24,14 @@ defineProps<{
          silently rendered every card as an inert <div> — the cards looked
          right and did nothing. -->
     <component
-      :is="choice.to ? NuxtLink : 'div'"
+      :is="tag(choice)"
       v-for="choice in choices"
       :key="choice.id"
-      :to="choice.to"
-      class="group relative block min-w-0 flex-1 basis-0
+      :to="interceptSelect ? undefined : choice.to"
+      class="group relative block min-w-0 flex-1 basis-0 text-left
              transition-transform duration-500 ease-out
              hover:z-10 hover:scale-[1.03] focus-within:z-10 focus-within:scale-[1.03]"
+      @click="interceptSelect && emit('select', choice)"
     >
       <!-- The growth is a transform on the hovered card itself, not `flex-grow`:
            a transform is off the layout path, so the other two cards hold their

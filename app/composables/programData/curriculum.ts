@@ -1251,8 +1251,118 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
   // Source: docs/brain/Knowledge Base/Programs/Explore-Godot/{curriculum,sessions}.md
   // Ten sessions grouped into four coherent modules rather than one module per session,
   // per the task's "small number of coherent modules" guidance. Module 1 matches the
-  // brief's worked example verbatim.
+  // brief's worked example verbatim. Sessions 6, 7, and 8 share the same driving
+  // question, Session Goal, and activity list verbatim in source — repeated here
+  // rather than deduped, since it's real, not a copy-paste mistake.
   'explore-godot': [
+    // A dedicated, single-item module rather than a flag on an item inside
+    // 'mod-eg-intro': being its own module means the existing module-lock
+    // logic in useProgramProgress.ts gates the rest of the curriculum for
+    // free (module 1 is always unlocked; module 2 stays locked until every
+    // item in module 1 — this one — is complete). No changes to that
+    // locking logic were needed. `presentation: 'takeover'` is what tells
+    // ProgramTabClassroom.vue to open the blocking modal + full-screen
+    // wizard here instead of the normal ProgramStepDrawer.
+    {
+      id: 'mod-eg-pre-survey',
+      title: 'Pre-Survey',
+      description: 'A few questions before you start.',
+      items: [
+        {
+          id: 'item-eg-pre-survey',
+          type: 'survey',
+          title: 'Before You Begin',
+          xp: XP.survey,
+          contentType: 'text',
+          presentation: 'takeover'
+        }
+      ]
+    },
+    {
+      id: 'mod-eg-intro',
+      title: 'Introduction',
+      description: 'What Explore: Godot is, what you need before you start, and where to play the moddable platformer you\'ll be building on.',
+      items: [
+        {
+          id: 'item-eg-intro-overview',
+          type: 'topic',
+          title: 'Overview',
+          xp: XP.topic,
+          contentType: 'text',
+          body: [
+            { kind: 'paragraph', text: 'Explore: Godot is a 10-session project aimed at taking you from player to builder. In this series, you will step inside a professional game engine to construct your very own 2D platformer level set in the Threadbare universe.' },
+            { kind: 'paragraph', text: 'Here, you will:' },
+            {
+              kind: 'list',
+              items: [
+                'Explore the Tools: Learn the interface of the Godot Engine, a powerful tool used by indie developers worldwide.',
+                'Script the Action: Write real code (scripts) to control player movement, collectibles, and hazards.',
+                'Design the Fun: Arrange platforms, traps, and goals to create a level that challenges your friends.'
+              ]
+            },
+            { kind: 'paragraph', text: 'Unlike the workshops, this is a continuous project. You will build upon your work in every session, culminating in a fully playable level.' },
+            { kind: 'paragraph', text: "Once you've completed Explore: Godot, you can earn the Introduction to Game Making with Godot microcredential from Arizona State University!" },
+            { kind: 'paragraph', text: 'Before you begin, make sure you have these things ready:' },
+            {
+              kind: 'list',
+              items: [
+                'A Computer or Laptop: You need a Windows, Mac, or Linux machine to run the game engine. Note: Tablets, phones, and most Chromebooks will not work.',
+                'Godot Engine Installed: You must download and install the Godot Engine (we will guide you through this in the first session).',
+                'A 3-Button Mouse: While a trackpad is possible, a mouse with a scroll wheel makes navigating the game world significantly easier.',
+                'A Game Design Journal: To sketch your level layouts and track your to-do list.'
+              ]
+            },
+            { kind: 'media', media: 'image' }
+          ]
+        },
+        {
+          id: 'item-eg-intro-play',
+          type: 'topic',
+          title: 'Play the Moddable Platformer',
+          xp: XP.topic,
+          contentType: 'text',
+          body: [
+            { kind: 'paragraph', text: "Play the unfinished platformer in your browser and consider what's possible for mods!" },
+            { kind: 'paragraph', text: 'Use the following link to play the unfinished platformer directly in your browser and explore the game meant to be modded!' },
+            { kind: 'link', label: 'Play the Platformer', href: 'https://endlessm.github.io/moddable-platformer/' },
+            { kind: 'paragraph', text: 'Need to use the Moddable Platformer project offline? Download the latest version of the project. Select the release marked Latest, open Assets, and download the project ZIP file. Then, extract the file and import the project into Godot.' },
+            { kind: 'link', label: 'Latest release page', href: 'https://github.com/endlessm/moddable-platformer/releases' },
+            { kind: 'media', media: 'image', caption: 'Moddable Platformer' }
+          ]
+        },
+        {
+          id: 'item-eg-intro-faq',
+          type: 'topic',
+          title: 'Frequently Asked Questions',
+          xp: XP.topic,
+          contentType: 'text',
+          body: [
+            { kind: 'heading', text: 'How much time will it take me to complete this program?' },
+            { kind: 'paragraph', text: 'Each session is designed to take around an hour to complete. However, each person learns in a different way and at a different pace, so here are some considerations:' },
+            { kind: 'paragraph', text: "Sessions (and activities) have an estimated time for completion, but these time frames are flexible: you might do something really fast and finish early, or you might need (or want to) stop and dig a little deeper in one task. That's ok!" },
+            { kind: 'paragraph', text: 'When you are asked to make mods, create a level or even do your own prototype, you can do it at your own pace.' },
+            { kind: 'paragraph', text: 'Remember: learning is not linear!' },
+            { kind: 'heading', text: 'What is an Essential Question?' },
+            { kind: 'paragraph', text: 'You\'ll see that each session begins with an essential question designed to provoke deep thinking about key concepts in game design. There\'s no need to write down an answer, and there are no right or wrong answers either. For instance, when we ask "What makes a level \'just right\'?" we\'re trying to encourage you to delve into critical aspects such as game mechanics, storytelling, player experience, and player engagement throughout the session. Each activity of a session connects to this essential question in one way or another.' },
+            { kind: 'heading', text: 'How do I get help if I need it?' },
+            { kind: 'paragraph', text: 'If you need assistance, please send an email to learning@endlessaccess.org.' }
+          ]
+        },
+        {
+          // The page renders this session as a single "Go to link" button out to
+          // an external glossary; the source does not capture its URL.
+          id: 'item-eg-intro-glossary',
+          type: 'resource',
+          title: 'Game Design Glossary',
+          xp: XP.resource,
+          contentType: 'text',
+          body: [
+            { kind: 'paragraph', text: "We know there are a lot of unique industry terms, so feel free to use our Game Design Glossary to quickly look up anything you don't recognize." },
+            { kind: 'link', label: 'Go to link' }
+          ]
+        }
+      ]
+    },
     {
       id: 'mod-eg-1',
       title: 'Getting into Godot',
@@ -1264,7 +1374,25 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'Why do we play games? Why do we mod them?',
           drivingQuestion: 'Why do we play games? Why do we mod them?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Get comfortable with Godot by loading and modding your first game – a moddable version of Pong – and reflect on basic game elements.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Open Godot for the first time.',
+                'Load a moddable Pong game and explore its parts.',
+                'Think about what makes a game a game.',
+                'Analyze the game elements in Pong.',
+                'Make your own simple modifications (mods).'
+              ]
+            },
+            { kind: 'paragraph', text: "Build confidence in navigating Godot's user interface (UI) and seeing how changes you make can transform a player's experience." },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-1-check',
@@ -1279,14 +1407,23 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'Should game makers also be game players?',
           drivingQuestion: 'Should game makers also be game players?',
           xp: XP.topic,
-          contentType: 'slideshow'
-        },
-        {
-          id: 'item-eg-2-check',
-          type: 'survey',
-          title: 'Session 2 Self-Check',
-          xp: XP.survey,
-          contentType: 'text'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Play and analyze platformer games and practice modding a new genre in Godot.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Play games from a different genre: platformers.',
+                'Learn what core gameplay loops are, and analyze how they look in platformers.',
+                'Load and mod a platformer in Godot.',
+                'Share your mods with the community.'
+              ]
+            },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           // SYNTHESIZED: the Explore source material has no per-module
@@ -1316,7 +1453,24 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'How do game makers create a fun and engaging level?',
           drivingQuestion: 'How do game makers create a fun and engaging level?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Create a small playable level by intentionally remixing the base platformer from start to finish. This session is different from earlier modding.' },
+            { kind: 'paragraph', text: "Instead of experimenting with individual changes, you'll focus on quickly shaping a level that feels complete and fun to play." },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Brainstorm how you would remake a platformer level.',
+                'Consider progression and balance of challenges in the platformer.',
+                'Use the tilemap and existing game components to remake the entire base level.',
+                'Share your level with the community.'
+              ]
+            },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-3-check',
@@ -1331,7 +1485,23 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'What helps an idea move from concept to something real?',
           drivingQuestion: 'What helps an idea move from concept to something real?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Learn problem decomposition – breaking a big design challenge into smaller steps – and keep implementing your mods to the level.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Explore how problem-solving applies to game design.',
+                'Practice breaking a big problem into smaller, manageable steps, also known as problem decomposition.',
+                'Connect this skill to redesigning your own level in Godot.'
+              ]
+            },
+            { kind: 'paragraph', text: 'Create your own Level Design Document.' },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-4-check',
@@ -1368,7 +1538,24 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'What makes a level good? What makes it great?',
           drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Begin building your new platformer level in Godot, balancing creativity, challenge, and accessibility.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Begin building your planned platformer level.',
+                "Learn how to use Godot's animation tools to make dynamic elements.",
+                'Think about pacing and difficulty curves.',
+                'Playtest sections as you build.',
+                "Tweak your plan as you go (that's part of the process!)."
+              ]
+            },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-5-check',
@@ -1383,7 +1570,23 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'What makes a level good? What makes it great?',
           drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Build and refine your platformer level by testing ideas, playtesting often, and responding to feedback.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Explore a game design lens and brainstorm how it could shape your level.',
+                'Build your platformer level based on your plan and ideas.',
+                'Playtest sections as you build to see how they feel in action.',
+                'Adjust and refine your plan as you learn what works and as you get feedback from other players.'
+              ]
+            },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-6-check',
@@ -1398,7 +1601,23 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'What makes a level good? What makes it great?',
           drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Build and refine your platformer level by testing ideas, playtesting often, and responding to feedback.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Explore a game design lens and brainstorm how it could shape your level.',
+                'Build your platformer level based on your plan and ideas.',
+                'Playtest sections as you build to see how they feel in action.',
+                'Adjust and refine your plan as you learn what works and as you get feedback from other players.'
+              ]
+            },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-7-check',
@@ -1413,7 +1632,23 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'What makes a level good? What makes it great?',
           drivingQuestion: 'What makes a level good? What makes it great?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Build and refine your platformer level by testing ideas, playtesting often, and responding to feedback.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Explore a game design lens and brainstorm how it could shape your level.',
+                'Build your platformer level based on your plan and ideas.',
+                'Playtest sections as you build to see how they feel in action.',
+                'Adjust and refine your plan as you learn what works and as you get feedback from other players.'
+              ]
+            },
+            { kind: 'note', text: 'Every time you see a highlighted word, you can go to the Glossary in the Introduction section to find out more.' }
+          ]
         },
         {
           id: 'item-eg-8-check',
@@ -1450,7 +1685,21 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'What makes a level "polished?"',
           drivingQuestion: 'What makes a level "polished?"',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Conduct playtesting session with people you know, and finish polishing your level and make plans for how best to showcase your level.' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Ask people to playtest your level and gather data to apply the finish touches or correct any bugs your level might have.',
+                'Have a playable level – even if it isn\'t "perfect".',
+                "Plan out the structure of your level's pitch deck."
+              ]
+            }
+          ]
         },
         {
           id: 'item-eg-9-check',
@@ -1465,7 +1714,20 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
           title: 'Where do you go from here?',
           drivingQuestion: 'Where do you go from here?',
           xp: XP.topic,
-          contentType: 'slideshow'
+          contentType: 'slideshow',
+          body: [
+            { kind: 'media', media: 'slideshow' },
+            { kind: 'heading', text: 'Session Goal' },
+            { kind: 'paragraph', text: 'Share your project with the rest of the world! Be proud of your work!' },
+            { kind: 'paragraph', text: "In this session, you'll:" },
+            {
+              kind: 'list',
+              items: [
+                'Share your work with your community.',
+                'Reflect on this experience.'
+              ]
+            }
+          ]
         },
         {
           id: 'item-eg-10-check',
@@ -1486,6 +1748,39 @@ export const curriculumByProgram: Record<string, CurriculumModule[]> = {
             'You exported your finished level as a .zip file anyone can play.',
             'You shared your pitch deck presentation, with a video of the gameplay if possible.',
             "You gave feedback on at least one other learner's project."
+          ]
+        }
+      ]
+    },
+    {
+      id: 'mod-eg-final',
+      title: 'Final Steps',
+      description: 'Claim your certificate, then decide what to build next.',
+      items: [
+        {
+          id: 'item-eg-final-certificate',
+          type: 'survey',
+          title: 'Certification of Completion',
+          xp: XP.survey,
+          contentType: 'text',
+          body: [
+            { kind: 'paragraph', text: "You've completed Explore: Godot, and it's time to celebrate! Submit this form to receive your official Explore: Godot certificate of completion." },
+            { kind: 'link', label: 'Go to link' }
+          ]
+        },
+        {
+          id: 'item-eg-final-continue',
+          type: 'topic',
+          title: 'Continue Your Journey',
+          xp: XP.topic,
+          contentType: 'text',
+          body: [
+            { kind: 'paragraph', text: "You've built your own platformer level in Godot. Now take the next step." },
+            { kind: 'paragraph', text: 'Try Explore: Git to learn how to collaborate using Git and GitHub before diving into larger team projects.' },
+            { kind: 'link', label: 'Explore: Git program', href: 'https://studio.endlessstudios.com/programs/3991983/' },
+            { kind: 'paragraph', text: 'If you are confident in your Git skills, then you can go right to Core: Threadbare to design and build your own StoryQuest inside the Threadbare world!' },
+            { kind: 'link', label: 'Core: Threadbare program', href: 'https://studio.endlessstudios.com/programs/1737709/' },
+            { kind: 'media', media: 'image' }
           ]
         }
       ]

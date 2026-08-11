@@ -25,16 +25,6 @@ const currentItem = computed(() => items.find(item => !progress.isCompleted(item
 
 const isComplete = computed(() => !currentItem.value && items.length > 0)
 
-const currentModuleNumber = computed(() => {
-  if (!currentItem.value) return 0
-  return props.template.curriculum.findIndex(mod => mod.id === currentItem.value!.moduleId) + 1
-})
-
-const currentLessonNumber = computed(() => {
-  if (!currentItem.value) return 0
-  return items.indexOf(currentItem.value) + 1
-})
-
 // Tabs are front-end state, so this asks the shell to switch rather than
 // navigating. The lesson id still goes through the route, which is where the
 // classroom reads it from.
@@ -88,20 +78,10 @@ function goToCurrentLesson() {
       <USeparator class="mt-4" />
 
       <div class="mt-4">
-        <div class="text-xs text-dimmed">
-          {{ t('program.home.moduleLabel', {
-            number: currentModuleNumber,
-            total: template.curriculum.length
-          }) }}
+        <div class="text-xs text-dimmed">{{ t('program.home.upNext') }}</div>
+        <div class="font-heading font-bold text-sm text-highlighted mt-0.5 break-words">
+          {{ t('program.home.currentStep', { module: currentItem.moduleTitle, step: currentItem.title }) }}
         </div>
-        <div class="font-heading font-bold text-sm text-primary-600 mt-0.5">
-          {{ currentItem.moduleTitle }}
-        </div>
-
-        <div class="mt-3 text-xs text-dimmed">
-          {{ t('program.home.lessonLabel', { number: currentLessonNumber, total: items.length }) }}
-        </div>
-        <div class="text-sm text-highlighted mt-0.5">{{ currentItem.title }}</div>
       </div>
 
       <UButton

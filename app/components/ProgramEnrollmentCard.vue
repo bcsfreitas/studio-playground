@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { ProgramTemplate, ProgramInstance, EnrollmentRecord, Cohort, EnrollmentStatus } from '~/composables/useProgramMockData'
-import { cohortStatusFor, cohortHasStarted, isBookableStatus } from '~/composables/useProgramMockData'
+import { cohortStatusFor, cohortHasStarted, isBookableStatus, useConsentBoundary } from '~/composables/useProgramMockData'
 import { formatCohortRange } from '~/composables/useLearnMockData'
 import { useProgramTabs } from '~/composables/useProgramTabs'
 import { usePreviewState } from '~/composables/usePreviewState'
+import { useProgramEnrollment } from '~/composables/useProgramEnrollment'
 import { signUpTo } from '~/composables/useAuthIntent'
 
 const props = defineProps<{
@@ -69,6 +70,7 @@ const facts = computed(() => {
 
 // Tabs are front-end state, so resuming switches tab rather than navigating.
 const { setTab } = useProgramTabs()
+const { startSelfPaced } = useProgramEnrollment(computed(() => props.template.id))
 
 // Cohorts gated by an access code stay locked client-side until the right
 // code is entered — there's no backend, so "unlocked" just means "the code
@@ -211,10 +213,15 @@ function submitCode() {
 }
 
 const enrollModalOpen = ref(false)
-const enrollModalStep = ref<'confirm' | 'success' | 'cancel'>('confirm')
+const enrollModalStep = ref<'confirm' | 'success' | 'cancel' | 'vpc-gate' | 'self-paced-confirm'>('confirm')
 
 function openEnrollModal() {
   enrollModalStep.value = 'confirm'
+  enrollModalOpen.value = true
+}
+
+function openSelfPacedConfirmModal() {
+  enrollModalStep.value = 'self-paced-confirm'
   enrollModalOpen.value = true
 }
 
@@ -223,6 +230,8 @@ function openEnrollModal() {
 const modalTitle = computed(() => {
   if (enrollModalStep.value === 'cancel') return t('program.enroll.cancelModal.title')
   if (enrollModalStep.value === 'confirm') return t('program.enroll.confirmModal.title')
+  if (enrollModalStep.value === 'vpc-gate') return t('onboarding.vpcGate.title')
+  if (enrollModalStep.value === 'self-paced-confirm') return t('program.enroll.selfPacedConfirmModal.title')
   return t('program.enroll.successModal.title')
 })
 
@@ -239,7 +248,21 @@ function confirmCancellation() {
 }
 
 const route = useRoute()
-const { isLoggedIn } = usePreviewState()
+const { isLoggedIn, accountStatus } = usePreviewState()
+
+// Flow 2a's join screen: an unconsented young learner joining an open cohort
+// is exactly the doc's "VPC at join" case (M2a) — the one boundary action
+// that reads cohort type, not just account status. See consent.ts.
+//
+// Self-paced cohorts (startDate === null) are excluded on purpose: the
+// consent matrix is about a *group's* visibility, and a self-paced instance
+// has no roster to be seen with — starting one alone crosses no boundary,
+// so it's never gated regardless of its `type`.
+const { check } = useConsentBoundary()
+const joinGate = computed(() => {
+  if (!selectedCohort.value || selectedCohort.value.startDate === null) return { gated: false, reason: 'not-required' as const }
+  return check(accountStatus.value, selectedCohort.value.type, 'join-open-cohort')
+})
 
 // A guest pressing Enroll is a guest telling us what they want. Sign-up carries
 // the program and the session they picked, and the query it comes back with is
@@ -248,19 +271,37 @@ const signUpToEnroll = computed(() => signUpTo(
   selectedCohort.value ? `${route.path}?enroll=${selectedCohort.value.id}` : route.path
 ))
 
+// Same intent-carrying trick as signUpToEnroll, for the self-paced CTA: a
+// guest's `next` marks that they meant to start, not just "come back here."
+const signUpToStartSelfPaced = computed(() => signUpTo(`${route.path}?startSelfPaced=1`))
+
 function onEnrollClick() {
   // Guests follow the `to` link instead; nothing to do here for them.
-  if (isLoggedIn.value) openEnrollModal()
+  if (!isLoggedIn.value) return
+  if (joinGate.value.gated) {
+    enrollModalStep.value = 'vpc-gate'
+    enrollModalOpen.value = true
+    return
+  }
+  openEnrollModal()
 }
 
 function onStartLearningClick() {
-  if (isLoggedIn.value) setTab('classroom')
+  // Guests follow the `to` link instead; nothing to do here for them.
+  if (!isLoggedIn.value) return
+  openSelfPacedConfirmModal()
+}
+
+function confirmSelfPaced() {
+  startSelfPaced()
+  enrollModalOpen.value = false
+  setTab('classroom')
 }
 
 // Resuming the intent, once. Waits for a signed-in state rather than firing on
 // mount: usePreviewState only reads storage on mount, so "signed in" isn't
-// known yet at setup, and a stray `?enroll=` must never open the modal for a
-// guest who was linked here.
+// known yet at setup, and a stray `?enroll=`/`?startSelfPaced=` must never
+// open a modal for a guest who was merely linked here.
 const resumedIntent = ref(false)
 watch(isLoggedIn, (signedIn) => {
   if (!signedIn || resumedIntent.value) return
@@ -271,6 +312,15 @@ watch(isLoggedIn, (signedIn) => {
   resumedIntent.value = true
   selectedCohortId.value = cohort.id
   openEnrollModal()
+}, { immediate: true })
+
+const resumedSelfPacedIntent = ref(false)
+watch(isLoggedIn, (signedIn) => {
+  if (!signedIn || resumedSelfPacedIntent.value) return
+  if (route.query.startSelfPaced !== '1') return
+
+  resumedSelfPacedIntent.value = true
+  openSelfPacedConfirmModal()
 }, { immediate: true })
 
 function confirmEnrollment() {
@@ -443,17 +493,18 @@ function addToCalendar() {
 
         <template v-else-if="selectedStatus === 'self-paced-always-open'">
           <UBadge :label="t('program.enroll.sessionDescription.selfPaced')" color="neutral" variant="soft" class="mb-3" />
-          <!-- Self-paced has nothing to confirm — no seat, no start date — so
-               there's no enroll modal in this path. A signed-in learner opens
-               the classroom on the spot; a guest signs up and comes back to
-               this same button. -->
+          <!-- No seat or start date to pick, but starting still opens the
+               classroom immediately — worth a confirmation rather than a
+               silent one-click commit. A guest's intent survives the sign-up
+               round trip via `?startSelfPaced=1` and reopens this same modal
+               on return (see the resumedSelfPacedIntent watcher above). -->
           <UButton
             :label="t('program.enroll.cta.startLearning')"
             icon="lucide:play"
             color="primary"
             size="xl"
             block
-            :to="isLoggedIn ? undefined : signUpTo(route.path)"
+            :to="isLoggedIn ? undefined : signUpToStartSelfPaced"
             @click="onStartLearningClick"
           />
         </template>
@@ -525,6 +576,30 @@ function addToCalendar() {
           </p>
         </div>
 
+        <div v-else-if="enrollModalStep === 'self-paced-confirm'" class="flex flex-col items-center text-center gap-3">
+          <div class="flex items-center justify-center size-12 rounded-full bg-primary/10 text-primary">
+            <UIcon name="lucide:play" class="size-6" />
+          </div>
+          <div class="font-heading font-bold text-lg text-highlighted">
+            {{ t('program.enroll.selfPacedConfirmModal.title') }}
+          </div>
+          <p class="text-sm text-muted">
+            {{ t('program.enroll.selfPacedConfirmModal.body', { program: template.title }) }}
+          </p>
+        </div>
+
+        <div v-else-if="enrollModalStep === 'vpc-gate'" class="flex flex-col items-center text-center gap-3">
+          <div class="flex items-center justify-center size-12 rounded-full bg-kids-50 text-kids">
+            <UIcon name="lucide:shield-check" class="size-6" />
+          </div>
+          <div class="font-heading font-bold text-lg text-highlighted">
+            {{ t('onboarding.vpcGate.title') }}
+          </div>
+          <p class="text-sm text-muted">
+            {{ t('program.enroll.vpcGate.body', { program: template.title }) }}
+          </p>
+        </div>
+
         <div v-else class="flex flex-col items-center text-center gap-3">
           <div class="flex items-center justify-center size-12 rounded-full bg-success/10 text-success">
             <UIcon name="lucide:check" class="size-6" />
@@ -552,6 +627,14 @@ function addToCalendar() {
         <template v-else-if="enrollModalStep === 'confirm'">
           <UButton :label="t('program.enroll.confirmModal.cancel')" color="neutral" variant="outline" @click="enrollModalOpen = false" />
           <UButton :label="t('program.enroll.confirmModal.confirm')" color="primary" @click="confirmEnrollment" />
+        </template>
+        <template v-else-if="enrollModalStep === 'vpc-gate'">
+          <UButton :label="t('onboarding.vpcGate.exits.play')" color="neutral" variant="outline" to="/" @click="enrollModalOpen = false" />
+          <UButton :label="t('onboarding.vpcGate.exits.waitlist')" color="neutral" variant="outline" to="/learn" @click="enrollModalOpen = false" />
+        </template>
+        <template v-else-if="enrollModalStep === 'self-paced-confirm'">
+          <UButton :label="t('program.enroll.selfPacedConfirmModal.cancel')" color="neutral" variant="outline" @click="enrollModalOpen = false" />
+          <UButton :label="t('program.enroll.selfPacedConfirmModal.confirm')" color="primary" @click="confirmSelfPaced" />
         </template>
         <UButton
           v-else

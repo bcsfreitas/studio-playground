@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { programTemplates, channelsForProgram, postsForProgramChannels, avatarForName } from '~/composables/useProgramMockData'
+import { usePreviewState } from '~/composables/usePreviewState'
 
 const route = useRoute()
 const { t } = useI18n()
+const { isOnboarded } = usePreviewState()
 
 const programId = computed(() => route.params.programId as string)
 const template = computed(() => programTemplates.find(p => p.id === programId.value))
@@ -26,6 +28,21 @@ const channelName = computed(() => {
   <UContainer v-if="template">
     <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_324px] gap-8 lg:gap-12 pt-10 pb-16">
       <div class="flex flex-col gap-6 min-w-0">
+        <!-- Per docs/brain/onboarding-flows-boundary-consent.md: the program
+             page is the checklist's primary home, so the full widget sits at
+             the top of the page the learner/educator lands on post-enrollment.
+             Flow varies by audience — Flow 2a's cohort-learner items (introduce
+             yourself, submit first task) don't apply to Flow 5's educators, whose
+             checklist ends at enrollment itself. The (flow-id, context-id) pair
+             for '2a' matches the dashboard's ChecklistCard, so ticking an item
+             on either surface updates both instantly, and claiming on either
+             surface hides it on both (ChecklistCard hides itself once claimed). -->
+        <ChecklistCard
+          :flow-id="template.audience === 'educator' ? '5' : '2a'"
+          :context-id="template.id"
+          :allow-claim="isOnboarded"
+        />
+
         <!-- Mobile-only: the rail is sticky on lg+, but below that the progress
              card is the first thing the learner should see, not the last. -->
         <div class="lg:hidden flex flex-col gap-8">
