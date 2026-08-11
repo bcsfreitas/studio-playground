@@ -1,10 +1,26 @@
 <script setup lang="ts">
-import { PREVIEW_STATES, usePreviewState } from '~/composables/usePreviewState'
+import { PREVIEW_STATES, RESET_FLAG_KEY, usePreviewState } from '~/composables/usePreviewState'
 import { PREVIEW_ACCOUNT_STATUSES } from '~/composables/useProgramMockData'
 
 // No props: every page shows the same bar and the state is global, so passing
 // it in would just be four chances for two pages to disagree.
 const { state, accountStatus, reset } = usePreviewState()
+
+const toast = useToast()
+
+// reset() reloads the page, so a toast fired right before that never has time
+// to paint. It sets a sessionStorage flag instead; this bar is on every page,
+// so whichever one loads next is guaranteed to see and consume it.
+onMounted(() => {
+  if (!import.meta.client) return
+  if (!sessionStorage.getItem(RESET_FLAG_KEY)) return
+  sessionStorage.removeItem(RESET_FLAG_KEY)
+  toast.add({
+    title: 'Preview session reset',
+    description: 'Back to Guest — lesson progress, checklists, and enrollments cleared.',
+    color: 'success'
+  })
+})
 </script>
 
 <template>

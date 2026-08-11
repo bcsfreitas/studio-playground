@@ -6,6 +6,12 @@ defineProps<{
   completed: boolean
   locked: boolean
   current: boolean
+  // The drawer's sidebar nav is a narrow column (see ProgramStepDrawer.vue)
+  // where a real lesson title needs the width the type icon, XP and chevron
+  // would otherwise take, and a checklist reads better as plain lines than as
+  // a stack of bordered cards — so compact drops the card chrome (ring/shadow)
+  // and the trailing meta, but keeps the leading status icon.
+  compact?: boolean
 }>()
 
 // The card stays presentational and hands the step back up — the drawer is a
@@ -45,8 +51,9 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
     :disabled="locked"
     :highlight="current"
     highlight-color="primary"
+    :variant="compact ? 'ghost' : 'outline'"
     class="rounded-2xl text-left transition-shadow duration-250 focus-visible:outline-3 disabled:cursor-not-allowed"
-    :class="locked ? '' : 'hover:shadow-xl'"
+    :class="locked ? '' : compact ? 'hover:bg-elevated' : 'hover:shadow-xl'"
     :ui="{
       container: 'p-0 sm:p-0',
       wrapper: 'flex-row items-center gap-3 px-6 py-4',
@@ -61,7 +68,7 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
       <UIcon
         :name="completed
           ? 'lucide:check-circle-2'
-          : locked ? 'lucide:lock' : current ? 'lucide:play' : 'lucide:circle'"
+          : locked ? 'lucide:lock' : current ? 'lucide:circle-play' : 'lucide:circle'"
         class="size-5 shrink-0"
         :class="completed
           ? 'text-success'
@@ -78,7 +85,7 @@ const ITEM_TYPE_ICON: Record<CurriculumItemType, string> = {
       >{{ item.title }}</span>
     </template>
 
-    <template #footer>
+    <template v-if="!compact" #footer>
       <UIcon :name="ITEM_TYPE_ICON[item.type]" class="size-3.5 shrink-0 text-dimmed" />
       <span v-if="item.xp" class="text-xs text-dimmed tabular-nums shrink-0">+{{ item.xp }} XP</span>
       <UIcon v-if="!locked" name="lucide:chevron-right" class="size-4 shrink-0 text-dimmed" />

@@ -7,21 +7,44 @@ import {
   upcomingEvents,
   weekCellsFor,
   topbarStatsFor,
+  continueLearningFor,
   userName,
   userAvatar,
   streakDays
 } from '~/composables/useHomeMockData'
 import { usePreviewState } from '~/composables/usePreviewState'
+import { useXpBalance } from '~/composables/useXpBalance'
+import { useResumeLearning } from '~/composables/useResumeLearning'
+import { useOnboardingIntent, INTENT_FLOWS } from '~/composables/useOnboardingIntent'
+import type { OnboardingFlowId } from '~/composables/useOnboardingChecklist'
 
 definePageMeta({ layout: 'dashboard' })
 
-const { isGuest, isStarting, isOnboarded, isLoggedIn } = usePreviewState()
-const showRecs = computed(() => isStarting.value || isGuest.value)
+const { isGuest, isFresh, isNew, isStarting, isOnboarded, isLoggedIn, state } = usePreviewState()
+const { total: xpTotal } = useXpBalance()
+const { resumeItem, resumeTo } = useResumeLearning()
+const { intent } = useOnboardingIntent()
+// Fresh only from here on: a New Learner is already enrolled, so their
+// "start learning" moment is over — they get the Continue learning card below.
+const showRecs = computed(() => isFresh.value || isGuest.value)
+
+const continueLearning = computed(() => continueLearningFor(state.value))
+
+// Which checklist (if any) belongs in the right rail for the current state:
+// Fresh Account only once they've picked a "what brings you here" card,
+// New/Onboarded off their enrollment.
+const checklist = computed<{ flowId: OnboardingFlowId, contextId: string } | null>(() => {
+  if (isFresh.value) return intent.value ? INTENT_FLOWS[intent.value] : null
+  if (isNew.value || isOnboarded.value) {
+    return continueLearning.value ? { flowId: '2a', contextId: continueLearning.value.id } : null
+  }
+  return null
+})
 
 const streakTitle = computed(() => (isOnboarded.value ? `${streakDays}-day streak` : 'Start your streak'))
 const streakMeta = computed(() => (isOnboarded.value ? 'Best: 14 days' : 'Best: 0 days'))
 const weekCells = computed(() => weekCellsFor(isOnboarded.value))
-const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value, xpTotal.value))
 
 const tab = ref<'all' | 'announce' | 'game' | 'program'>('all')
 const tabs: { id: typeof tab.value, label: string }[] = [
@@ -61,7 +84,7 @@ const filteredPosts = computed(() => feedPosts.filter(p => tab.value === 'all' |
               Come play.
             </h1>
             <p class="max-w-[440px] text-md text-white/85">
-              Every game here was made by a kid. Play as many as you like, then build one yourself. We'll show you every step. No account needed to start.
+              Play as many games as you like, then build one yourself. We'll show you every step. No account needed to start.
             </p>
             <!-- `color="neutral"` rather than primary: the banner art is already
                  the brand orange, so an orange button on top of it disappears. -->
@@ -71,12 +94,10 @@ const filteredPosts = computed(() => feedPosts.filter(p => tab.value === 'all' |
 
         <!-- Sits outside the two-column grid below, at the same level as the
              hero, so the row spans the full container instead of being boxed
-             into the main column. One persistent slot, one job: see
-             WhatsNextSlot's own doc comment for the state machine this
-             replaces (guest cards, checklist card, and the resume card all
-             used to live here separately). -->
+             into the main column. Guest and Fresh Account only — New/Onboarded
+             render nothing here. -->
         <section :class="isGuest ? 'mt-20' : 'mt-10'">
-          <WhatsNextSlot />
+          <OnboardingIntentPrompt />
         </section>
 
         <div class="grid items-start gap-12" style="grid-template-columns: minmax(0,1fr) 324px; margin-top: 80px">
@@ -96,18 +117,57 @@ const filteredPosts = computed(() => feedPosts.filter(p => tab.value === 'all' |
                     </UButton>
                   </template>
                 </SectionTitle>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-6">
                   <ProgramTile
                     v-for="r in programRecs.slice(0, 2)"
                     :key="r.id"
-                    :to="`/learn/${r.id}`"
+                    :to="r.id === 'explore-godot' ? `/learn/${r.id}` : undefined"
                     :image="r.image"
                     :name="r.name"
                     :description="r.description"
-                    :tasks-count="r.tasksCount"
+                    :session-count="r.sessionCount"
+                    :session-unit="r.sessionUnit"
                     :status="r.status"
                   />
                 </div>
+              </div>
+
+              <!-- Already enrolled (New Learner or Onboarded), so the pitch is
+                   replaced with a resume prompt for the program they're in. -->
+              <div v-else-if="continueLearning">
+                <SectionTitle title="Continue learning">
+                  <template #trailing>
+                    <UButton color="secondary" variant="ghost" size="xs">
+                      View all programs
+                    </UButton>
+                  </template>
+                </SectionTitle>
+
+                <UPageCard
+                  orientation="horizontal"
+                  reverse
+                  class="transition-shadow duration-250 hover:shadow-2xl"
+                >
+                  <img :src="continueLearning.image" :alt="continueLearning.name" class="h-full object-cover rounded-2xl">
+
+                  <template #body>
+                    <div class="text-xs font-semibold uppercase text-dimmed w-full">Program</div>
+                    <div class="mt-1 font-heading font-bold text-highlighted text-2xl">{{ continueLearning.name }}</div>
+                    <div class="text-sm text-muted">Current task: {{ resumeItem?.title }}</div>
+                    <div class="flex items-center gap-3 mt-4">
+                      <UProgress :model-value="continueLearning.progress" color="primary" />
+                      <span class="text-xs text-default">{{ continueLearning.progress }}%</span>
+                    </div>
+                    <div class="mt-3">
+                      <UButton
+                        color="primary"
+                        size="xl"
+                        icon="lucide:play"
+                        :to="resumeTo"
+                      >Resume learning</UButton>
+                    </div>
+                  </template>
+                </UPageCard>
               </div>
             </section>
 
@@ -185,6 +245,12 @@ const filteredPosts = computed(() => feedPosts.filter(p => tab.value === 'all' |
 
           <!-- ============ RIGHT RAIL ============ -->
           <div class="flex flex-col gap-6 min-w-0 w-full">
+            <ChecklistCard
+              v-if="checklist"
+              :flow-id="checklist.flowId"
+              :context-id="checklist.contextId"
+              :allow-claim="isOnboarded"
+            />
             <StreakCard v-if="isLoggedIn" :title="streakTitle" :meta="streakMeta" :days="weekCells" />
             <UpcomingEventsCard :events="upcomingEvents" />
             <BountiesCard :bounties="bounties" />

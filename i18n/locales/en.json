@@ -135,15 +135,20 @@
       },
       "vpcGate": {
         "body": "{program} is an open group — joining makes your work and profile visible outside it. A parent or guardian needs to approve that first."
+      },
+      "selfPacedConfirmModal": {
+        "title": "Start learning now?",
+        "body": "You're about to start {program} at your own pace. You can stop and pick up right where you left off any time.",
+        "cancel": "Not yet",
+        "confirm": "Yes, start learning"
       }
     },
     "viewer": {
-      "sidebar": {
-        "xpProgress": "{earned} / {available} XP"
-      },
       "actions": {
         "markComplete": "Mark as complete",
-        "completed": "Completed"
+        "nextItem": "Go to next item",
+        "xpAvailable": "+{xp} XP",
+        "xpEarned": "+{xp} XP earned"
       },
       "content": {
         "placeholder": "{contentType} placeholder",
@@ -152,7 +157,7 @@
       "notFound": "Program not found.",
       "deliverable": {
         "startTask": "Start this task",
-        "introBody": "Share proof of what you built for this module - a link to screenshots, a short video, or a playable build if you have one.",
+        "introBody": "Share proof of what you built for this task - a link to screenshots, a short video, or a playable build if you have one.",
         "shareIntro": "You can share:",
         "shareScreenshots": "A link to screenshots",
         "shareVideo": "A link to a short video",
@@ -163,8 +168,27 @@
         "submit": "Submit for completion",
         "yourSubmission": "Your submission"
       },
-      "yourPath": "Your path",
-      "moduleHeading": "Module {number} — {title}"
+      "yourPath": "Your path"
+    },
+    "preSurvey": {
+      "gate": {
+        "title": "Before you dive in",
+        "body": "A quick pre-survey helps us understand where you're starting from before you start {program}. It only takes a few minutes.",
+        "cta": "Start pre-survey"
+      },
+      "wizard": {
+        "back": "Back",
+        "continue": "Continue",
+        "finish": "Finish",
+        "exit": "Exit",
+        "textPlaceholder": "Type your answer…",
+        "otherPlaceholder": "Please specify",
+        "sections": {
+          "whoYouAre": "Who You Are",
+          "programContext": "Program Context",
+          "selfAssessment": "Competency Self-Assessment"
+        }
+      }
     },
     "projects": {
       "seeAll": "See all {count} projects",
@@ -202,8 +226,8 @@
       "completed": "Completed",
       "completedBody": "You've finished every lesson in this program. Nice work.",
       "xpEarned": "{earned} / {available} XP",
-      "moduleLabel": "Module {number} of {total}",
-      "lessonLabel": "Lesson {number} of {total}",
+      "upNext": "Up next",
+      "currentStep": "{module}: {step}",
       "continue": "Continue learning",
       "reviewClassroom": "Review the classroom"
     },
@@ -226,8 +250,8 @@
           "requirement": "Deliver your first task"
         },
         "module-cleared": {
-          "name": "Module Cleared",
-          "requirement": "Finish every step in a module"
+          "name": "Section Cleared",
+          "requirement": "Finish every step in a section"
         },
         "halfway": {
           "name": "Halfway There",
@@ -481,24 +505,30 @@
     "checklist": {
       "title": "Getting started",
       "xpReward": "Finish all {count} to earn {xp} XP",
-      "mirror": "{context} — {completed} of {total} done, next: {next}",
       "complete": "All done — nice work!",
+      "claimButton": "Claim {xp} XP",
+      "claimModal": {
+        "title": "XP claimed!",
+        "body": "You just earned {xp} XP.",
+        "confirm": "Nice!"
+      },
       "items": {
         "accountCreated": "Account created",
         "codeOfConduct": "Agree to the code of conduct",
         "introduceYourself": "Introduce yourself to your group",
         "submitFirstTask": "Submit your first task to the group feed",
-        "postFirstComment": "Post your first comment"
+        "postFirstComment": "Post your first comment",
+        "joinEducatorProgram": "Join the educator training program",
+        "connectGithub": "Connect your GitHub account",
+        "claimFirstTask": "Claim your first contribution task"
       }
     },
-    "whatsNext": {
-      "vacuum": {
-        "question": "Have you made a game before?",
-        "no": "No",
-        "aLittle": "A little",
-        "yes": "Yes"
-      },
-      "nextStep": "Next: {label}"
+    "intent": {
+      "title": "What brings you here?",
+      "tailoring": {
+        "title": "Tailoring your experience…",
+        "body": "Hang tight while we set things up just for you."
+      }
     },
     "vpcGate": {
       "title": "A grown-up needs to say yes first",

@@ -93,6 +93,9 @@ export interface CurriculumItem {
   drivingQuestion?: string
   xp: number
   contentType: CurriculumContentType
+  /** How a step is presented when opened. Defaults to 'drawer' — only a
+   *  gating pre-survey needs the full-screen 'takeover' treatment. */
+  presentation?: 'drawer' | 'takeover'
   acceptanceCriteria?: string[]
   body?: CurriculumBlock[]
 }
@@ -102,6 +105,16 @@ export interface CurriculumModule {
   title: string
   description?: string
   items: CurriculumItem[]
+}
+
+// A curated link list, not a lesson: no xp, no completion state, and it lives
+// on its own Resources tab rather than inside the curriculum a learner steps
+// through. Shares CurriculumBlock so the same ProgramSessionBody renderer
+// (paragraph/linkList/note/etc.) works for both.
+export interface ProgramResourceSection {
+  id: string
+  title: string
+  body: CurriculumBlock[]
 }
 
 export interface Testimonial {
@@ -146,6 +159,9 @@ export interface ProgramTemplate {
   sessionUnit: ProgramSessionUnit
   milestoneCount?: number
   curriculum: CurriculumModule[]
+  // Optional: only programs whose Resources tab has been built out carry
+  // this. Others fall back to the tab's "not built yet" placeholder.
+  resources?: ProgramResourceSection[]
   toolsUsed: string[]
   prerequisites: string[]
   studentsCompletedCount: number

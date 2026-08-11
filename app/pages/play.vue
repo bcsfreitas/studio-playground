@@ -2,11 +2,13 @@
 import { games } from '~/composables/gameData'
 import { usePreviewState } from '~/composables/usePreviewState'
 import { topbarStatsFor, userName, userAvatar } from '~/composables/useHomeMockData'
+import { useXpBalance } from '~/composables/useXpBalance'
 
 definePageMeta({ layout: 'dashboard' })
 
 const { isLoggedIn, isOnboarded } = usePreviewState()
-const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+const { total: xpTotal } = useXpBalance()
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value, xpTotal.value))
 </script>
 
 <template>

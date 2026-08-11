@@ -14,9 +14,22 @@ export const PREVIEW_STATES: { id: PreviewState, label: string }[] = [
 const STORAGE_KEY = 'preview-state'
 const ACCOUNT_STATUS_STORAGE_KEY = 'account-status'
 
-// Everything useProgramProgress writes, so a reset clears the whole mock
-// session rather than just the state pill.
-const PROGRESS_KEY_PREFIX = 'program-progress:'
+// Everything else the mock session writes, so a reset clears the whole thing
+// rather than just the state pill. Duplicated here rather than imported from
+// useProgramProgress.ts / useOnboardingChecklist.ts / useProgramEnrollment.ts
+// on purpose — importing SELF_PACED_KEY would pull in useProgramEnrollment.ts,
+// which already imports this file, for one string constant.
+const PROGRESS_KEY_PREFIX = 'program-progress:' // useProgramProgress.ts's storageKey()
+const CHECKLIST_KEY_PREFIX = 'onboarding-checklist:' // useOnboardingChecklist.ts's storageKey()
+const CHECKLIST_CLAIMED_KEY_PREFIX = 'onboarding-checklist-claimed:' // useOnboardingChecklist.ts's claimedStorageKey()
+const ONBOARDING_INTENT_KEY = 'onboarding-intent' // useOnboardingIntent.ts's STORAGE_KEY
+const XP_BALANCE_KEY = 'xp-balance' // useXpBalance.ts's STORAGE_KEY
+const SELF_PACED_KEY = 'self-paced-started' // useProgramEnrollment.ts's SELF_PACED_STORAGE_KEY
+
+// Set right before the post-reset reload, consumed once by DevPreviewBar so it
+// can confirm the wipe actually happened — sessionStorage survives the reload
+// but not a real new visit, so the confirmation can't outlive its own session.
+export const RESET_FLAG_KEY = 'preview-reset-flag'
 
 function isPreviewState(value: unknown): value is PreviewState {
   return PREVIEW_STATES.some(s => s.id === value)
@@ -89,12 +102,22 @@ export function usePreviewState() {
   // beginner surfaces on home.
   const isStarting = computed(() => isFresh.value || isNew.value)
 
-  /** Back to a first-ever visit: signed out, with no lesson progress banked. */
+  /** Back to a first-ever visit: signed out, with no lesson progress, checklists, or enrollments banked. */
   function reset() {
     if (!import.meta.client) return
     Object.keys(localStorage)
-      .filter(key => key === STORAGE_KEY || key === ACCOUNT_STATUS_STORAGE_KEY || key.startsWith(PROGRESS_KEY_PREFIX))
+      .filter(key =>
+        key === STORAGE_KEY
+        || key === ACCOUNT_STATUS_STORAGE_KEY
+        || key === SELF_PACED_KEY
+        || key === ONBOARDING_INTENT_KEY
+        || key === XP_BALANCE_KEY
+        || key.startsWith(PROGRESS_KEY_PREFIX)
+        || key.startsWith(CHECKLIST_KEY_PREFIX)
+        || key.startsWith(CHECKLIST_CLAIMED_KEY_PREFIX)
+      )
       .forEach(key => localStorage.removeItem(key))
+    sessionStorage.setItem(RESET_FLAG_KEY, '1')
     // Reload rather than assign `guest` here: useProgramProgress reads storage
     // once on mount, so its in-memory copy has to go with the page for the wipe
     // to show, and a fresh load already starts on the default state.

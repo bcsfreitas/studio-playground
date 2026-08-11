@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { programTemplates } from '~/composables/useProgramMockData'
-import { flattenCurriculum, type CurriculumModuleSummary, type FlatCurriculumItem } from '~/composables/useProgramCurriculum'
+import { preSurveyQuestions, programTemplates } from '~/composables/useProgramMockData'
+import { flattenCurriculum, withAwardableXp, type CurriculumModuleSummary, type FlatCurriculumItem } from '~/composables/useProgramCurriculum'
 import { useProgramProgress, type DeliverableSubmission } from '~/composables/useProgramProgress'
 
 const route = useRoute()
@@ -29,29 +29,67 @@ const currentItemId = computed(() =>
   flatItems.find(item => !progress?.isCompleted(item.id))?.id ?? flatItems[0]?.id
 )
 
-// `?item=` should only auto-open the drawer the first time this session lands
-// on the classroom — a "Resume learning" link, a refresh, or a shared URL.
-// There's no <KeepAlive> around the tab components, so switching to another
-// tab and back remounts this one from scratch, and `?item=` is still in the
-// URL (see the watcher below, which keeps it there on purpose). Without this
-// guard, every trip back to Classroom would reopen whatever step was last
-// read, even after the learner closed it deliberately.
-const hasOpenedThisSession = useState(`classroom-opened:${programId}`, () => false)
-
 // Two refs rather than one derived from the other: the drawer animates out on
 // close, and clearing the item at the same moment would blank its content
 // mid-slide. Same split as the Make page's tool drawer.
+const activeItem = ref<FlatCurriculumItem | null>(null)
+const drawerOpen = ref(false)
+
+// A 'takeover' item (the pre-survey) never opens the drawer — it launches a
+// blocking modal followed by a full-screen wizard instead, gating the rest
+// of the curriculum the same way any module boundary already does (see
+// mod-eg-pre-survey in curriculum.ts). Every way a step can be opened — a
+// click here, a click in the drawer's own sidebar, or the `?item=` deep
+// link below — funnels through this one function so that branch can't be
+// bypassed by a future call site.
+const preSurveyGateOpen = ref(false)
+const preSurveyWizardOpen = ref(false)
+const pendingTakeoverItem = ref<FlatCurriculumItem | null>(null)
+
+function openItem(item: FlatCurriculumItem) {
+  if (item.presentation === 'takeover') {
+    pendingTakeoverItem.value = item
+    preSurveyGateOpen.value = true
+    return
+  }
+  activeItem.value = item
+  drawerOpen.value = true
+}
+
+// `?item=` should only auto-open the first time this session lands on the
+// classroom — a "Resume learning" link, a refresh, or a shared URL. There's
+// no <KeepAlive> around the tab components, so switching to another tab and
+// back remounts this one from scratch, and `?item=` is still in the URL
+// (see the watcher below, which keeps it there on purpose). Without this
+// guard, every trip back to Classroom would reopen whatever step was last
+// read, even after the learner closed it deliberately.
+const hasOpenedThisSession = useState(`classroom-opened:${programId}`, () => false)
 const queryItem = route.query.item as string | undefined
 const shouldAutoOpen = Boolean(queryItem) && !hasOpenedThisSession.value
 hasOpenedThisSession.value = true
-const activeItem = ref<FlatCurriculumItem | null>(shouldAutoOpen ? openableItem(queryItem!) ?? null : null)
-const drawerOpen = ref(Boolean(activeItem.value))
+const initialItem = shouldAutoOpen ? openableItem(queryItem!) : undefined
+if (initialItem) openItem(initialItem)
 
 function openStep(itemId: string) {
   const item = openableItem(itemId)
-  if (!item) return
-  activeItem.value = item
-  drawerOpen.value = true
+  if (item) openItem(item)
+}
+
+function onGateStart() {
+  preSurveyGateOpen.value = false
+  preSurveyWizardOpen.value = true
+}
+
+function onWizardExit() {
+  preSurveyWizardOpen.value = false
+  pendingTakeoverItem.value = null
+}
+
+function onWizardComplete() {
+  const item = pendingTakeoverItem.value
+  preSurveyWizardOpen.value = false
+  pendingTakeoverItem.value = null
+  if (item) completeAndAdvance(item.id)
 }
 
 // Keep the URL pointing at the step being read, so a refresh or a shared link
@@ -70,7 +108,7 @@ watch(activeItem, (item) => {
 function advanceFrom(itemId: string) {
   const next = flatItems[flatItems.findIndex(item => item.id === itemId) + 1]
   const openable = next && openableItem(next.id)
-  if (openable) activeItem.value = openable
+  if (openable) openItem(openable)
   else drawerOpen.value = false
 }
 
@@ -87,9 +125,8 @@ function submitDeliverable(itemId: string, submission: DeliverableSubmission) {
   advanceFrom(itemId)
 }
 
-const modules = computed<CurriculumModuleSummary[]>(() => (template?.curriculum ?? []).map((mod, index) => ({
+const modules = computed<CurriculumModuleSummary[]>(() => withAwardableXp(template?.curriculum ?? []).map(mod => ({
   id: mod.id,
-  number: index + 1,
   title: mod.title,
   items: mod.items,
   isLocked: progress!.isModuleLocked(mod.id),
@@ -111,7 +148,7 @@ const modules = computed<CurriculumModuleSummary[]>(() => (template?.curriculum 
               class="font-heading font-bold text-sm uppercase tracking-wide"
               :class="mod.isLocked ? 'text-dimmed' : 'text-primary-600'"
             >
-              {{ t('program.viewer.moduleHeading', { number: mod.number, title: mod.title }) }}
+              {{ mod.title }}
             </h3>
             <UIcon v-if="mod.isLocked" name="lucide:lock" class="size-3.5 shrink-0 text-dimmed" />
             <span class="ml-auto text-xs text-muted tabular-nums shrink-0">
@@ -133,11 +170,10 @@ const modules = computed<CurriculumModuleSummary[]>(() => (template?.curriculum 
         </section>
       </div>
 
-      <!-- Course progress and badges live on the Home tab: they are the
-           standing summary of the program, not something to read while working
-           through the step list. -->
-      <div class="lg:sticky lg:top-6 lg:self-start">
+      <div class="lg:sticky lg:top-6 lg:self-start flex flex-col gap-8">
         <ProgramProgressCard :template="template" :show-current-lesson="false" />
+        <ProgramCourseMetrics :template="template" />
+        <ProgramCourseBadges :template="template" />
       </div>
     </div>
   </UContainer>
@@ -162,8 +198,25 @@ const modules = computed<CurriculumModuleSummary[]>(() => (template?.curriculum 
     :item="activeItem"
     :progress="progress"
     :modules="modules"
+    :program-title="template.title"
     @select="openStep"
     @complete="completeAndAdvance"
     @submit="submitDeliverable"
+  />
+
+  <!-- The 01+03-style gate: a blocking modal (no dismiss, no skip) that
+       hands off to a full-screen wizard on its single CTA. Both render
+       outside the container for the same reason the drawer does. -->
+  <ProgramPreSurveyGateModal
+    v-if="template"
+    v-model:open="preSurveyGateOpen"
+    :program-title="template.title"
+    @start="onGateStart"
+  />
+  <ProgramPreSurveyWizard
+    v-model:open="preSurveyWizardOpen"
+    :questions="preSurveyQuestions"
+    @complete="onWizardComplete"
+    @exit="onWizardExit"
   />
 </template>

@@ -3,6 +3,7 @@ import { gameById } from '~/composables/gameData'
 import { usePreviewState } from '~/composables/usePreviewState'
 import { useConsentBoundary } from '~/composables/useProgramMockData'
 import { topbarStatsFor, userName, userAvatar } from '~/composables/useHomeMockData'
+import { useXpBalance } from '~/composables/useXpBalance'
 
 definePageMeta({ layout: 'dashboard' })
 
@@ -13,7 +14,8 @@ const gameId = computed(() => route.params.gameId as string)
 const game = computed(() => gameById(gameId.value))
 
 const { isLoggedIn, isOnboarded, accountStatus } = usePreviewState()
-const topbarStats = computed(() => topbarStatsFor(isOnboarded.value))
+const { total: xpTotal } = useXpBalance()
+const topbarStats = computed(() => topbarStatsFor(isOnboarded.value, xpTotal.value))
 
 // github-connect gates a young learner unconditionally, regardless of which
 // cohort (if any) they're in — see the consent matrix in
@@ -69,6 +71,10 @@ const CONTRIBUTE_TASKS = [
               ]"
             />
             <template v-else>
+              <!-- Sits past the VpcGate above, so an unconsented Digital Youth
+                   never reaches it — no extra per-item gating needed for the
+                   "connect GitHub" checklist item. -->
+              <ChecklistCard flow-id="6" :context-id="game.id" />
               <UPageCard variant="outline" class="rounded-2xl">
                 <h3 class="m-0 font-heading text-sm font-bold text-highlighted">{{ t('games.contribute.tasksTitle') }}</h3>
                 <div class="mt-3 flex flex-col gap-2">
