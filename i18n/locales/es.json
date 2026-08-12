@@ -206,9 +206,44 @@
       "prerequisites": "Requisitos previos"
     },
     "teacherCta": {
-      "title": "¿Vas a impartir este curso en tu salón de clases?",
-      "description": "Capacítate para dar este curso a tus propios estudiantes.",
-      "cta": "Conoce la capacitación para docentes"
+      "title": "¿Quieres impartir este curso en tu salón de clases?",
+      "description": "Da este curso a tus propios estudiantes.",
+      "cta": "Crea tu propia cohorte",
+      "drawer": {
+        "headline": "Imparte este programa como tu propia clase.",
+        "intro": "Una versión privada de este programa, creada para tu salón de clases.",
+        "features": {
+          "private": "Una instancia cerrada y privada de este programa",
+          "invite": "Invita exactamente a los estudiantes que elijas",
+          "silo": "Totalmente aislada: sin acceso a la comunidad ni a la biblioteca de recursos",
+          "dashboard": "Consulta de un vistazo el progreso de cada estudiante"
+        },
+        "guestMessage": "Para crear una cohorte necesitas una cuenta.",
+        "logIn": "Iniciar sesión",
+        "signUp": "Registrarse",
+        "comingSoon": "La creación de cohortes estará disponible próximamente."
+      }
+    },
+    "mentorQualify": {
+      "title": "Confirma tu rol en la escuela",
+      "intro": "Unos datos sobre dónde enseñas, para configurar tus herramientas de clase.",
+      "fields": {
+        "schoolEmail": "Tu correo escolar",
+        "schoolName": "Nombre de la escuela",
+        "role": "Tu rol en la escuela"
+      },
+      "errors": {
+        "emailRequired": "Tu correo escolar es obligatorio",
+        "emailInvalid": "Ingresa un correo electrónico válido",
+        "schoolNameRequired": "El nombre de la escuela es obligatorio",
+        "roleRequired": "Tu rol en la escuela es obligatorio"
+      },
+      "cancel": "Cancelar",
+      "submit": "Enviar",
+      "processing": {
+        "title": "Confirmando tu acceso escolar…",
+        "body": "Espera un momento mientras verificamos tus datos."
+      }
     },
     "community": {
       "channels": "Canales",
@@ -579,5 +614,10 @@
       "eyebrow": "Programas recomendados",
       "count": "No hay programas disponibles | {count} programa disponible | {count} programas disponibles"
     }
+  },
+  "teach": {
+    "title": "Tu centro de enseñanza estará disponible pronto",
+    "body": "Aquí podrás configurar y administrar tus propias cohortes. Todavía lo estamos construyendo.",
+    "backHome": "Volver al inicio"
   }
 }

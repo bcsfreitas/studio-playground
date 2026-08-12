@@ -206,9 +206,44 @@
       "prerequisites": "Prerequisites"
     },
     "teacherCta": {
-      "title": "Teaching this in your classroom?",
-      "description": "Get trained to run this course with your own students.",
-      "cta": "Explore educator training"
+      "title": "Want to teach this in your classroom?",
+      "description": "Run this course with your own students.",
+      "cta": "Create your own cohort",
+      "drawer": {
+        "headline": "Run this program as your own class.",
+        "intro": "A private version of this program, built for your classroom.",
+        "features": {
+          "private": "A closed, private instance of this program",
+          "invite": "Invite exactly the students you choose",
+          "silo": "Fully siloed — no access to the wider community or asset library",
+          "dashboard": "See how each student is progressing, at a glance"
+        },
+        "guestMessage": "Creating a cohort requires an account.",
+        "logIn": "Log In",
+        "signUp": "Sign Up",
+        "comingSoon": "Cohort creation is coming soon."
+      }
+    },
+    "mentorQualify": {
+      "title": "Confirm your school role",
+      "intro": "A few details about where you teach, so we can set up your classroom tools.",
+      "fields": {
+        "schoolEmail": "Your school email",
+        "schoolName": "School name",
+        "role": "Your role at school"
+      },
+      "errors": {
+        "emailRequired": "Your school email is required",
+        "emailInvalid": "Enter a valid email address",
+        "schoolNameRequired": "School name is required",
+        "roleRequired": "Your role at school is required"
+      },
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "processing": {
+        "title": "Confirming your school access…",
+        "body": "Hang tight while we verify your details."
+      }
     },
     "community": {
       "channels": "Channels",
@@ -579,5 +614,10 @@
       "eyebrow": "Recommended programs",
       "count": "No programs available | {count} program available | {count} programs available"
     }
+  },
+  "teach": {
+    "title": "Your teaching hub is coming soon",
+    "body": "This is where you'll set up and manage your own cohorts. We're still building it.",
+    "backHome": "Back to home"
   }
 }

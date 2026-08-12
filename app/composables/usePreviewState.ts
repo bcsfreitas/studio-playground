@@ -25,6 +25,7 @@ const CHECKLIST_CLAIMED_KEY_PREFIX = 'onboarding-checklist-claimed:' // useOnboa
 const ONBOARDING_INTENT_KEY = 'onboarding-intent' // useOnboardingIntent.ts's STORAGE_KEY
 const XP_BALANCE_KEY = 'xp-balance' // useXpBalance.ts's STORAGE_KEY
 const SELF_PACED_KEY = 'self-paced-started' // useProgramEnrollment.ts's SELF_PACED_STORAGE_KEY
+const MENTOR_STATUS_KEY = 'mentor-status' // useMentorStatus.ts's STORAGE_KEY
 
 // Set right before the post-reset reload, consumed once by DevPreviewBar so it
 // can confirm the wipe actually happened — sessionStorage survives the reload
@@ -110,6 +111,7 @@ export function usePreviewState() {
         key === STORAGE_KEY
         || key === ACCOUNT_STATUS_STORAGE_KEY
         || key === SELF_PACED_KEY
+        || key === MENTOR_STATUS_KEY
         || key === ONBOARDING_INTENT_KEY
         || key === XP_BALANCE_KEY
         || key.startsWith(PROGRESS_KEY_PREFIX)
