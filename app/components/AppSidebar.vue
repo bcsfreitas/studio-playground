@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import { useMentorStatus } from '~/composables/useMentorStatus'
 
 const props = withDefaults(defineProps<{
   showAdmin?: boolean
@@ -9,11 +10,16 @@ const props = withDefaults(defineProps<{
 
 const adminItems = ['Games', 'Programs', 'Resources', 'Intake Form', 'Feed Console', 'Users', 'Institutions', 'Events']
 
+const { isMentor } = useMentorStatus()
+
 const mainItems = computed<NavigationMenuItem[]>(() => [
   { label: 'Home', icon: 'lucide:home', to: '/', color: 'primary' },
   { label: 'Play', icon: 'lucide:gamepad-2', to: '/play', color: 'purple' },
   { label: 'Learn', icon: 'lucide:brain', to: '/learn', color: 'blue' },
   { label: 'Make', icon: 'lucide:wrench', to: '/make', color: 'warning' },
+  // Only granted once someone completes the mentor qualification drawer —
+  // see useMentorStatus.ts.
+  ...(isMentor.value ? [{ label: 'Teach', icon: 'lucide:graduation-cap', to: '/teach', color: 'secondary' }] : []),
   {
     label: 'Contribute',
     icon: 'lucide:blocks',
