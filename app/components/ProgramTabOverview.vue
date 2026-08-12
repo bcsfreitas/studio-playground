@@ -47,6 +47,7 @@ const projects = computed(() => projectsForProgram(programId.value))
             :enrollment="enrollment"
           />
           <ProgramSideInfo :template="template" :instances="instances" />
+          <ProgramTeacherCta v-if="template.audience !== 'educator'" />
         </div>
       </div>
 

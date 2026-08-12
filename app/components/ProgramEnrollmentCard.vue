@@ -379,7 +379,7 @@ function addToCalendar() {
 </script>
 
 <template>
-  <UPageCard variant="soft">
+  <UPageCard variant="soft" :ui="{ root: 'bg-white border border-primary/20' }">
     <ul class="flex flex-col gap-3">
       <li v-for="fact in facts" :key="fact.key" class="flex items-center gap-3">
         <img v-if="fact.image" :src="fact.image" alt="" class="size-8 shrink-0" />

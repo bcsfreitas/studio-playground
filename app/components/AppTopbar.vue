@@ -55,7 +55,7 @@ const accountMenuItems = computed<DropdownMenuItem[][]>(() => [
   <!-- The tinted band is full-bleed across the panel, but the bar's own contents
        stay inside the page container so they line up with the content below
        instead of hugging the viewport edge. -->
-  <div class="w-full bg-elevated">
+  <div class="w-full bg-default/75 backdrop-blur border-b border-default">
     <UDashboardNavbar :ui="{ root: 'w-full max-w-(--ui-container) mx-auto px-4 sm:px-6 lg:px-8 border-b-0', right: 'gap-3.5' }">
       <template #right>
         <!-- The language control comes along because a guest reading the
