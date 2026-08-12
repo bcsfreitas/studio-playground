@@ -205,6 +205,11 @@
       "tools": "Herramientas que usarás",
       "prerequisites": "Requisitos previos"
     },
+    "teacherCta": {
+      "title": "¿Vas a impartir este curso en tu salón de clases?",
+      "description": "Capacítate para dar este curso a tus propios estudiantes.",
+      "cta": "Conoce la capacitación para docentes"
+    },
     "community": {
       "channels": "Canales",
       "restricted": "Solo para personas inscritas en este programa",
@@ -554,6 +559,25 @@
       "title": "Juego no encontrado",
       "body": "No encontramos un juego en esta dirección. Puede que se haya movido o que el enlace esté desactualizado.",
       "back": "Volver al inicio"
+    }
+  },
+  "learn": {
+    "hero": {
+      "eyebrow": "Aprender",
+      "title": "Encuentra el programa adecuado para donde estás empezando.",
+      "subtitle": "Explora programas prácticos para estudiantes y educadores, mira lo que vas a crear, y retoma justo donde lo dejaste si ya estás inscrito."
+    },
+    "filters": {
+      "timing": "Horario",
+      "timingAll": "Todos los horarios",
+      "audience": "Audiencia",
+      "audienceAll": "Todas las audiencias",
+      "difficulty": "Dificultad",
+      "difficultyAll": "Todos los niveles"
+    },
+    "list": {
+      "eyebrow": "Programas recomendados",
+      "count": "No hay programas disponibles | {count} programa disponible | {count} programas disponibles"
     }
   }
 }

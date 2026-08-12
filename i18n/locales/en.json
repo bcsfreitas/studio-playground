@@ -205,6 +205,11 @@
       "tools": "Tools you'll use",
       "prerequisites": "Prerequisites"
     },
+    "teacherCta": {
+      "title": "Teaching this in your classroom?",
+      "description": "Get trained to run this course with your own students.",
+      "cta": "Explore educator training"
+    },
     "community": {
       "channels": "Channels",
       "restricted": "Only for people enrolled in this program",
@@ -554,6 +559,25 @@
       "title": "Game not found",
       "body": "We couldn't find a game at this address. It may have moved or the link may be out of date.",
       "back": "Back to home"
+    }
+  },
+  "learn": {
+    "hero": {
+      "eyebrow": "Learn",
+      "title": "Find the right program for where you're starting.",
+      "subtitle": "Browse hands-on programs for learners and educators, see what you'll build, and pick up right where you left off if you're already enrolled."
+    },
+    "filters": {
+      "timing": "Timing",
+      "timingAll": "All timing",
+      "audience": "Audience",
+      "audienceAll": "All audiences",
+      "difficulty": "Difficulty",
+      "difficultyAll": "All levels"
+    },
+    "list": {
+      "eyebrow": "Recommended programs",
+      "count": "No programs available | {count} program available | {count} programs available"
     }
   }
 }

@@ -113,7 +113,7 @@ export const programTemplates: ProgramTemplate[] = [
     id: 'explore-godot',
     title: 'Explore: Godot',
     description: 'Ten sessions modding and building your own Threadbare-world platformer level in Godot — from your first Pong mod through a finished, playtested, and showcased level.',
-    image: '/images/img/default-bg.png',
+    image: '/images/img/bg-godot.png',
     // SYNTHESIZED: no named facilitator in source for the recurring program; only
     // the one real May-June 2026 cohort is documented, without a facilitator credit.
     facilitator: 'Lena Fitzgerald',

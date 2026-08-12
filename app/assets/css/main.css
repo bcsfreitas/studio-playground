@@ -289,3 +289,12 @@ body {
   background-size: 12px 12px;
   background-position: 0 0, 0 6px, 6px -6px, -6px 0;
 }
+
+/* Ambient brand glow on the dashboard page canvas — see app.config.ts
+   `dashboardPanel.root`. A background-image (not -color) so it layers under
+   a page's own `bg-slate-50` instead of being replaced by it. */
+@utility page-glow {
+  background-image:
+    none;
+  background-repeat: no-repeat;
+}

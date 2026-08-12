@@ -119,6 +119,7 @@ provideProgramTabs({
   <!-- `sm:p-0`/`sm:gap-0` as well as the bare ones — see index.vue for why. -->
   <UDashboardPanel :ui="{ body: 'p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
     <template #body>
+      <!-- <div class="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(circle_at_85%_12%,rgba(255,107,0,0.12),transparent_30%),radial-gradient(circle_at_15%_28%,rgba(120,87,228,0.09),transparent_28%)]"></div> -->
       <!-- Signed in, not just enrolled: a new learner gets the same bar, with
            counters that start at zero. Guests get the same band too, carrying
            the sign-in pair instead of an account. -->
@@ -130,7 +131,7 @@ provideProgramTabs({
           <!-- The title is the page header and stays across tab switches. The
                program image and description belong to the Overview tab, which
                renders them itself. -->
-          <h1 class="text-5xl font-heading font-bold text-highlighted text-pretty">
+          <h1 class="text-6xl font-heading font-bold text-highlighted text-pretty mt-10">
             {{ template.title }}
           </h1>
 
