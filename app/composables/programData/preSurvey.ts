@@ -60,16 +60,6 @@ export const preSurveyQuestions: PreSurveyQuestion[] = [
     options: ['Male', 'Female', 'Non-binary', 'Prefer not to say']
   },
   { id: 'primaryLanguage', section: 'whoYouAre', prompt: 'What is your primary language?', type: 'text' },
-  {
-    id: 'timezone',
-    section: 'whoYouAre',
-    prompt: 'What timezone are you in?',
-    type: 'select',
-    options: [
-      'Pacific Time (PT)', 'Eastern Time (ET)', 'Central Time (CT)', 'Mountain Time (MT)',
-      'GMT / UTC', 'Australian Eastern Time (AEST)', 'India Standard Time (IST)', 'Central European Time (CET)', 'Other'
-    ]
-  },
 
   // --- Program Context ---
   {

@@ -470,7 +470,7 @@
     },
     "showcase": {
       "headline": "Come play.",
-      "playFree": "Play games made by kids like you, free",
+      "playFree": "Play free games from our studios",
       "learnByMaking": "Learn to build your own, step by step",
       "shareWork": "Share what you make with the community"
     },
@@ -596,6 +596,13 @@
       "back": "Back to home"
     }
   },
+  "play": {
+    "hero": {
+      "eyebrow": "Play",
+      "title": "Come play.",
+      "subtitle": "Play as many games as you like, then build one yourself. We'll show you every step."
+    }
+  },
   "learn": {
     "hero": {
       "eyebrow": "Learn",
@@ -616,8 +623,126 @@
     }
   },
   "teach": {
-    "title": "Your teaching hub is coming soon",
-    "body": "This is where you'll set up and manage your own cohorts. We're still building it.",
-    "backHome": "Back to home"
+    "hub": {
+      "hero": {
+        "eyebrow": "Teach",
+        "title": "Your classrooms",
+        "subtitle": "Manage the private classrooms you run, see how each group is doing, and share the link that gets your learners in."
+      },
+      "sidebar": {
+        "classrooms": "Classrooms",
+        "newClassroom": "New classroom",
+        "mentorTraining": "Mentor training",
+        "listEmpty": "No classrooms yet"
+      },
+      "empty": {
+        "title": "You haven't created a classroom yet",
+        "body": "Start a classroom to invite your learners and track their progress.",
+        "cta": "New classroom"
+      },
+      "tabs": {
+        "progress": "Progress",
+        "settings": "Settings"
+      },
+      "progress": {
+        "title": "Progress",
+        "avgCompletion": "Average completion",
+        "seatsFilled": "Seats filled"
+      },
+      "settings": {
+        "title": "Classroom settings",
+        "inviteLink": "Invite link",
+        "copyLink": "Copy link",
+        "linkCopied": "Invite link copied",
+        "linkCopyFailed": "Couldn't copy the link — copy it manually instead",
+        "dateRange": "Dates",
+        "selfPaced": "Self-paced",
+        "maxLearners": "Max learners",
+        "seatsTaken": "Seats taken"
+      },
+      "welcome": {
+        "title": "Welcome, {name}!",
+        "steps": {
+          "create": {
+            "title": "Create a classroom"
+          },
+          "training": {
+            "title": "Take the training course",
+            "description": "Learn how to run a great classroom and get the most out of Endless Studios.",
+            "cta": "Go to training"
+          },
+          "invite": {
+            "title": "Invite students",
+            "description": "Share a link or code, or upload a class list to add your students.",
+            "cta": "Invite students"
+          }
+        }
+      },
+      "invite": {
+        "title": "Invite students",
+        "tabs": {
+          "send": "Send invite",
+          "csv": "Add directly"
+        },
+        "linkLabel": "Invite link",
+        "copyLink": "Copy link",
+        "or": "OR",
+        "codeLabel": "Classroom code",
+        "copyCode": "Copy code",
+        "linkCopied": "Invite link copied",
+        "linkCopyFailed": "Couldn't copy the link — copy it manually instead",
+        "codeCopied": "Classroom code copied",
+        "codeCopyFailed": "Couldn't copy the code — copy it manually instead",
+        "csv": {
+          "dropLabel": "Drop a CSV file or click to upload",
+          "preview": "{count} student found | {count} students found",
+          "confirm": "Import students"
+        },
+        "done": "Done"
+      }
+    },
+    "new": {
+      "wizard": {
+        "back": "Back",
+        "course": {
+          "title": "Choose a course",
+          "continue": "Continue"
+        },
+        "settings": {
+          "title": "Classroom settings",
+          "courseLabel": "For {title}",
+          "nameLabel": "Classroom name",
+          "namePlaceholder": "e.g. Core: Threadbare — Room 3B",
+          "ageRangeLabel": "Age range",
+          "ageRangePlaceholder": "Select an age range",
+          "ageRanges": {
+            "8-10": "8–10",
+            "10-12": "10–12",
+            "12-14": "12–14",
+            "14-16": "14–16",
+            "16-18": "16–18",
+            "mixed": "Mixed ages"
+          },
+          "consent": {
+            "prefix": "I confirm I am requesting this program for an educational setting and agree to review the ",
+            "linkText": "classroom privacy notice",
+            "suffix": "."
+          },
+          "silo": {
+            "label": "Keep this classroom closed to outside platform interaction",
+            "ndpaBadge": "NDPA",
+            "ndpaTooltip": "Keeps student data siloed under your school's NDPA agreement."
+          },
+          "submit": "Create a classroom"
+        },
+        "processing": {
+          "title": "Creating your classroom…",
+          "body": "Hang tight, this will just take a moment."
+        },
+        "success": {
+          "title": "Classroom created successfully!"
+        }
+      }
+    }
   }
 }

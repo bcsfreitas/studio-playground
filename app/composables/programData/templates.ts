@@ -18,7 +18,7 @@ export const programTemplates: ProgramTemplate[] = [
     id: 'core-threadbare',
     title: 'Core: Threadbare',
     description: 'A structured, group-based game-making experience. Build and submit a StoryQuest — a playable Godot mini-game for the live Threadbare repo — across five milestones, then open a GitHub pull request to ship it.',
-    image: '/images/img/bg-threadbare.png',
+    image: '/images/img/bg-core-threadbare.png',
     // SYNTHESIZED: no single named facilitator exists in source — Core: Threadbare
     // runs across many partner sites and UTP GameLab cohorts, each with its own
     // local facilitator, so there's no one program-level name to use.
@@ -68,7 +68,7 @@ export const programTemplates: ProgramTemplate[] = [
     id: 'explore-threadbare',
     title: 'Explore: Threadbare',
     description: 'Thirteen one-hour workshops across game design, art, engineering, and go-to-market. Self-paced: start the day you enroll and work through all thirteen at your own pace.',
-    image: '/images/img/bg-threadbare.png',
+    image: '/images/img/bg-explore-threadbare.png',
     // SYNTHESIZED: no named facilitator in source — these workshops run through
     // many partner educators (Urban Arts, Glasswing, Wichita, etc.), not one person.
     facilitator: 'Theo Okonkwo',

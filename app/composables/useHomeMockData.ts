@@ -6,7 +6,7 @@ import type { PreviewState } from '~/composables/usePreviewState'
 // this file's own consumers.
 import { avatarForName } from '~/composables/programData/avatars'
 
-export const userName = 'Nova'
+export const userName = 'Joana'
 // Resolved through the same registry every other face on the platform uses, so
 // the signed-in user looks like herself wherever she turns up.
 export const userAvatar = avatarForName(userName)

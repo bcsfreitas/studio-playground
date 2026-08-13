@@ -33,13 +33,13 @@ const projects = computed(() => projectsForProgram(programId.value))
 
       <!-- One card, two positions. Below lg the enrollment CTA has to sit right
            after the description rather than after the whole scroll of
-           curriculum/testimonials/certificate; on lg+ it's the sticky right
-           rail. Grid placement moves it instead of a second copy — two mounted
+           curriculum/testimonials/certificate; on lg+ it's the right rail.
+           Grid placement moves it instead of a second copy — two mounted
            cards meant two modals (UModal teleports to body, so `lg:hidden` on
            the wrapper doesn't hide it) and the sign-up enroll intent resumed in
            both, stacking the confirm and success dialogs. -->
       <div class="lg:col-start-2 lg:row-start-1 lg:row-span-2">
-        <div class="sticky top-6 flex flex-col gap-8">
+        <div class="flex flex-col gap-8">
           <USeparator class="lg:hidden" />
           <ProgramEnrollmentCard
             :template="template"

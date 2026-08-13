@@ -2,7 +2,7 @@
 import type { CohortTiming } from '~/composables/useLearnMockData'
 import type { ProgramAudience, ProgramDifficulty } from '~/composables/useProgramMockData'
 
-defineProps<{
+const props = defineProps<{
   timing: CohortTiming | 'all'
   audience: ProgramAudience | 'all'
   difficulty: ProgramDifficulty | 'all'
@@ -16,79 +16,78 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const timingOptions: { value: CohortTiming | 'all', label: string }[] = [
-  { value: 'all', label: t('learn.filters.timingAll') },
-  { value: 'in-progress', label: 'In Progress' },
-  { value: 'starting-soon', label: 'Starting Soon' },
-  { value: 'open-enrollment', label: 'Open Enrollment' }
-]
+// Each item carries its own active-state look in `ui.label` (rather than a
+// has-[data-state=checked] selector in the shared `ui` prop below) because
+// `label` sits beside the radio input, not above it — :has() can't reach
+// sideways to a sibling's checked state.
+function itemUi(active: boolean) {
+  return {
+    label: active
+      ? 'block w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-highlighted shadow-sm bg-default transition-colors'
+      : 'block w-full rounded-lg px-3 py-2 text-left text-sm text-muted transition-colors hover:bg-default/70 hover:text-highlighted'
+  }
+}
 
-const audienceOptions: { value: ProgramAudience | 'all', label: string }[] = [
-  { value: 'all', label: t('learn.filters.audienceAll') },
-  { value: 'learner', label: 'For learners' },
-  { value: 'educator', label: 'For educators' }
-]
+const timingOptions = computed(() => ([
+  { value: 'all' as const, label: t('learn.filters.timingAll'), ui: itemUi(props.timing === 'all') },
+  { value: 'in-progress' as const, label: 'In Progress', ui: itemUi(props.timing === 'in-progress') },
+  { value: 'starting-soon' as const, label: 'Starting Soon', ui: itemUi(props.timing === 'starting-soon') },
+  { value: 'open-enrollment' as const, label: 'Open Enrollment', ui: itemUi(props.timing === 'open-enrollment') }
+]))
 
-const difficultyOptions: { value: ProgramDifficulty | 'all', label: string }[] = [
-  { value: 'all', label: t('learn.filters.difficultyAll') },
-  { value: 'Beginner', label: 'Beginner' },
-  { value: 'Intermediate', label: 'Intermediate' },
-  { value: 'Advanced', label: 'Advanced' }
-]
+const audienceOptions = computed(() => ([
+  { value: 'all' as const, label: t('learn.filters.audienceAll'), ui: itemUi(props.audience === 'all') },
+  { value: 'learner' as const, label: 'For learners', ui: itemUi(props.audience === 'learner') },
+  { value: 'educator' as const, label: 'For educators', ui: itemUi(props.audience === 'educator') }
+]))
 
-// Active vs. inactive toggle-button treatment, shared by every fieldset below.
-function toggleClass(active: boolean) {
-  return active
-    ? 'bg-white font-semibold text-highlighted shadow-sm'
-    : 'text-muted hover:bg-white/70 hover:text-highlighted'
+const difficultyOptions = computed(() => ([
+  { value: 'all' as const, label: t('learn.filters.difficultyAll'), ui: itemUi(props.difficulty === 'all') },
+  { value: 'Beginner' as const, label: 'Beginner', ui: itemUi(props.difficulty === 'Beginner') },
+  { value: 'Intermediate' as const, label: 'Intermediate', ui: itemUi(props.difficulty === 'Intermediate') },
+  { value: 'Advanced' as const, label: 'Advanced', ui: itemUi(props.difficulty === 'Advanced') }
+]))
+
+// Shared look for every group: no radio dot (indicator hidden — the active
+// state reads entirely from itemUi above), legend styled as a small-caps
+// label instead of the default bold heading.
+const radioUi = {
+  legend: 'mb-2 text-xs font-bold uppercase tracking-wide text-dimmed',
+  fieldset: 'gap-1'
 }
 </script>
 
 <template>
-  <aside class="rounded-[20px] border border-default bg-elevated/55 p-5 lg:sticky lg:top-24">
-    <fieldset>
-      <legend class="text-xs font-bold uppercase tracking-wide text-dimmed">{{ t('learn.filters.timing') }}</legend>
-      <div class="mt-2 grid gap-1">
-        <button
-          v-for="item in timingOptions"
-          :key="item.value"
-          type="button"
-          :aria-pressed="timing === item.value"
-          class="rounded-lg px-3 py-2 text-left text-sm transition-colors"
-          :class="toggleClass(timing === item.value)"
-          @click="emit('update:timing', item.value)"
-        >{{ item.label }}</button>
-      </div>
-    </fieldset>
+  <UCard as="aside" variant="subtle" class="rounded-[20px] lg:sticky lg:top-24" :ui="{ root: 'bg-elevated/55', body: 'flex flex-col gap-5 p-5' }">
+    <URadioGroup
+      :model-value="timing"
+      :legend="t('learn.filters.timing')"
+      indicator="hidden"
+      :items="timingOptions"
+      :ui="radioUi"
+      @update:model-value="emit('update:timing', $event)"
+    />
 
-    <fieldset class="mt-5 border-t border-default pt-5">
-      <legend class="text-xs font-bold uppercase tracking-wide text-dimmed">{{ t('learn.filters.audience') }}</legend>
-      <div class="mt-2 grid gap-1">
-        <button
-          v-for="item in audienceOptions"
-          :key="item.value"
-          type="button"
-          :aria-pressed="audience === item.value"
-          class="rounded-lg px-3 py-2 text-left text-sm transition-colors"
-          :class="toggleClass(audience === item.value)"
-          @click="emit('update:audience', item.value)"
-        >{{ item.label }}</button>
-      </div>
-    </fieldset>
+    <USeparator />
 
-    <fieldset class="mt-5 border-t border-default pt-5">
-      <legend class="text-xs font-bold uppercase tracking-wide text-dimmed">{{ t('learn.filters.difficulty') }}</legend>
-      <div class="mt-2 grid gap-1">
-        <button
-          v-for="item in difficultyOptions"
-          :key="item.value"
-          type="button"
-          :aria-pressed="difficulty === item.value"
-          class="rounded-lg px-3 py-2 text-left text-sm transition-colors"
-          :class="toggleClass(difficulty === item.value)"
-          @click="emit('update:difficulty', item.value)"
-        >{{ item.label }}</button>
-      </div>
-    </fieldset>
-  </aside>
+    <URadioGroup
+      :model-value="audience"
+      :legend="t('learn.filters.audience')"
+      indicator="hidden"
+      :items="audienceOptions"
+      :ui="radioUi"
+      @update:model-value="emit('update:audience', $event)"
+    />
+
+    <USeparator />
+
+    <URadioGroup
+      :model-value="difficulty"
+      :legend="t('learn.filters.difficulty')"
+      indicator="hidden"
+      :items="difficultyOptions"
+      :ui="radioUi"
+      @update:model-value="emit('update:difficulty', $event)"
+    />
+  </UCard>
 </template>

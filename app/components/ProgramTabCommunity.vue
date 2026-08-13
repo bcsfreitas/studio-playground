@@ -16,11 +16,11 @@ const { isLoggedIn } = usePreviewState()
 // except through `?tab=`, which the shell reads on arrival.
 const signUpToPost = computed(() => signUpTo(`/learn/${programId.value}?tab=community`))
 
-// Announcements, Introductions and the per-group channels belong to people
-// actually in the program, so they are absent for everyone else rather than
-// listed and locked.
+// Announcements, Introductions and Your Cohort belong to people actually in
+// the program, so they are absent for everyone else rather than listed and
+// locked.
 const channels = computed(() =>
-  channelsForProgram(programId.value).filter(channel => isEnrolled.value || !channel.restricted)
+  channelsForProgram().filter(channel => isEnrolled.value || !channel.restricted)
 )
 
 const selectedChannelId = ref(channels.value[0]?.id ?? 'general')

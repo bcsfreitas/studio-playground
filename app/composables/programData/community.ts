@@ -1,46 +1,26 @@
 import type { ChannelPost, ProgramChannel, ProgramMember } from './types'
-import { programInstances } from './instances'
 
 // SYNTHESIZED: none of this exists in the Knowledge Base docs, which describe
 // what programs teach rather than any community activity around them. The
 // channel set below comes from the product spec; posts and members are written
 // to sound like the programs they belong to.
 
-// Announcements and Introductions are enrolled-only per the product spec, as
-// are the per-group channels. General, Questions, Showcase and Resources are
-// open to anyone browsing the program.
+// Announcements, Introductions and Your Cohort are enrolled-only per the
+// product spec, and are listed first so a learner's own channels sit above
+// the ones anyone browsing the program can already see. General, Questions,
+// Showcase and Resources are open to anyone.
 const SHARED_CHANNELS: ProgramChannel[] = [
-  { id: 'announcements', name: 'Announcements', icon: 'lucide:megaphone', restricted: true },
-  { id: 'introductions', name: 'Introductions', icon: 'lucide:hand', restricted: true },
-  { id: 'general', name: 'General', icon: 'lucide:messages-square', restricted: false },
-  { id: 'questions', name: 'Questions', icon: 'lucide:circle-help', restricted: false },
-  { id: 'showcase', name: 'Showcase', icon: 'lucide:sparkles', restricted: false },
-  { id: 'resources', name: 'Resources', icon: 'lucide:link', restricted: false }
+  { id: 'announcements', name: 'Announcements', icon: 'lucide:hash', restricted: true },
+  { id: 'introductions', name: 'Introductions', icon: 'lucide:hash', restricted: true },
+  { id: 'your-cohort', name: 'Your Cohort', icon: 'lucide:hash', restricted: true },
+  { id: 'general', name: 'General', icon: 'lucide:hash', restricted: false },
+  { id: 'questions', name: 'Questions', icon: 'lucide:hash', restricted: false },
+  { id: 'showcase', name: 'Showcase', icon: 'lucide:hash', restricted: false },
+  { id: 'resources', name: 'Resources', icon: 'lucide:hash', restricted: false }
 ]
 
-/**
- * Channels for a program: the shared set, plus one per learner group.
- *
- * Group channels are named after the group itself ("Night Owls"), never
- * "#cohort-3" — "cohort" is a data-model term and must not reach learner-facing
- * copy. They are restricted for the same reason Announcements is: they belong
- * to the people actually in that group.
- */
-export function channelsForProgram(programId: string): ProgramChannel[] {
-  const groupChannels: ProgramChannel[] = programInstances
-    .filter(instance => instance.programId === programId)
-    .flatMap(instance => instance.cohorts)
-    // A workshop series carries a placeholder group with no name; there is no
-    // real group behind it, so it gets no channel.
-    .filter(cohort => Boolean(cohort.name))
-    .map(cohort => ({
-      id: `group-${cohort.id}`,
-      name: cohort.name,
-      icon: 'lucide:users',
-      restricted: true
-    }))
-
-  return [...SHARED_CHANNELS, ...groupChannels]
+export function channelsForProgram(): ProgramChannel[] {
+  return SHARED_CHANNELS
 }
 
 const POSTS: ChannelPost[] = [

@@ -74,7 +74,7 @@ const filteredPrograms = computed(() => sortedPrograms.value.filter((p) => {
 
 <template>
   <!-- `sm:p-0`/`sm:gap-0` as well as the bare ones — see index.vue for why. -->
-  <UDashboardPanel :ui="{ body: 'p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
+  <UDashboardPanel :ui="{ body: 'relative p-0 sm:p-0 gap-0 sm:gap-0 overflow-x-auto' }">
     <template #body>
       <div class="absolute z-[-1] rounded-full bg-blue-500 blur-[220px] size-72 sm:size-80 transform left-2/3 -translate-x-1/2 -translate-y-80"></div>
       <div class="absolute z-[-1] inset-x-0 top-0 h-[420px] overflow-hidden pointer-events-none">

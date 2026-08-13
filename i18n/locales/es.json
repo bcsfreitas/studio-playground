@@ -470,7 +470,7 @@
     },
     "showcase": {
       "headline": "Ven a jugar.",
-      "playFree": "Juega gratis a juegos hechos por chicos como tú",
+      "playFree": "Juega gratis juegos de nuestros estudios",
       "learnByMaking": "Aprende a crear el tuyo, paso a paso",
       "shareWork": "Comparte lo que creas con la comunidad"
     },
@@ -596,6 +596,13 @@
       "back": "Volver al inicio"
     }
   },
+  "play": {
+    "hero": {
+      "eyebrow": "Jugar",
+      "title": "Ven a jugar.",
+      "subtitle": "Juega los juegos que quieras y después construye el tuyo. Te mostramos cada paso."
+    }
+  },
   "learn": {
     "hero": {
       "eyebrow": "Aprender",
@@ -616,8 +623,126 @@
     }
   },
   "teach": {
-    "title": "Tu centro de enseñanza estará disponible pronto",
-    "body": "Aquí podrás configurar y administrar tus propias cohortes. Todavía lo estamos construyendo.",
-    "backHome": "Volver al inicio"
+    "hub": {
+      "hero": {
+        "eyebrow": "Enseñar",
+        "title": "Tus salones",
+        "subtitle": "Administra los salones privados que diriges, mira cómo va cada grupo y comparte el enlace que le da acceso a tus estudiantes."
+      },
+      "sidebar": {
+        "classrooms": "Salones",
+        "newClassroom": "Nuevo salón",
+        "mentorTraining": "Capacitación para mentores",
+        "listEmpty": "Todavía no tienes salones"
+      },
+      "empty": {
+        "title": "Todavía no has creado un salón",
+        "body": "Crea un salón para invitar a tus estudiantes y seguir su progreso.",
+        "cta": "Nuevo salón"
+      },
+      "tabs": {
+        "progress": "Progreso",
+        "settings": "Ajustes"
+      },
+      "progress": {
+        "title": "Progreso",
+        "avgCompletion": "Progreso promedio",
+        "seatsFilled": "Cupos ocupados"
+      },
+      "settings": {
+        "title": "Ajustes del salón",
+        "inviteLink": "Enlace de invitación",
+        "copyLink": "Copiar enlace",
+        "linkCopied": "Enlace de invitación copiado",
+        "linkCopyFailed": "No se pudo copiar el enlace — cópialo manualmente",
+        "dateRange": "Fechas",
+        "selfPaced": "A tu propio ritmo",
+        "maxLearners": "Cupos máximos",
+        "seatsTaken": "Cupos ocupados"
+      },
+      "welcome": {
+        "title": "¡Bienvenida, {name}!",
+        "steps": {
+          "create": {
+            "title": "Crear un salón"
+          },
+          "training": {
+            "title": "Toma el curso de capacitación",
+            "description": "Aprende a dirigir un gran salón y a aprovechar al máximo Endless Studios.",
+            "cta": "Ir a la capacitación"
+          },
+          "invite": {
+            "title": "Invita a tus estudiantes",
+            "description": "Comparte un enlace o código, o sube una lista de la clase para agregar a tus estudiantes.",
+            "cta": "Invitar estudiantes"
+          }
+        }
+      },
+      "invite": {
+        "title": "Invitar estudiantes",
+        "tabs": {
+          "send": "Enviar invitación",
+          "csv": "Agregar directamente"
+        },
+        "linkLabel": "Enlace de invitación",
+        "copyLink": "Copiar enlace",
+        "or": "O",
+        "codeLabel": "Código del salón",
+        "copyCode": "Copiar código",
+        "linkCopied": "Enlace de invitación copiado",
+        "linkCopyFailed": "No se pudo copiar el enlace — cópialo manualmente",
+        "codeCopied": "Código del salón copiado",
+        "codeCopyFailed": "No se pudo copiar el código — cópialo manualmente",
+        "csv": {
+          "dropLabel": "Arrastra un archivo CSV o haz clic para subirlo",
+          "preview": "{count} estudiante encontrado | {count} estudiantes encontrados",
+          "confirm": "Importar estudiantes"
+        },
+        "done": "Listo"
+      }
+    },
+    "new": {
+      "wizard": {
+        "back": "Atrás",
+        "course": {
+          "title": "Elige un curso",
+          "continue": "Continuar"
+        },
+        "settings": {
+          "title": "Ajustes del salón",
+          "courseLabel": "Para {title}",
+          "nameLabel": "Nombre del salón",
+          "namePlaceholder": "p. ej. Core: Threadbare — Salón 3B",
+          "ageRangeLabel": "Rango de edad",
+          "ageRangePlaceholder": "Selecciona un rango de edad",
+          "ageRanges": {
+            "8-10": "8–10",
+            "10-12": "10–12",
+            "12-14": "12–14",
+            "14-16": "14–16",
+            "16-18": "16–18",
+            "mixed": "Edades mixtas"
+          },
+          "consent": {
+            "prefix": "Confirmo que estoy solicitando este programa para un entorno educativo y acepto revisar el ",
+            "linkText": "aviso de privacidad del salón",
+            "suffix": "."
+          },
+          "silo": {
+            "label": "Mantener este salón cerrado a la interacción fuera de la plataforma",
+            "ndpaBadge": "NDPA",
+            "ndpaTooltip": "Mantiene los datos de los estudiantes aislados bajo el acuerdo NDPA de tu escuela."
+          },
+          "submit": "Crear un salón"
+        },
+        "processing": {
+          "title": "Creando tu salón…",
+          "body": "Un momento, esto solo tomará un instante."
+        },
+        "success": {
+          "title": "¡Salón creado con éxito!"
+        }
+      }
+    }
   }
 }

@@ -14,6 +14,7 @@ export * from './programData/community'
 export * from './programData/avatars'
 export * from './programData/badges'
 export * from './programData/consent'
+export * from './programData/mentorClassrooms'
 
 /**
  * Precedence order matters: already-enrolled and self-paced both bypass the

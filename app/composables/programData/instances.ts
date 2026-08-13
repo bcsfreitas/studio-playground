@@ -273,12 +273,12 @@ export const programInstances: ProgramInstance[] = [
     programId: 'explore-godot',
     enrollmentModel: 'cohort',
     visibility: 'public',
-    scheduleLabel: 'Tue/Thu mornings, Aug 11 – Sep 10, 2026',
+    scheduleLabel: 'Tue/Thu mornings, Sep 1 – Oct 1, 2026',
     // SYNTHESIZED: no facilitator name exists in source for this cohort.
     mentors: ['Priya Sundaram'],
     sessions: buildSessions(
       'instance-explore-godot-2026-08-am',
-      '2026-08-11',
+      '2026-09-01',
       twiceWeeklyOffsets(10),
       '09:00',
       60,
@@ -290,8 +290,8 @@ export const programInstances: ProgramInstance[] = [
         instanceId: 'instance-explore-godot-2026-08-am',
         name: 'Dawn Patrol',
         type: 'open',
-        startDate: '2026-08-11',
-        endDate: '2026-09-10',
+        startDate: '2026-09-01',
+        endDate: '2026-10-01',
         maxLearners: 20,
         seatsTaken: 8
       }
@@ -302,12 +302,12 @@ export const programInstances: ProgramInstance[] = [
     programId: 'explore-godot',
     enrollmentModel: 'cohort',
     visibility: 'public',
-    scheduleLabel: 'Mon/Wed evenings, Aug 17 – Sep 16, 2026',
+    scheduleLabel: 'Mon/Wed evenings, Aug 31 – Sep 30, 2026',
     // SYNTHESIZED: no facilitator name exists in source for this cohort.
     mentors: ['Marcus Idowu'],
     sessions: buildSessions(
       'instance-explore-godot-2026-08-pm',
-      '2026-08-17',
+      '2026-08-31',
       twiceWeeklyOffsets(10),
       '18:00',
       60,
@@ -319,8 +319,8 @@ export const programInstances: ProgramInstance[] = [
         instanceId: 'instance-explore-godot-2026-08-pm',
         name: 'Studio B',
         type: 'open',
-        startDate: '2026-08-17',
-        endDate: '2026-09-16',
+        startDate: '2026-08-31',
+        endDate: '2026-09-30',
         maxLearners: 18,
         seatsTaken: 11
       }

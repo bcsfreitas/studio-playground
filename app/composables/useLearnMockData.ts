@@ -23,8 +23,8 @@ type LearnProgramSchedule = Pick<LearnProgram, 'id' | 'cohortStart' | 'cohortEnd
 const PROGRAM_SCHEDULES: LearnProgramSchedule[] = [
   // Dates mirror each program's real instance(s) in programData/instances.ts.
   // Explore: Godot lists 3 instances there; the catalog card only has room for
-  // one range, so this uses the soonest upcoming one (Dawn Patrol, Aug 11).
-  { id: 'explore-godot', cohortStart: '2026-08-11', cohortEnd: '2026-09-10' },
+  // one range, so this uses the soonest upcoming one (Studio B, Aug 31).
+  { id: 'explore-godot', cohortStart: '2026-08-31', cohortEnd: '2026-09-30' },
   { id: 'core-threadbare', cohortStart: '2026-09-01', cohortEnd: '2026-10-29' },
   // Explore: Threadbare runs no cohort at all — enroll and start the same day.
   { id: 'explore-threadbare', cohortStart: null, cohortEnd: null },
