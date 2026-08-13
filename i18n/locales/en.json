@@ -93,6 +93,14 @@
         "helper": "This session requires an access code from your facilitator.",
         "error": "That code doesn't match. Check with your facilitator and try again."
       },
+      "hasAccessCode": "I have an access code",
+      "accessCodeModal": {
+        "title": "Enter your access code",
+        "body": "Enter the access code your facilitator gave you to join {program}.",
+        "error": "That code doesn't match any session for this program. Check with your facilitator and try again.",
+        "cancel": "Cancel",
+        "confirm": "Continue"
+      },
       "notify": {
         "title": "No dates scheduled yet",
         "body": "Leave your email and we'll tell you as soon as the next run opens.",
