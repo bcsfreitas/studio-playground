@@ -29,21 +29,27 @@ const LAYERS = [
 </script>
 
 <template>
-  <div class="stars size-full absolute inset-x-0 top-0" :style="{ '--star-color': color }">
-    <div
-      v-for="(layer, i) in LAYERS"
-      :key="i"
-      class="star-layer"
-      :style="{ '--star-duration': layer.duration, '--star-opacity': layer.opacity }"
-    >
+  <!-- Star positions are Math.random() per render, so SSR and client markup
+       never match — client-only sidesteps the hydration mismatch entirely
+       rather than fighting it with a seeded RNG for a purely decorative
+       backdrop. -->
+  <ClientOnly>
+    <div class="stars size-full absolute inset-x-0 top-0" :style="{ '--star-color': color }">
       <div
-        v-for="(star, j) in layer.stars"
-        :key="j"
-        class="star absolute rounded-full"
-        :style="{ left: star.left, top: star.top, width: star.size, height: star.size }"
-      />
+        v-for="(layer, i) in LAYERS"
+        :key="i"
+        class="star-layer"
+        :style="{ '--star-duration': layer.duration, '--star-opacity': layer.opacity }"
+      >
+        <div
+          v-for="(star, j) in layer.stars"
+          :key="j"
+          class="star absolute rounded-full"
+          :style="{ left: star.left, top: star.top, width: star.size, height: star.size }"
+        />
+      </div>
     </div>
-  </div>
+  </ClientOnly>
 </template>
 
 <style scoped>

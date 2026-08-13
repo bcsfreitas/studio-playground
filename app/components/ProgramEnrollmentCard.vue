@@ -379,7 +379,12 @@ function addToCalendar() {
 </script>
 
 <template>
-  <UPageCard variant="soft" :ui="{ root: 'bg-white border border-primary/20' }">
+  <UPageCard
+    variant="outline"
+    spotlight
+    class="[--spotlight-color:var(--color-orange-200)]"
+    :ui="{ spotlight: 'absolute inset-px rounded-[inherit] pointer-events-none bg-default' }"
+  >
     <ul class="flex flex-col gap-3">
       <li v-for="fact in facts" :key="fact.key" class="flex items-center gap-3">
         <img v-if="fact.image" :src="fact.image" alt="" class="size-8 shrink-0" />
@@ -492,7 +497,6 @@ function addToCalendar() {
         </template>
 
         <template v-else-if="selectedStatus === 'self-paced-always-open'">
-          <UBadge :label="t('program.enroll.sessionDescription.selfPaced')" color="neutral" variant="soft" class="mb-3" />
           <!-- No seat or start date to pick, but starting still opens the
                classroom immediately — worth a confirmation rather than a
                silent one-click commit. A guest's intent survives the sign-up

@@ -14,6 +14,11 @@ const toast = useToast()
 
 const qualifyOpen = ref(false)
 
+// Same pattern ProgramTabCommunity.vue uses — this component's only call
+// site (ProgramTeacherCta.vue) is always rendered inside /learn/[programId],
+// so the param is reliably available without threading a prop in.
+const programId = computed(() => route.params.programId as string)
+
 const FEATURES = [
   { icon: 'lucide:lock', key: 'private' },
   { icon: 'lucide:user-plus', key: 'invite' },
@@ -73,6 +78,7 @@ function onPrimaryCta() {
       overlay: 'z-[250]',
       container: 'h-full overflow-y-auto',
       header: 'px-6 py-4 border-b border-default shrink-0',
+      body: 'flex-1 flex flex-col items-center justify-center',
       footer: 'px-6 py-4 border-t border-default shrink-0'
     }"
   >
@@ -95,19 +101,19 @@ function onPrimaryCta() {
             <span class="text-sm text-default">{{ t(`program.teacherCta.drawer.features.${feature.key}`) }}</span>
           </li>
         </ul>
-      </div>
-    </template>
 
-    <template #footer>
-      <div v-if="isLoggedIn" class="w-full">
         <UButton
+          v-if="isLoggedIn"
           :label="t('program.teacherCta.cta')"
           color="primary"
           block
           @click="onPrimaryCta"
         />
       </div>
-      <div v-else class="w-full flex flex-col gap-3">
+    </template>
+
+    <template v-if="!isLoggedIn" #footer>
+      <div class="w-full flex flex-col gap-3">
         <p class="text-sm text-muted">{{ t('program.teacherCta.drawer.guestMessage') }}</p>
         <div class="flex gap-3">
           <UButton
@@ -128,5 +134,5 @@ function onPrimaryCta() {
     </template>
   </UDrawer>
 
-  <MentorQualificationDrawer v-model:open="qualifyOpen" />
+  <MentorQualificationDrawer v-model:open="qualifyOpen" :program-id="programId" />
 </template>

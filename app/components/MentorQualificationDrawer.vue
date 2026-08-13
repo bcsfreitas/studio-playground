@@ -5,6 +5,10 @@ import { useMentorStatus } from '~/composables/useMentorStatus'
 
 const open = defineModel<boolean>('open', { required: true })
 
+const props = defineProps<{
+  programId: string
+}>()
+
 const { t } = useI18n()
 const { grantMentorStatus } = useMentorStatus()
 
@@ -39,7 +43,10 @@ function onSubmit() {
     grantMentorStatus()
     open.value = false
     step.value = 'form'
-    navigateTo('/teach')
+    // Straight to Step 2 of the create-classroom wizard, not the empty hub —
+    // the mentor was just reading this program's page, so it's already the
+    // course they want to teach (see teach/new.vue's initialSelection()).
+    navigateTo({ path: '/teach/new', query: { programId: props.programId } })
   }, PROCESSING_MS)
 }
 
@@ -65,7 +72,7 @@ function onCancel() {
       overlay: 'z-[250]',
       container: 'h-full overflow-y-auto',
       header: 'px-6 py-4 border-b border-default shrink-0',
-      footer: 'px-6 py-4 border-t border-default shrink-0'
+      body: 'flex-1 flex flex-col items-center justify-center'
     }"
   >
     <template #body>
@@ -95,32 +102,30 @@ function onCancel() {
             <UInput v-model="state.role" size="lg" class="w-full" />
           </UFormField>
         </UForm>
+
+        <div class="flex gap-3">
+          <UButton
+            :label="t('program.mentorQualify.cancel')"
+            color="neutral"
+            variant="outline"
+            class="flex-1 justify-center"
+            @click="onCancel"
+          />
+          <UButton
+            type="submit"
+            form="mentor-qualify-form"
+            :label="t('program.mentorQualify.submit')"
+            color="primary"
+            :disabled="!isValid"
+            class="flex-1 justify-center"
+          />
+        </div>
       </div>
 
       <div v-else class="flex flex-col items-center text-center gap-3 py-2 h-full justify-center">
         <UIcon name="lucide:loader-circle" class="size-8 text-primary animate-spin" />
         <div class="font-heading font-bold text-lg text-highlighted">{{ t('program.mentorQualify.processing.title') }}</div>
         <p class="text-sm text-muted">{{ t('program.mentorQualify.processing.body') }}</p>
-      </div>
-    </template>
-
-    <template v-if="step === 'form'" #footer>
-      <div class="w-full flex gap-3">
-        <UButton
-          :label="t('program.mentorQualify.cancel')"
-          color="neutral"
-          variant="outline"
-          class="flex-1 justify-center"
-          @click="onCancel"
-        />
-        <UButton
-          type="submit"
-          form="mentor-qualify-form"
-          :label="t('program.mentorQualify.submit')"
-          color="primary"
-          :disabled="!isValid"
-          class="flex-1 justify-center"
-        />
       </div>
     </template>
   </UDrawer>

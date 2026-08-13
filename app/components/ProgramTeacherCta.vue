@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
+
+const drawerOpen = ref(false)
 </script>
 
 <template>
@@ -8,18 +10,19 @@ const { t } = useI18n()
     icon="lucide:graduation-cap"
     :title="t('program.teacherCta.title')"
     :description="t('program.teacherCta.description')"
-    :ui="{ leadingIcon: 'text-dimmed', title: 'text-sm', description: 'text-sm' }"
   >
     <template #footer>
       <UButton
-        to="/learn/educator-training"
         color="neutral"
         variant="outline"
         size="sm"
         trailing-icon="lucide:arrow-right"
+        @click="drawerOpen = true"
       >
         {{ t('program.teacherCta.cta') }}
       </UButton>
     </template>
   </UPageCard>
+
+  <CreateCohortDrawer v-model:open="drawerOpen" />
 </template>

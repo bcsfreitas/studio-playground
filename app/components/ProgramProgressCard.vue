@@ -38,8 +38,11 @@ function goToCurrentLesson() {
 
 <template>
   <UPageCard
-    variant="soft"
+    variant="outline"
+    spotlight
+    class="[--spotlight-color:var(--color-orange-200)]"
     :class="isComplete ? 'ring-2 ring-success' : ''"
+    :ui="{ spotlight: 'absolute inset-px rounded-[inherit] pointer-events-none bg-default' }"
   >
     <div class="flex items-center justify-between gap-3">
       <h3 class="text-xs font-semibold text-dimmed uppercase tracking-wide">

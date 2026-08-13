@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<{
 })
 
 const { t } = useI18n()
-const { items, toggle, completedCount, totalCount, isComplete, claimed, claim } = useOnboardingChecklist(
+const { items, completedCount, totalCount, isComplete, claimed, claim } = useOnboardingChecklist(
   props.flowId,
   props.contextId,
   // Onboarded personas land with onboarding already behind them — allowClaim
@@ -69,8 +69,7 @@ function claimXp() {
       <div
         v-for="item in items"
         :key="item.id"
-        class="flex items-center gap-2.5 rounded-[10px] px-2 py-[7px] cursor-pointer hover:bg-muted"
-        @click="toggle(item.id)"
+        class="flex items-center gap-2.5 rounded-[10px] px-2 py-[7px]"
       >
         <span
           class="inline-flex size-[18px] rounded-full items-center justify-center shrink-0 box-border"
@@ -79,7 +78,6 @@ function claimXp() {
           <Icon v-if="item.done" name="lucide:check" class="size-[11px] text-white" />
         </span>
         <span class="text-[13px]" :class="item.done ? 'text-dimmed line-through' : 'text-default'">{{ item.label }}</span>
-        <Icon v-if="!item.done" name="lucide:chevron-right" class="size-3.5 text-dimmed ml-auto" />
       </div>
     </div>
 
