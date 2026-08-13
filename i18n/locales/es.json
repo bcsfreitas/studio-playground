@@ -93,6 +93,14 @@
         "helper": "Esta sesión requiere un código de acceso de tu facilitador.",
         "error": "Ese código no coincide. Consulta con tu facilitador e intenta de nuevo."
       },
+      "hasAccessCode": "Tengo un código de acceso",
+      "accessCodeModal": {
+        "title": "Ingresa tu código de acceso",
+        "body": "Ingresa el código de acceso que tu facilitador te dio para unirte a {program}.",
+        "error": "Ese código no coincide con ninguna sesión de este programa. Consulta con tu facilitador e intenta de nuevo.",
+        "cancel": "Cancelar",
+        "confirm": "Continuar"
+      },
       "notify": {
         "title": "Todavía no hay fechas programadas",
         "body": "Déjanos tu correo y te avisaremos en cuanto se abra la próxima edición.",
